@@ -1,0 +1,32 @@
+@(list: Seq[PostEntity])
+
+<div class="row">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <div class="panel panel-default" style="border-radius : 0 !important ;">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <div class="list-group">
+                    @for(item <- list) {
+                        <div class="list-group-item" style="border:0px !important;">
+                            <a href="#">
+                            @item.title
+                            </a>
+                            <div>
+                                <p>@item.excerpt</p>
+                                <p style="clear:both"></p>
+                                <p class="pull-right">
+                                    <span class=""><small>@@Tom</small></span>
+                                    <span class=""><small>2015.08.08</small></span>
+                                </p>
+                                <p style="clear:both"></p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

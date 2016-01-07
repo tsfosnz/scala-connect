@@ -1,0 +1,54 @@
+.tm-content-wrapper {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: auto;
+    background-color: #005384;
+}
+
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a
+{
+    background-color: #005384;
+    color:white;
+
+}
+
+.tm-list-container {
+
+    width: 2500px;
+    margin-top: 150px;
+    padding-left: 30px;
+}
+
+.tm-list-box {
+    position: relative;
+    width: 300px;
+    height: 600px;
+    float: left;
+    margin-right: 50px;
+}
+
+.tm-list-box-empty {
+    background: none !important;
+    border: 1px solid #eeeeee;
+}
+
+.tm-list-box .box-header {
+    width: 270px;
+}
+
+.tm-list-box .box-body {
+
+}
+
+.tm-list-box .box-body .box-item {
+
+    width: 270px;
+    border: 1px solid black;
+    margin-top:20px;
+}
+
+.tm-list-box .box-footer {
+    width: 270px;
+    position: absolute;
+    bottom: 2px;
+}

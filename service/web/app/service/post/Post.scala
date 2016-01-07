@@ -13,12 +13,12 @@ object Post {
 
   def test = {
 
-    _query.filter(_.memberId === 1)
+    _query.filter(_.authorId === 1)
     _query.map(
 
       model => {
         println((
-          model.memberId,
+          model.authorId,
           model.title
           ).getClass.getSimpleName)
       }
@@ -101,9 +101,9 @@ object Post {
         _query.map {
 
           model => (
-            model.memberId,
+            model.authorId,
             model.title,
-            model.body,
+            model.textBody,
             model.createdAt,
             model.updatedAt
 
@@ -150,7 +150,7 @@ object Post {
 
       val query = for {
         item <- _query if item.id === id
-      } yield (item.title, item.body, item.updatedAt)
+      } yield (item.title, item.textBody, item.updatedAt)
 
       val action = query.update(data("title").head, data("body").head, now)
       val sql = query.updateStatement
@@ -243,9 +243,11 @@ object Post {
       // _query,
 
       _query += PostEntity(
-        memberId = 1,
+        authorId = 1,
         title = faker.Company.name,
-        body = faker.Company.name,
+        excerpt = faker.Lorem.paragraph(5),
+        textBody = faker.Lorem.paragraphs(10).mkString("\n"),
+        htmlBody = faker.Lorem.paragraphs(10).mkString("\n"),
         status = "proposal",
         isArchived = "false",
         createdAt = now,
@@ -255,9 +257,11 @@ object Post {
         finishedAt = None
       ),
       _query += PostEntity(
-        memberId = 1,
+        authorId = 1,
         title = faker.Company.name,
-        body = faker.Company.name,
+        excerpt = faker.Lorem.paragraph(5),
+        textBody = faker.Lorem.paragraphs(10).mkString("\n"),
+        htmlBody = faker.Lorem.paragraphs(10).mkString("\n"),
         status = "proposal",
         isArchived = "false",
         createdAt = now,

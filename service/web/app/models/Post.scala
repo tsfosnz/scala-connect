@@ -6,11 +6,15 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
 
   def id = column[Option[Int]]("post_id", O.PrimaryKey, O.AutoInc)
 
-  def memberId = column[Int]("member_id", O.Default(0))
+  def authorId = column[Int]("author_id", O.Default(0))
 
   def title = column[String]("title", O.Length(128), O.Default(""))
 
-  def body = column[String]("body", O.Length(512), O.Default(""))
+  def excerpt = column[String]("excerpt", O.Length(512), O.Default(""))
+
+  def textBody = column[String]("text_body", O.Length(512), O.Default(""))
+
+  def htmlBody = column[String]("html_body", O.Length(512), O.Default(""))
 
   def status = column[String]("status", O.SqlType("CHAR"), O.Length(32), O.Default(""))
 
@@ -27,9 +31,11 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
   def * =
     (
       id,
-      memberId,
+      authorId,
       title,
-      body,
+      excerpt,
+      textBody,
+      htmlBody,
       status,
       isArchived,
       startedAt,
@@ -42,9 +48,11 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
 case class PostEntity
 (
   id: Option[Int],
-  memberId: Int,
+  authorId: Int,
   title: String,
-  body: String,
+  excerpt: String,
+  textBody: String,
+  htmlBody: String,
   status: String,
   isArchived: String,
   startedAt: Option[String],

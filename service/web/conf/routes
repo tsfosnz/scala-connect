@@ -14,11 +14,10 @@ GET     /                               process.member.controllers.Application.i
 GET     /hello                          process.member.controllers.HelloScala.index
 GET     /more/:name                     process.member.controllers.HelloScala.more(name: String)
 
-# Test only
 
+# the route for home
 
-GET     /test/team                      process.member.controllers.test.Fetcher.team
-GET     /test/post                   process.member.controllers.test.Fetcher.post
+GET     /home                     process.home.controllers.main.Fetcher.index
 
 # the routes for the post
 
