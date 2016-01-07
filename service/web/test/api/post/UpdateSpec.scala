@@ -10,12 +10,12 @@ import play.api.test.{FakeRequest, WithApplication}
 @RunWith(classOf[JUnitRunner])
 class UpdateSpec extends Specification {
 
-  "Project.API.update" should {
+  "Post.API.update" should {
 
-    "/projects/update, should add value when correct" in new WithApplication{
+    "/posts/update, should add value when correct" in new WithApplication{
 
 
-      val api = "/project/1/update"
+      val api = "/post/1/update"
 
       // P200
       // Programming in scala
@@ -37,10 +37,10 @@ class UpdateSpec extends Specification {
       println(contentAsString(home))
     }
 
-    "/projects/update, should not add value when empty" in new WithApplication{
+    "/posts/update, should not add value when empty" in new WithApplication{
 
 
-      val api = "/project/1/update"
+      val api = "/post/1/update"
 
       // P200
       // Programming in scala
@@ -65,10 +65,10 @@ class UpdateSpec extends Specification {
       //println(contentAsString(home))
     }
 
-    "/projects/update, should not found" in new WithApplication{
+    "/posts/update, should not found" in new WithApplication{
 
 
-      val api = "/project/1000/update"
+      val api = "/post/1000/update"
 
       // P200
       // Programming in scala

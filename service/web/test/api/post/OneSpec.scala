@@ -14,12 +14,12 @@ import play.api.test._
 @RunWith(classOf[JUnitRunner])
 class OneSpec extends Specification {
 
-  "Project.API.one" should {
+  "Post.API.one" should {
 
-    "/projects/id, should return json" in new WithApplication {
+    "/posts/id, should return json" in new WithApplication {
 
 
-      val api = "/project/1"
+      val api = "/post/1"
 
       val home = route(
 

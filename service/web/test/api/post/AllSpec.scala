@@ -14,12 +14,12 @@ import play.api.test._
 @RunWith(classOf[JUnitRunner])
 class AllSpec extends Specification {
 
-  "Project.API.all" should {
+  "Post.API.all" should {
 
-    "/projects/count, should return json" in new WithApplication {
+    "/posts/count, should return json" in new WithApplication {
 
 
-      val api = "/projects/20"
+      val api = "/posts/20"
 
       val home = route(
 

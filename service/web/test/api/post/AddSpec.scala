@@ -9,12 +9,12 @@ import play.api.test.{FakeRequest, WithApplication}
 @RunWith(classOf[JUnitRunner])
 class AddSpec extends Specification {
 
-  "Project.API.add" should {
+  "Post.API.add" should {
 
-    "/projects/new, should add value when correct" in new WithApplication{
+    "/posts/new, should add value when correct" in new WithApplication{
 
 
-      val api = "/project/new"
+      val api = "/post/new"
 
       // P200
       // Programming in scala
@@ -36,10 +36,10 @@ class AddSpec extends Specification {
       //println(contentAsString(home))
     }
 
-    "/projects/new, should not add value when empty" in new WithApplication{
+    "/posts/new, should not add value when empty" in new WithApplication{
 
 
-      val api = "/project/new"
+      val api = "/post/new"
 
       // P200
       // Programming in scala
@@ -62,10 +62,10 @@ class AddSpec extends Specification {
       //println(contentAsString(home))
     }
 
-    "/projects/new, should filter mal-format value" in new WithApplication{
+    "/posts/new, should filter mal-format value" in new WithApplication{
 
 
-      val api = "/project/new"
+      val api = "/post/new"
 
       // P200
       // Programming in scala

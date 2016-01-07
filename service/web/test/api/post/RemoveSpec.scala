@@ -10,12 +10,12 @@ import play.api.test.{FakeRequest, WithApplication}
 @RunWith(classOf[JUnitRunner])
 class RemoveSpec extends Specification {
 
-  "Project.API.remove" should {
+  "Post.API.remove" should {
 
-    "/projects/remove, should remove value when correct" in new WithApplication{
+    "/posts/remove, should remove value when correct" in new WithApplication{
 
 
-      val api = "/project/1/remove"
+      val api = "/post/1/remove"
 
       // P200
       // Programming in scala
@@ -32,10 +32,10 @@ class RemoveSpec extends Specification {
       println(contentAsString(home))
     }
 
-    "/projects/remove, should not remove when not exist" in new WithApplication{
+    "/posts/remove, should not remove when not exist" in new WithApplication{
 
 
-      val api = "/project/1000/remove"
+      val api = "/post/1000/remove"
 
       val home = route (
 
