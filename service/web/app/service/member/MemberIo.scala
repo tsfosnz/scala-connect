@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-object Member {
+object MemberIo {
 
   lazy val _query: TableQuery[Member] = TableQuery[Member]
   lazy val _db: Database = Database.forConfig("mydb")
@@ -183,15 +183,7 @@ object Member {
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
-    //_db.close()
+    setupFuture
 
 
   }
@@ -240,12 +232,6 @@ object Member {
     val setupFuture = _db.run(setup)
 
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
+    setupFuture
   }
 }

@@ -3,7 +3,7 @@ package process.member.controllers.post
 import models.PostEntity
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.post.Post
+import service.post.PostIo
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -53,7 +53,7 @@ class Updater extends Command {
 
       case _ =>
 
-        val result = Post.add(authorId, data)
+        val result = PostIo.add(authorId, data)
 
         result match {
           case null => Future {
@@ -94,7 +94,7 @@ class Updater extends Command {
 
       case _ =>
 
-        val result = Post.update(id, data)
+        val result = PostIo.update(id, data)
 
         result match {
           case null => Future {
@@ -120,7 +120,7 @@ class Updater extends Command {
 
     //val timeout = play.api.libs.concurrent.Promise.timeout("Oops", 1)
 
-    val result = Post.remove(id)
+    val result = PostIo.remove(id)
 
     result match {
       case null => Future {

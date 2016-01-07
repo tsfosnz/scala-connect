@@ -4,7 +4,7 @@ import slick.driver.MySQLDriver.api._
 
 class LabelPost(tag: Tag) extends Table[LabelPostEntity](tag, "label_post") {
 
-  def id = column[Int]("label_id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("label_post_id", O.PrimaryKey, O.AutoInc)
 
   def labelId = column[Int]("label_id")
 

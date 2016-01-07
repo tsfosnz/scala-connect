@@ -3,14 +3,15 @@ package service.label
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import models.Label
+import models.{LabelPost, Label}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-object Label {
+object LabelPostIo {
 
-  lazy val _query: TableQuery[Label] = TableQuery[Label]
+  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
@@ -189,26 +190,21 @@ object Label {
   /**
    * initialize the table, create its schema, update its schema
    */
-  def initialize() {
-
-    val setup = DBIO.seq(
-
-      _query.schema.drop,
-      _query.schema.create
+  def initialize(drop: Boolean = false) = {
 
 
-    )
+    val dropData= List(_query.schema.drop, _query.schema.create)
+    val createData= List(_query.schema.create)
+
+
+    val setup = if (drop)
+      DBIO.seq(dropData: _*)
+    else
+      DBIO.seq(createData: _*)
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
+    setupFuture
 
     //_db.close()
 
@@ -218,7 +214,7 @@ object Label {
   /**
    * populate the data into the table
    */
-  def populate() {
+  def populate(labelId: Int, postId: Int) = {
 
     val dt: java.util.Date = new java.util.Date()
 
@@ -235,27 +231,19 @@ object Label {
       _query.map {
 
         m => (
-          m.name,
-          m.createdAt,
-          m.updatedAt
+          m.labelId,
+          m.postId
           )
       } +=(
-        faker.Lorem.words(2).mkString(""),
-        now,
-        now
+        labelId,
+        postId
         )
 
     )
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
+    setupFuture
 
 
   }

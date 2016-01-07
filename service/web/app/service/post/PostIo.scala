@@ -6,7 +6,7 @@ import models.{Post, PostEntity}
 import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object Post {
+object PostIo {
 
   lazy val _query: TableQuery[Post] = TableQuery[Post]
   lazy val _db: Database = Database.forConfig("mydb")
@@ -205,7 +205,9 @@ object Post {
       _query.schema.drop,
       _query.schema.create
 
-    ).transactionally
+      //_query.schema.create
+
+    )
 
     val setupFuture = _db.run(setup)
 
@@ -243,7 +245,7 @@ object Post {
           )
       } +=(
         (Math.random() * 100).toInt,
-        faker.Lorem.sentence(32),
+        faker.Lorem.sentence(16),
         faker.Lorem.paragraph(3),
         faker.Lorem.paragraphs(10).mkString("\n"),
         faker.Lorem.paragraphs(10).mkString("\n"),
@@ -255,14 +257,7 @@ object Post {
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
+    setupFuture
   }
 
 }

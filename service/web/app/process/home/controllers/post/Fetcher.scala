@@ -5,7 +5,7 @@ import models.PostEntity
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.post.Post
+import service.post.PostIo
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -25,7 +25,7 @@ class Fetcher extends Command {
       else
         page.get - 1
 
-    val result: Future[Seq[PostEntity]] = Post.all(p, count)
+    val result: Future[Seq[PostEntity]] = PostIo.all(p, count)
     //val timeout = play.api.libs.concurrent.Promise.timeout("Oops", 1)
 
     val error = scala.concurrent.Future {
@@ -54,7 +54,7 @@ class Fetcher extends Command {
 
   def one(id: Int) = Action.async { request =>
 
-    val result = Post.one(id)
+    val result = PostIo.one(id)
 
     val error = scala.concurrent.Future {
       "System error"

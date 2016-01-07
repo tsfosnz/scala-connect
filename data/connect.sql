@@ -12,8 +12,8 @@
 
 -- Dumping database structure for connect
 DROP DATABASE IF EXISTS `connect`;
-CREATE DATABASE IF NOT EXISTS `connect` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `connect`;
+CREATE DATABASE IF NOT EXISTS `connectapp` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `connectapp`;
 
 
 
@@ -86,8 +86,8 @@ CREATE TABLE IF NOT EXISTS `post` (
   `author_id` int(11) NOT NULL,
   `title` varchar(128) NOT NULL,
   `excerpt` varchar(4096) NOT NULL,
-  `html_body` varchar(65535) NOT NULL,
-  `text_body` varchar(65535) NOT NULL,
+  `html_body` varchar(2) NOT NULL,
+  `text_body` varchar(2) NOT NULL,
   `status` char(32) NOT NULL DEFAULT 'plan',
   `is_archived` enum('true','false') NOT NULL DEFAULT 'false',
   `created_at` datetime NULL,

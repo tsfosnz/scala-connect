@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
 import play.api.mvc.{ResponseHeader, Result}
-import service.team.Team
+import service.team.TeamIo
 import org.scalatest.concurrent.ScalaFutures._
 
 
@@ -34,7 +34,7 @@ class TeamSpec extends PlaySpec {
     "populate data in table<project>" in {
 
       for (i <- 0 to 100) {
-        Team.populate
+        TeamIo.populate
       }
     }
 

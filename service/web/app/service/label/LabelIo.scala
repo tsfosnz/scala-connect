@@ -2,14 +2,15 @@ package service.label
 
 import java.text.SimpleDateFormat
 
-import models.{LabelPost, Label}
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
+import models.Label
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object LabelPost {
+object LabelIo {
 
-  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
+  lazy val _query: TableQuery[Label] = TableQuery[Label]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
@@ -188,7 +189,7 @@ object LabelPost {
   /**
    * initialize the table, create its schema, update its schema
    */
-  def initialize() {
+  def initialize = {
 
     val setup = DBIO.seq(
 
@@ -196,32 +197,18 @@ object LabelPost {
       _query.schema.create
 
 
-      //_query += Project(101, "Acme, Inc."),
-      //_query += Project(49, "Superior Coffee"),
-      //_query += Project(150, "The High Ground")
-
     )
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
-
-    //_db.close()
-
+    setupFuture
 
   }
 
   /**
    * populate the data into the table
    */
-  def populate(labelId: Int, postId: Int) {
+  def populate() {
 
     val dt: java.util.Date = new java.util.Date()
 
@@ -238,12 +225,14 @@ object LabelPost {
       _query.map {
 
         m => (
-          m.labelId,
-          m.postId
+          m.name,
+          m.createdAt,
+          m.updatedAt
           )
       } +=(
-        labelId,
-        postId
+        faker.Lorem.words(2).mkString(""),
+        now,
+        now
         )
 
     )

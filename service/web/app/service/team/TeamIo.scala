@@ -4,21 +4,21 @@ import java.sql.SQLTimeoutException
 import java.text.SimpleDateFormat
 
 import models.{TeamFullEntity, MemberEntity, Team, TeamEntity}
-import service.member.Member
+import service.member.MemberIo
 import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import faker._
 
 
-object Team {
+object TeamIo {
 
   lazy val _query: TableQuery[Team] = TableQuery[Team]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
 
-    TeamMember.remove(1)
+    TeamMemberIo.remove(1)
 
   }
 
@@ -61,7 +61,7 @@ object Team {
 
           } yield {
 
-            val member = TeamMember.getMemberBy(t.id.get)
+            val member = TeamMemberIo.getMemberBy(t.id.get)
 
             for {
 
@@ -215,7 +215,7 @@ object Team {
 
     }*/
 
-    TeamMember.add(teamId, memberId)
+    TeamMemberIo.add(teamId, memberId)
 
   }
 
@@ -238,15 +238,7 @@ object Team {
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
-    _db.close()
+    setupFuture
 
 
   }
@@ -287,13 +279,7 @@ object Team {
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
+    setupFuture
 
 
   }

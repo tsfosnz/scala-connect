@@ -5,7 +5,7 @@ import play.api.libs.iteratee.{Enumeratee, Enumerator}
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.twirl.api.Html
-import service.team.{TeamMember, Team}
+import service.team.{TeamMemberIo, TeamIo}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, Future}
@@ -35,7 +35,7 @@ class Fetcher extends Command {
       "System error"
     }
 
-    val result = Team.all(p, count)
+    val result = TeamIo.all(p, count)
 
     result match {
       case null => Future.firstCompletedOf(Seq(error)).map {
@@ -55,7 +55,7 @@ class Fetcher extends Command {
 
   def one(id: Int) = Action.async { request =>
 
-    val result: Future[Seq[TeamEntity]] = Team.one(id)
+    val result: Future[Seq[TeamEntity]] = TeamIo.one(id)
 
     result.map(
       result =>

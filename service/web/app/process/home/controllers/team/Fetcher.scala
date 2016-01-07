@@ -4,7 +4,7 @@ import core._
 import models.{MemberEntity, TeamEntity, TeamFullEntity}
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.team.Team
+import service.team.TeamIo
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -33,7 +33,7 @@ class Fetcher extends Command {
        "System error"
      }
 
-     val result = Team.all(p, count)
+     val result = TeamIo.all(p, count)
 
      result match {
        case null => Future.firstCompletedOf(Seq(error)).map {
@@ -53,7 +53,7 @@ class Fetcher extends Command {
 
    def one(id: Int) = Action.async { request =>
 
-     val result: Future[Seq[TeamEntity]] = Team.one(id)
+     val result: Future[Seq[TeamEntity]] = TeamIo.one(id)
 
      result.map(
        result =>

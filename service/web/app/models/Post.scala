@@ -12,9 +12,9 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
 
   def excerpt = column[String]("excerpt", O.Length(512), O.Default(""))
 
-  def textBody = column[String]("text_body", O.Length(65535), O.Default(""))
+  def textBody = column[String]("text_body", O.SqlType("TEXT"))
 
-  def htmlBody = column[String]("html_body", O.Length(65535), O.Default(""))
+  def htmlBody = column[String]("html_body", O.SqlType("TEXT"))
 
   def status = column[String]("status", O.SqlType("CHAR"), O.Length(32), O.Default(""))
 
