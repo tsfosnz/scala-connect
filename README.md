@@ -1,17 +1,6 @@
-# Team 
+# scala-connect
 
-
-An web app to support SCRUM project management philosophy. 
-
-SCRUM is a swift and agile project management metholody, and it's not invented for software development!!
-
-Practically I think it's the best so far.
-
-## What is it
-
-The web app will provide facilities and tools to manage project by SCRUM.
-
-Even though, it wasn't sufficient now, but it will be growing and be useful.
+A simple social connect app by scala
 
 ## Development
 
