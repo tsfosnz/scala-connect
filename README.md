@@ -6,11 +6,10 @@ A simple social connect app by scala
 
 - Bootstrap css framework 3.3.6+
 - AngularJS 1.x.x
+- ReactJs/Flux
 - Play framework 2.x.x+
 - Play slicks 3.x.x
 - MySQL
-- Try ruby on rails
-- Or maybe more
 
 ## Progress
 
