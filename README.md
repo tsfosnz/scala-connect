@@ -2,7 +2,7 @@
 
 A simple social connect app by scala
 
-## Development
+## Power by
 
 - Bootstrap css framework 3.3.6+
 - AngularJS 1.x.x
@@ -11,7 +11,4 @@ A simple social connect app by scala
 - Play slicks 3.x.x
 - MySQL
 
-## Progress
 
-- Looking for the best practice with Play framework
-- Suspended, 2015.12.25, instead, focus on important things
