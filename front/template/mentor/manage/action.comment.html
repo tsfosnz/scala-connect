@@ -1,0 +1,25 @@
+<div actioncomment>
+<div class="comment-items">
+    <div ng-repeat="value in vm.schedule.action.item.comment track by value.index">
+        <blockquote class="ng-hide" ng-show="!value.editing">
+            <p ng-bind="value.content"></p>
+            <footer>Tom <cite title="Source Title">2015.11.11</cite></footer>
+
+        </blockquote>
+
+        <p class="pull-right">
+            <a href="javascript:" ng-click="Comment.remove($index);">Delete</a></p>
+    </div>
+    <div style="clear:both"></div>
+</div>
+<div class="comment-input">
+    <div class="form-group" style="border-top: 1px solid #cccccc;padding-top:10px;">
+        <div class="col-sm-offset-0 col-sm-10">
+            <textarea class="form-control" rows="3" placeholder="Comment..." ng-model="Comment.item.content"></textarea>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-primary" ng-click="Comment.add()">Add</button>
+        </div>
+    </div>
+</div>
+</div>

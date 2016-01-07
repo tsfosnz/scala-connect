@@ -1,0 +1,39 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Map static resources from the /public folder to the /assets URL path
+
+
+GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
+
+
+# Home page
+
+GET     /                               process.member.controllers.Application.index
+GET     /hello                          process.member.controllers.HelloScala.index
+GET     /more/:name                     process.member.controllers.HelloScala.more(name: String)
+
+# Test only
+
+
+GET     /test/team                      process.member.controllers.test.Fetcher.team
+GET     /test/post                   process.member.controllers.test.Fetcher.post
+
+# the routes for the post
+
+GET     /posts/$count<[0-9]+>        process.member.controllers.post.Fetcher.all(count: Int, page: Option[Int])
+GET     /post/$id<[0-9]+>            process.member.controllers.post.Fetcher.one(id: Int)
+
+POST    /post/new                    process.member.controllers.post.Updater.add
+POST    /post/$id<[0-9]+>/update     process.member.controllers.post.Updater.update(id: Int)
+
+DELETE  /post/:id/remove             process.member.controllers.post.Updater.remove(id: Int)
+
+# the routes for the team
+
+GET     /teams/$count<[0-9]+>           process.member.controllers.team.Fetcher.all(count: Int, page: Option[Int])
+#GET     /team/:id                       process.member.controllers.team.Fetcher.one(id: Int)
+#POST    /team/new                       process.member.controllers.team.Updater.add
+#POST    /team/:id/update                process.member.controllers.team.Updater.update(id: Int)
+#POST    /team/:id/remove                process.member.controllers.team.Updater.remove(id: Int)

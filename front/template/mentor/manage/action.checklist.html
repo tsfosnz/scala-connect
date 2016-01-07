@@ -1,0 +1,17 @@
+<div actionchecklist class="form-group ng-hide" ng-show="vm.schedule.action.item.checklist.length > 0">
+    <div class="col-sm-12">
+        <div class="checkbox" ng-repeat="value in vm.schedule.action.item.checklist track by value.index">
+            <label>
+                <input type="hidden" ng-model="value.index" ng-value="$index" />
+                <input type="checkbox" ng-model="value.status">
+                <span class="ng-hide" ng-show="!value.editing"  ng-bind="value.name" ng-click="Checklist.edit($index)"></span>
+                <input class="ng-hide" ng-show="value.editing" type="text" ng-model="value.name" />
+                <a href="javascript:" class="ng-hide" ng-show="value.editing" ><i class="fa fa-save" ng-click="Checklist.restore($index)"></i></a>
+                <a href="javascript:"><i class="fa fa-remove" ng-click="Checklist.remove($index)"></i></a>
+            </label>
+        </div>
+        <div>
+            <p class="pull-right"><a class="btn btn-default" href="javascript:" ng-click="Checklist.add()">Add</a></p>
+        </div>
+    </div>
+</div>

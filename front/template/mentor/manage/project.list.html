@@ -1,0 +1,230 @@
+<div class="row">
+    <div class="col-sm-6" style="background:none;">
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    Filter
+                    <span class="badge">All Projects</span>
+                </a>
+                <ul class="dropdown-menu" style="width:250px;">
+                    <li>
+                        <a href="#">All Projects</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li class="dropdown-header">Status</li>
+                    <li>
+                        <a href="#/project/plan">In plan</a>
+                    </li>
+                    <li>
+                        <a href="#/project/progress">In progress</a>
+                    </li>
+                    <li>
+                        <a href="#/project/complete">Complete</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#/project/archive">Archived</a>
+                    </li>
+                </ul>
+
+            </li>
+        </ul>
+    </div>
+    <div style="clear: both;"></div>
+</div>
+<div class="row" style="margin-top:50px;">
+
+    <!-- the project list -->
+    <div class="col-sm-12 col-xs-12" ng-repeat="value in vm.project.list">
+
+        <div class="list-group">
+            <div href="#" class="list-group-item">
+
+                <div class="dropdown pull-right">
+                    <a class="dropdown-toggle"
+                       data-toggle="dropdown"
+                       role="button" aria-haspopup="true" aria-expanded="false"
+                       style="color:gray"><i class="fa fa-gear"></i></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#/project/{{value.project_id}}/schedule">
+                                Edit Shedules
+                            </a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="#">Edit</a>
+                        </li>
+                        <li>
+                            <a href="javascript:">Remove</a>
+                        </li>
+                    </ul>
+                </div>
+                <h4 class="list-group-item-heading" ng-bind="value.name"></h4>
+
+                <div class="list-group-item-text" ng-bind="value.description"></div>
+
+                <div class="panel panel-warning" style="margin-top:10px;">
+                    <div class="panel-heading">
+                        Team
+                        <div class="dropdown pull-right">
+                            <a class="dropdown-toggle"
+                               data-toggle="dropdown"
+                               role="button" aria-haspopup="true" aria-expanded="false"
+                               style="color:gray">
+                                <i class="fa fa-gear"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a>
+                                        Add member
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        Import team
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a ng-click="vm.project.editMember()">
+                                        Edit team
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                    <div class="list-group">
+                        <div class="list-group-item" ng-repeat="user in value.members">
+                            <p>
+                                <a href="javascript:"><span ng-bind="user.name"></span></a>
+                                <a href="javascript:" class="pull-right"
+                                   ng-click="user.expand = !user.expand">
+                                    <i class="glyphicon ng-hide"
+                                       ng-show="!user.isEdited"
+                                       ng-class="{'glyphicon-chevron-up': user.expand, 'glyphicon-chevron-down': !user.expand}"></i>
+                                </a>
+                                <a href="javascript:"
+                                   class="pull-right ng-hide"
+                                   ng-show="user.isEdited"
+                                   ng-click="vm.project.removeMember(user)"><i class="fa fa-minus"></i></a>
+                            </p>
+
+                            <div class="ng-hide" ng-show="user.expand">
+                                <hr/>
+                                <div ng-bind="user.description">
+                                </div>
+                                <p>
+                                    <span ng-bind="user.email"></span>
+                                </p>
+                                </p>
+                                <hr/>
+                                <!-- address>
+                                    <span ng-bind="user.location"></span><br>
+                                    <span ng-bind="user.city"></span>, <span ng-bind="user.state"></span><br>
+                                    <abbr title="Phone">P:</abbr><span ng-bind="user.phone"></span>
+                                </address -->
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- new project list -->
+    <div class="col-sm-12 col-xs-12">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title ng-hide" ng-show="true">
+                    <span>Create New project</span>
+                </h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal ng-hide" ng-show="true">
+
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputEmail3" placeholder="Project name"
+                                   ng-model="vm.project.item.name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <textarea class="form-control" rows="3" placeholder="Description..."
+                                      ng-model="vm.project.item.description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-default" ng-click="vm.project.add()">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="importTeamModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Import Team & Members</h4>
+            </div>
+            <div class="modal-body" style="height:600px;overflow-y: auto;">
+
+                <div class="panel panel-success" ng-repeat="value in vm.team.list">
+                    <div class="panel-heading">
+                        <span ng-bind="value.name"></span>
+                        <span class="pull-right"><input type="checkbox" ng-model="value.selected" ng-click="vm.team.select(value);"/></span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <div ng-bind="value.description"></div>
+                            </div>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-group-item" ng-repeat="member in value.members">
+                                <a href="javascript:"><span ng-bind="member.name"></span></a>
+                                (<span ng-bind="member.email"></span>)
+
+                                <span class="pull-right"><input type="checkbox" ng-model="member.selected"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.project.addMember(vm.team.list)">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<script type="application/javascript">
+    $(document).ready(function () {
+
+        $("#importTeamModal").modal(function () {
+
+        });
+
+    });
+</script>
