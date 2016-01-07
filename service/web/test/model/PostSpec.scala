@@ -6,6 +6,8 @@ import org.specs2.runner._
 import service.post.Post
 import service.team.Team
 
+import scala.concurrent.Future
+
 /**
  * The test is flexible, and we can use different test framework,
  * and one task, is to test the model
@@ -24,8 +26,10 @@ class PostSpec extends PlaySpec {
 
     "populate data in table<project>" in {
 
+      Post.initialize
+
       for (i <- 0 to 200) {
-        Post.populate
+        //Post.populate
       }
     }
 

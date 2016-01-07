@@ -171,8 +171,8 @@ object Member {
 
     val setup = DBIO.seq(
 
-      //_query.schema.drop,
-      //_query.schema.create
+      _query.schema.drop,
+      _query.schema.create
 
 
       //_query += Member(101, "Acme, Inc."),
@@ -191,7 +191,7 @@ object Member {
       case s => println("failed", s)
     }
 
-    _db.close()
+    //_db.close()
 
 
   }
@@ -211,36 +211,34 @@ object Member {
 
     val setup = DBIO.seq(
 
-      // _query,
+      _query.map {
 
-      _query += MemberEntity(
-        username = faker.Name.name,
-        email = faker.Internet.email,
-        password = "",
-        firstName = faker.Name.first_name,
-        lastName = faker.Name.last_name,
-        displayName = faker.Name.name,
-        description = faker.Company.name,
-        createdAt = now,
-        updatedAt = now,
-        id = None
-      ),
-      _query += MemberEntity(
-        username = faker.Name.name,
-        email = faker.Internet.email,
-        password = "",
-        firstName = faker.Name.first_name,
-        lastName = faker.Name.last_name,
-        displayName = faker.Name.name,
-        description = faker.Company.name,
-        createdAt = now,
-        updatedAt = now,
-        id = None
-      )
+        m => (
+
+          m.username,
+          m.email,
+          m.firstName,
+          m.lastName,
+          m.displayName,
+          m.description,
+          m.createdAt,
+          m.updatedAt
+          )
+      } +=(
+        faker.Name.name,
+        faker.Internet.email,
+        faker.Name.first_name,
+        faker.Name.last_name,
+        faker.Name.name,
+        faker.Lorem.paragraph(3),
+        now,
+        now
+        )
 
     )
 
     val setupFuture = _db.run(setup)
+
 
     setupFuture.onSuccess {
       case s => println("success: ", s)

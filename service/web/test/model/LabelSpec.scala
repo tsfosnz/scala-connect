@@ -3,9 +3,8 @@ package model
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
+import service.label.Label
 import service.member.Member
-import service.post.Post
-import service.team.Team
 
 /**
  * The test is flexible, and we can use different test framework,
@@ -19,16 +18,16 @@ import service.team.Team
  * This is more like a UnitTest, not a TDD
  */
 @RunWith(classOf[JUnitRunner])
-class MemberSpec extends PlaySpec {
+class LabelSpec extends PlaySpec {
 
-  "Project<Model>" must {
+  "Label<Model>" must {
 
-    "populate data in table<project>" in {
+    "populate data in table<label>" in {
 
-      Member.initialize
+      Label.initialize
 
-      for (i <- 0 to 100) {
-        Member.populate
+      for (i <- 0 to 10) {
+        Label.populate
       }
     }
 

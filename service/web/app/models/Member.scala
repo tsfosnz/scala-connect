@@ -4,7 +4,7 @@ import slick.driver.MySQLDriver.api._
 
 class Member(tag: Tag) extends Table[MemberEntity](tag, "member") {
 
-  def id = column[Option[Int]]("member_id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("member_id", O.PrimaryKey, O.AutoInc)
 
   def username = column[String]("username", O.Length(128), O.Default(""))
 
@@ -41,7 +41,7 @@ class Member(tag: Tag) extends Table[MemberEntity](tag, "member") {
 
 case class MemberEntity
 (
-  id: Option[Int],
+  id: Int,
   username: String,
   email: String,
   password: String,

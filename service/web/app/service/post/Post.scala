@@ -196,39 +196,27 @@ object Post {
   /**
    * initialize the table, create its schema, update its schema
    */
-  def initialize() {
+  def initialize() = {
+
+    // println("hello")
 
     val setup = DBIO.seq(
 
-      //_query.schema.drop,
-      //_query.schema.create
+      _query.schema.drop,
+      _query.schema.create
 
-
-      //_query += Project(101, "Acme, Inc."),
-      //_query += Project(49, "Superior Coffee"),
-      //_query += Project(150, "The High Ground")
-
-    )
+    ).transactionally
 
     val setupFuture = _db.run(setup)
 
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
-    //_db.close()
-
+    setupFuture
 
   }
 
   /**
    * populate the data into the table
    */
-  def populate() {
+  def populate = {
 
     val dt: java.util.Date = new java.util.Date()
 
@@ -242,34 +230,26 @@ object Post {
 
       // _query,
 
-      _query += PostEntity(
-        authorId = 1,
-        title = faker.Company.name,
-        excerpt = faker.Lorem.paragraph(5),
-        textBody = faker.Lorem.paragraphs(10).mkString("\n"),
-        htmlBody = faker.Lorem.paragraphs(10).mkString("\n"),
-        status = "proposal",
-        isArchived = "false",
-        createdAt = now,
-        updatedAt = now,
-        id = None,
-        startedAt = None,
-        finishedAt = None
-      ),
-      _query += PostEntity(
-        authorId = 1,
-        title = faker.Company.name,
-        excerpt = faker.Lorem.paragraph(5),
-        textBody = faker.Lorem.paragraphs(10).mkString("\n"),
-        htmlBody = faker.Lorem.paragraphs(10).mkString("\n"),
-        status = "proposal",
-        isArchived = "false",
-        createdAt = now,
-        updatedAt = now,
-        id = None,
-        startedAt = None,
-        finishedAt = None
-      )
+      _query.map {
+
+        m => (
+          m.authorId,
+          m.title,
+          m.excerpt,
+          m.textBody,
+          m.htmlBody,
+          m.createdAt,
+          m.updatedAt
+          )
+      } +=(
+        (Math.random() * 100).toInt,
+        faker.Lorem.sentence(32),
+        faker.Lorem.paragraph(3),
+        faker.Lorem.paragraphs(10).mkString("\n"),
+        faker.Lorem.paragraphs(10).mkString("\n"),
+        now,
+        now
+        )
 
     )
 
@@ -283,6 +263,6 @@ object Post {
       case s => println("failed", s)
     }
 
-
   }
+
 }
