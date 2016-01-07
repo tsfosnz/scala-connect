@@ -20,8 +20,8 @@ class AddSpec extends Specification {
       // Programming in scala
 
       val data = Array (
-        ("name", "hello"),
-        ("description", "test one")
+        ("title", "hello"),
+        ("body", "test one")
       )
 
       val home = route (
@@ -71,8 +71,8 @@ class AddSpec extends Specification {
       // Programming in scala
 
       val data = Array (
-        ("name", "hello"),
-        ("description", "test one"),
+        ("title", "hello"),
+        ("body", "test one"),
         ("a", "b")
       )
 

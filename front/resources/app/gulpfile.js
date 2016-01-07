@@ -1,20 +1,20 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 
-var taskBuildProject = require("./member/manage/build");
+var home = require("./home/manage/build");
 
 var env = {
     'dev': {
-        EndpointBaseUrl: "'/team/teamapp/front/template';",
-        TemplateBaseUrl: "'/team/teamapp/front/template';"
+        EndpointBaseUrl: "'conn/front/template';",
+        TemplateBaseUrl: "'conn/front/template';"
     }
 };
 
 // ./node_modules/.bin/gulp
 
-gulp.task('member', function (cb) {
+gulp.task('home', function (cb) {
 
-    return taskBuildProject(gulp, env);
+    return home(gulp, env);
 });
 
 
@@ -30,7 +30,7 @@ gulp.task('test', function (done) {
     }, done).start();
 });
 
-gulp.task('default', ['member'], function () {
+gulp.task('default', ['home'], function () {
 
 
 });
