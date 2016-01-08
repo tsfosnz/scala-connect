@@ -1,56 +1,94 @@
-package service.member
+package service.team
 
+import java.sql.SQLTimeoutException
 import java.text.SimpleDateFormat
 
-import models.{Member, MemberEntity}
+import models.{TeamFullEntity, MemberEntity, Team, TeamEntity}
+import service.member.MemberServ
 import slick.driver.MySQLDriver.api._
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import faker._
 
 
-object MemberIo {
+object TeamServ {
 
-  lazy val _query: TableQuery[Member] = TableQuery[Member]
+  lazy val _query: TableQuery[Team] = TableQuery[Team]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
 
+    TeamMemberServ.remove(1)
 
-    val data: Map[String, Any] = Map(
-      "managerId" -> 1,
-      "name" -> "test"
-
-    )
   }
 
-  def all(page: Int, count: Int): Future[Seq[MemberEntity]] = {
+  /**
+   *
+   * Get team ++ member, with page and count limit,
+   * and it should be (team, team, ...), for each team,
+   * team.member = (member, member...)
+   *
+   * @param page
+   * @param count
+   * @return
+   */
+  def all(page: Int, count: Int) = {
+
 
     try {
 
+
       val query = _query.drop(page).take(count)
+
+      val action = query.result
+
       val sql = query.result.statements.head
 
       //println(sql)
 
-      val action = query.result
-      val result: Future[Seq[MemberEntity]] = _db.run(action)
+      val result = _db.run(action)
 
 
-      //throw new Exception("Wrong!!")
+      val withMember = for {
 
-      //_db.close
+        r <- result
 
-      result
+      } yield {
+
+          val b = for {
+
+            t <- r
+
+          } yield {
+
+            val member = TeamMemberServ.getMemberBy(t.id.get)
+
+            for {
+
+              m <- member
+
+            } yield TeamFullEntity(team = t, member = m)
+
+
+            //Future.successful(b)
+
+          }
+
+          Future.sequence(b)
+
+        }
+
+      withMember
+
     }
 
     catch {
-      case err: Exception => null
+      case err: Throwable => null
     }
 
   }
 
-  def one(id: Int): Future[Seq[MemberEntity]] = {
+  def one(id: Int): Future[Seq[TeamEntity]] = {
 
     // first lets define a SQL
 
@@ -61,7 +99,7 @@ object MemberIo {
     println(sql)
 
     val action = query.result
-    val result: Future[Seq[MemberEntity]] = _db.run(action)
+    val result: Future[Seq[TeamEntity]] = _db.run(action)
 
     result
 
@@ -98,13 +136,13 @@ object MemberIo {
 
       _query.map(
         model => (
-          model.username,
+          model.name,
           model.description,
           model.createdAt,
           model.updatedAt
 
           )) +=(
-        data("username"),
+        data("name"),
         data("description"),
         now,
         now
@@ -133,7 +171,7 @@ object MemberIo {
     val now: String = sdf.format(dt);
 
     // how to add to model member according to data
-    // member[Map.Key] = Map.Value?
+    // team[Map.Key] = Map.Value?
 
     val action = DBIO.seq(
 
@@ -163,6 +201,23 @@ object MemberIo {
 
   }
 
+  def addMember(teamId: Int, memberId: Int): Unit = {
+
+    /*
+    for {
+
+      t <- team
+      m <- member
+
+    } yield {
+
+      TeamMember.add(t.id.get, m.id.get)
+
+    }*/
+
+    TeamMemberServ.add(teamId, memberId)
+
+  }
 
   /**
    * initialize the table, create its schema, update its schema
@@ -171,19 +226,19 @@ object MemberIo {
 
     val setup = DBIO.seq(
 
-      _query.schema.drop,
-      _query.schema.create
+      //_query.schema.drop,
+      //_query.schema.create
 
 
-      //_query += Member(101, "Acme, Inc."),
-      //_query += Member(49, "Superior Coffee"),
-      //_query += Member(150, "The High Ground")
+      //_query += Team(101, "Acme, Inc."),
+      //_query += Team(49, "Superior Coffee"),
+      //_query += Team(150, "The High Ground")
 
     )
 
-    val setupFuture = _db.run(setup)
+    val result = _db.run(setup)
 
-    setupFuture
+    result
 
 
   }
@@ -203,35 +258,29 @@ object MemberIo {
 
     val setup = DBIO.seq(
 
-      _query.map {
+      // _query,
 
-        m => (
-
-          m.username,
-          m.email,
-          m.firstName,
-          m.lastName,
-          m.displayName,
-          m.description,
-          m.createdAt,
-          m.updatedAt
-          )
-      } +=(
-        faker.Name.name,
-        faker.Internet.email,
-        faker.Name.first_name,
-        faker.Name.last_name,
-        faker.Name.name,
-        faker.Lorem.paragraph(3),
-        now,
-        now
-        )
+      _query += TeamEntity(
+        name = faker.Company.name,
+        description = faker.Company.name,
+        createdAt = now,
+        updatedAt = now,
+        id = None
+      ),
+      _query += TeamEntity(
+        name = faker.Company.name,
+        description = faker.Company.name,
+        createdAt = now,
+        updatedAt = now,
+        id = None
+      )
 
     )
 
-    val setupFuture = _db.run(setup)
+    val result = _db.run(setup)
+
+    result
 
 
-    setupFuture
   }
 }

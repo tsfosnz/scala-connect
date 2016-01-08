@@ -5,8 +5,8 @@ import play.api.libs.iteratee.{Enumerator, Enumeratee}
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.twirl.api.Html
-import service.post.PostIo
-import service.team.TeamIo
+import service.post.PostServ
+import service.team.TeamServ
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -29,7 +29,7 @@ class Fetcher extends Command {
 
   def team = Action.async { request =>
 
-    TeamIo.test
+    TeamServ.test
 
     /*
     val team = Team.all(0, 10)
@@ -95,7 +95,7 @@ class Fetcher extends Command {
       """<script>console.log('bar')</script>""").andThen(Enumerator.eof)).as(HTML)
     */
 
-    val t = PostIo.test
+    val t = PostServ.test
 
     println(t)
 

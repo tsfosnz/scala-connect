@@ -3,14 +3,15 @@ package service.label
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import models.Label
+import models.{LabelPost, Label}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-object LabelIo {
+object LabelPostServ {
 
-  lazy val _query: TableQuery[Label] = TableQuery[Label]
+  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
@@ -36,7 +37,7 @@ object LabelIo {
         val result = _db.run(action)
 
 
-        //throw new Exception("Wrong!!")
+        //throw new Throwable("Wrong!!")
 
         //_db.close
 
@@ -44,7 +45,7 @@ object LabelIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -67,7 +68,7 @@ object LabelIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -122,7 +123,7 @@ object LabelIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -156,7 +157,7 @@ object LabelIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
 
@@ -180,73 +181,10 @@ object LabelIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
   */
 
-  /**
-   * initialize the table, create its schema, update its schema
-   */
-  def initialize = {
-
-    val setup = DBIO.seq(
-
-      _query.schema.drop,
-      _query.schema.create
-
-
-    )
-
-    val setupFuture = _db.run(setup)
-
-    setupFuture
-
-  }
-
-  /**
-   * populate the data into the table
-   */
-  def populate() {
-
-    val dt: java.util.Date = new java.util.Date()
-
-    val sdf: SimpleDateFormat =
-      new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
-    val now: String = sdf.format(dt)
-
-
-    val setup = DBIO.seq(
-
-      // _query,
-
-      _query.map {
-
-        m => (
-          m.name,
-          m.createdAt,
-          m.updatedAt
-          )
-      } +=(
-        faker.Lorem.words(2).mkString(""),
-        now,
-        now
-        )
-
-    )
-
-    val setupFuture = _db.run(setup)
-
-    setupFuture.onSuccess {
-      case s => println("success: ", s)
-    }
-
-    setupFuture.onFailure {
-      case s => println("failed", s)
-    }
-
-
-  }
 }

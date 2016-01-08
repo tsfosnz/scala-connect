@@ -6,13 +6,10 @@ import org.scalatest.concurrent.{ScalaFutures, Futures}
 import org.scalatest.time.{Seconds, Span}
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import service.post.PostIo
-import service.label.LabelIo
-import service.team.TeamIo
-import org.scalatest.concurrent.Timeouts._
+import migration._
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -33,13 +30,13 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
-      val f = PostIo.initialize
+      val f = PostTable.initialize()
 
       Await.result(f, Duration("5 seconds"))
 
       for (i <- 0 to 200) {
 
-        Await.result(PostIo.populate, Duration("1 seconds"))
+        Await.result(PostTable.populate, Duration("1 seconds"))
       }
     }
 

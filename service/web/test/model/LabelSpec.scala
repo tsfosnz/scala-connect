@@ -3,8 +3,7 @@ package model
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import service.label.LabelIo
-import service.member.MemberIo
+import migration.LabelTable
 
 /**
  * The test is flexible, and we can use different test framework,
@@ -24,10 +23,10 @@ class LabelSpec extends PlaySpec {
 
     "populate data in table<label>" in {
 
-      LabelIo.initialize
+      LabelTable.initialize
 
       for (i <- 0 to 10) {
-        LabelIo.populate
+        LabelTable.populate
       }
     }
 

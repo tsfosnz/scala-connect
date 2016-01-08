@@ -2,13 +2,10 @@ package process.home.controllers.main
 
 import core._
 import models.PostEntity
-import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.post.PostIo
-
+import service.post.PostServ
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 
 class Fetcher extends Command {
@@ -24,7 +21,7 @@ class Fetcher extends Command {
 
     //
 
-    val result = PostIo.all(0, 20)
+    val result = PostServ.all(0, 20)
 
     for {
 

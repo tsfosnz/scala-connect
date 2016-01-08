@@ -1,17 +1,10 @@
 package service.team
 
-import java.sql.SQLTimeoutException
-import java.text.SimpleDateFormat
-
 import models.{TeamMember, TeamMemberEntity}
-import service.member.MemberIo
+import service.member.MemberServ
 import slick.driver.MySQLDriver.api._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import faker._
 
-
-object TeamMemberIo {
+object TeamMemberServ {
 
   // all these code will go primary constructor, and run
   // automatically when object created
@@ -25,7 +18,7 @@ object TeamMemberIo {
 
     val query = for {
 
-      (r, m) <- TeamMemberIo._query join MemberIo._query on (_.memberId === _.id)
+      (r, m) <- TeamMemberServ._query join MemberServ._query on (_.memberId === _.id)
       if r.teamId === teamId
 
     } yield m
@@ -105,9 +98,9 @@ object TeamMemberIo {
 
     )
 
-    val setupFuture = _db.run(setup)
+    val result = _db.run(setup)
 
-    setupFuture
+    result
 
 
   }

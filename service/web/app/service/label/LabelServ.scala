@@ -3,15 +3,14 @@ package service.label
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import models.{LabelPost, Label}
+import models.Label
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-object LabelPostIo {
+object LabelServ {
 
-  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
+  lazy val _query: TableQuery[Label] = TableQuery[Label]
   lazy val _db: Database = Database.forConfig("mydb")
 
   def test = {
@@ -37,7 +36,7 @@ object LabelPostIo {
         val result = _db.run(action)
 
 
-        //throw new Exception("Wrong!!")
+        //throw new Throwable("Wrong!!")
 
         //_db.close
 
@@ -45,7 +44,7 @@ object LabelPostIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -68,7 +67,7 @@ object LabelPostIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -123,7 +122,7 @@ object LabelPostIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
@@ -157,7 +156,7 @@ object LabelPostIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
 
@@ -181,70 +180,9 @@ object LabelPostIo {
       }
 
       catch {
-        case err: Exception => null
+        case err: Throwable => null
       }
 
     }
   */
-
-  /**
-   * initialize the table, create its schema, update its schema
-   */
-  def initialize(drop: Boolean = false) = {
-
-
-    val dropData= List(_query.schema.drop, _query.schema.create)
-    val createData= List(_query.schema.create)
-
-
-    val setup = if (drop)
-      DBIO.seq(dropData: _*)
-    else
-      DBIO.seq(createData: _*)
-
-    val setupFuture = _db.run(setup)
-
-    setupFuture
-
-    //_db.close()
-
-
-  }
-
-  /**
-   * populate the data into the table
-   */
-  def populate(labelId: Int, postId: Int) = {
-
-    val dt: java.util.Date = new java.util.Date()
-
-    val sdf: SimpleDateFormat =
-      new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
-    val now: String = sdf.format(dt)
-
-
-    val setup = DBIO.seq(
-
-      // _query,
-
-      _query.map {
-
-        m => (
-          m.labelId,
-          m.postId
-          )
-      } +=(
-        labelId,
-        postId
-        )
-
-    )
-
-    val setupFuture = _db.run(setup)
-
-    setupFuture
-
-
-  }
 }

@@ -1,10 +1,8 @@
-package model
+package migration
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import migration.LabelPostTable
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -21,32 +19,34 @@ import scala.concurrent.duration.Duration
  * This is more like a UnitTest, not a TDD
  */
 @RunWith(classOf[JUnitRunner])
-class LabelPostSpec extends PlaySpec {
+class DbSeedSpec extends PlaySpec {
 
-  "Label<Model>" must {
+  "Db seed" must {
 
-    "populate data in table<label>" in {
+    "populate data to table for test" in {
 
+      // create all
 
-      try {
-        Await.result(LabelPostTable.initialize(true), Duration("5 seconds"))
+      for (i <- 0 to 9) {
+        Await.result(LabelTable.populate, Duration("5 seconds"))
       }
 
-      catch {
-        case err: MySQLSyntaxErrorException =>
-          Await.result(LabelPostTable.initialize(), Duration("5 seconds"))
+      for (i <- 0 to 99) {
+        Await.result(PostTable.populate, Duration("5 seconds"))
       }
 
-      for (j <- 1 to 200) {
-
-        Await.result(LabelPostTable.populate(j % 10 + 1, j), Duration("1 seconds"))
-
+      for (i <- 0 to 9) {
+        Await.result(MemberTable.populate, Duration("5 seconds"))
       }
+
+      // Await.result(LabelPostTable.populate, Duration("5 seconds"))
+
+
     }
 
-    "continue..." in {
+    "continue" in {
 
-      println("To be continuted...")
+      // println("To be continuted...")
 
       //Project.remove
 

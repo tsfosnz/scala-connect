@@ -3,9 +3,9 @@ package model
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import service.member.MemberIo
-import service.post.PostIo
-import service.team.TeamIo
+import service.member.MemberServ
+import service.post.PostServ
+import service.team.TeamServ
 
 /**
  * The test is flexible, and we can use different test framework,
@@ -25,10 +25,10 @@ class MemberSpec extends PlaySpec {
 
     "populate data in table<project>" in {
 
-      MemberIo.initialize
+      MemberServ.initialize
 
       for (i <- 0 to 100) {
-        MemberIo.populate
+        MemberServ.populate
       }
     }
 
