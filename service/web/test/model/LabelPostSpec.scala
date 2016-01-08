@@ -28,20 +28,6 @@ class LabelPostSpec extends PlaySpec {
     "populate data in table<label>" in {
 
 
-      try {
-        Await.result(LabelPostTable.initialize(true), Duration("5 seconds"))
-      }
-
-      catch {
-        case err: MySQLSyntaxErrorException =>
-          Await.result(LabelPostTable.initialize(), Duration("5 seconds"))
-      }
-
-      for (j <- 1 to 200) {
-
-        Await.result(LabelPostTable.populate(j % 10 + 1, j), Duration("1 seconds"))
-
-      }
     }
 
     "continue..." in {

@@ -23,9 +23,6 @@ trait MigrationTable[T <: Table[_]] {
 
     result
 
-    //_db.close()
-
-
   }
 
 }

@@ -1,6 +1,0 @@
-package core
-
-class Migration {
-
-
-}

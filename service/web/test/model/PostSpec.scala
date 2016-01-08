@@ -30,14 +30,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
-      val f = PostTable.initialize()
 
-      Await.result(f, Duration("5 seconds"))
-
-      for (i <- 0 to 200) {
-
-        Await.result(PostTable.populate, Duration("1 seconds"))
-      }
     }
 
     "continue..." in {

@@ -20,8 +20,6 @@ object LabelPostTable extends MigrationTable[LabelPost]{
 
     val setup = DBIO.seq(
 
-      // _query,
-
       _query.map {
 
         m => (

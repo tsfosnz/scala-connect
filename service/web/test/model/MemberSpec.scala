@@ -25,11 +25,7 @@ class MemberSpec extends PlaySpec {
 
     "populate data in table<project>" in {
 
-      MemberServ.initialize
 
-      for (i <- 0 to 100) {
-        MemberServ.populate
-      }
     }
 
     "continue..." in {

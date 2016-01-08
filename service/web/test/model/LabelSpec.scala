@@ -23,11 +23,6 @@ class LabelSpec extends PlaySpec {
 
     "populate data in table<label>" in {
 
-      LabelTable.initialize
-
-      for (i <- 0 to 10) {
-        LabelTable.populate
-      }
     }
 
     "continue..." in {
