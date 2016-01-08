@@ -10,8 +10,8 @@ import scala.concurrent.Future
 
 object MemberServ {
 
-  lazy val _query: TableQuery[Member] = TableQuery[Member]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Member] = TableQuery[Member]
+  lazy val db: Database = Database.forConfig("mydb")
 
   def test() {
 
@@ -22,18 +22,18 @@ object MemberServ {
 
     try {
 
-      val query = _query.drop(page).take(count)
-      val sql = query.result.statements.head
+      val q = query.drop(page).take(count)
+      val sql = q.result.statements.head
 
       println(sql)
 
-      val action = query.result
-      val result = _db.run(action)
+      val action = q.result
+      val result = db.run(action)
 
 
       //throw new Throwable("Wrong!!")
 
-      //_db.close
+      //db.close
 
       result
     }
@@ -49,13 +49,13 @@ object MemberServ {
     // first lets define a SQL
 
 
-    val query = _query.filter(_.id === id)
-    val sql = query.result.statements.head
+    val q = query.filter(_.id === id)
+    val sql = q.result.statements.head
 
     println(sql)
 
-    val action = query.result
-    val result = _db.run(action)
+    val action = q.result
+    val result = db.run(action)
 
     result
 
@@ -66,10 +66,10 @@ object MemberServ {
     // first lets define a SQL
 
 
-    val query = _query.take(1).sortBy(_.createdAt.desc)
+    val q = query.take(1).sortBy(_.createdAt.desc)
 
-    val action = query.delete
-    val result = _db.run(action)
+    val action = q.delete
+    val result = db.run(action)
 
     val sql = action.statements.head
 
@@ -90,7 +90,7 @@ object MemberServ {
 
     val action = DBIO.seq(
 
-      _query.map(
+      query.map(
         model => (
           model.username,
           model.description,
@@ -105,12 +105,12 @@ object MemberServ {
         ))
 
 
-    val sql = _query.insertStatement
+    val sql = query.insertStatement
 
-    // here we can see the pure sql from query
+    // here we can see the pure sql from q
     println(sql)
 
-    val result = _db.run(action)
+    val result = db.run(action)
 
     result
 
@@ -132,7 +132,7 @@ object MemberServ {
     val action = DBIO.seq(
 
       /*
-        _query.map(
+        query.map(
 
           model => for {
 
@@ -146,12 +146,12 @@ object MemberServ {
     )
 
 
-    val sql = _query.insertStatement
+    val sql = query.insertStatement
 
-    // here we can see the pure sql from query
+    // here we can see the pure sql from q
     println(sql)
 
-    val result = _db.run(action)
+    val result = db.run(action)
 
     result
 

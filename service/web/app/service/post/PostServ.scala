@@ -2,18 +2,19 @@ package service.post
 
 import java.text.SimpleDateFormat
 
-import models.Post
+import core.Service
+import models.{LabelPost, Post}
 import slick.driver.MySQLDriver.api._
 
 object PostServ {
 
-  lazy val _query: TableQuery[Post] = TableQuery[Post]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Post] = TableQuery[Post]
+  lazy val db: Database = Database.forConfig("mydb")
 
   def test = {
 
-    _query.filter(_.authorId === 1)
-    _query.map(
+    query.filter(_.authorId === 1)
+    query.map(
 
       model => {
         println((
@@ -33,18 +34,18 @@ object PostServ {
 
     try {
 
-      val query = _query.drop(page).take(count)
+      val q = query.drop(page).take(count)
       val sql = query.result.statements.head
 
       println(sql)
 
       val action = query.result
-      val result = _db.run(action)
+      val result = db.run(action)
 
 
       //throw new Throwable("Wrong!!")
 
-      //_db.close
+      //db.close
 
       result
     }
@@ -61,13 +62,13 @@ object PostServ {
 
     try {
 
-      val query = _query.filter(_.id === id)
+      val q = query.filter(_.id === id)
       val sql = query.result.statements.head
 
       println(sql)
 
-      val action = query.result
-      val result = _db.run(action)
+      val action = q.result
+      val result = db.run(action)
 
       result
     }
@@ -97,7 +98,7 @@ object PostServ {
 
       val action = DBIO.seq {
 
-        _query.map {
+        query.map {
 
           model => (
             model.authorId,
@@ -117,12 +118,12 @@ object PostServ {
       }
 
 
-      val sql = _query.insertStatement
+      val sql = query.insertStatement
 
-      // here we can see the pure sql from query
+      // here we can see the pure sql from q
       println(sql)
 
-      val result = _db.run(action)
+      val result = db.run(action)
 
       result
     }
@@ -147,16 +148,16 @@ object PostServ {
       // should only add the value in data
       // and leave all esle alone
 
-      val query = for {
-        item <- _query if item.id === id
+      val q = for {
+        item <- query if item.id === id
       } yield (item.title, item.textBody, item.updatedAt)
 
-      val action = query.update(data("title").head, data("body").head, now)
-      val sql = query.updateStatement
+      val action = q.update(data("title").head, data("body").head, now)
+      val sql = q.updateStatement
 
       println(sql)
 
-      val result = _db.run(action)
+      val result = db.run(action)
 
       result
     }
@@ -173,10 +174,10 @@ object PostServ {
     // first lets define a SQL
 
     try {
-      val query = _query.filter(_.id === id)
+      val q = query.filter(_.id === id)
 
-      val action = query.delete
-      val result = _db.run(action)
+      val action = q.delete
+      val result = db.run(action)
 
       val sql = action.statements.head
 
@@ -184,6 +185,7 @@ object PostServ {
 
       result
     }
+
 
     catch {
       case err: Throwable => null

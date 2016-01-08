@@ -47,6 +47,10 @@ class Fetcher extends Command {
 
           k => k.map {
             n => Ok(Json.prettyPrint(Json.toJson(n)))
+          }.recover {
+
+            case err =>
+              InternalServerError(fail(ServErrorConst.SystemError))
           }
         }
       }
@@ -60,7 +64,11 @@ class Fetcher extends Command {
     result.map(
       result =>
         Ok(Json.toJson(result))
-    )
+    ).recover {
+
+      case err =>
+        InternalServerError(fail(ServErrorConst.SystemError))
+    }
 
   }
 }

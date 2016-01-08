@@ -6,10 +6,11 @@ import slick.driver.MySQLDriver.api._
 
 object LabelPostTable extends MigrationTable[LabelPost]{
 
-  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
-  lazy val _db: Database = Database.forConfig("mydb")
+  //type T = LabelPost
+  lazy val query = TableQuery[LabelPost]
+  lazy val db = Database.forConfig("mydb")
 
-  def initialize(drop: Boolean = false) = init(_query, _db)(drop)
+  def initialize(drop: Boolean = false) = init(query, db)(drop)
 
 
   /**
@@ -20,7 +21,7 @@ object LabelPostTable extends MigrationTable[LabelPost]{
 
     val setup = DBIO.seq(
 
-      _query.map {
+      query.map {
 
         m => (
           m.labelId,
@@ -33,7 +34,7 @@ object LabelPostTable extends MigrationTable[LabelPost]{
 
     )
 
-    val result = _db.run(setup)
+    val result = db.run(setup)
 
     result
 

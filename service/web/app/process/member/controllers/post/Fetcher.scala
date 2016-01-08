@@ -39,14 +39,16 @@ class Fetcher extends Command {
       }
       case _ =>
 
-        // what if it didn't success
-
         result.map {
           data => //Ok(Json.toJson(data))
             Result(
               header = ResponseHeader(200, Map(CONTENT_TYPE -> "application/json")),
               body = Enumerator(Json.toJson(data).toString().getBytes)
             )
+        }.recover {
+
+          case err =>
+            InternalServerError(fail(ServErrorConst.SystemError))
         }
 
     }
@@ -67,14 +69,16 @@ class Fetcher extends Command {
       }
       case _ =>
 
-        // what if it didn't success
-
         result.map {
           data => //Ok(Json.toJson(data))
             Result(
               header = ResponseHeader(200, Map(CONTENT_TYPE -> "application/json")),
               body = Enumerator(Json.toJson(data).toString().getBytes)
             )
+        }.recover {
+
+          case err =>
+            InternalServerError(fail(ServErrorConst.SystemError))
         }
 
     }

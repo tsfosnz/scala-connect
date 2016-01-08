@@ -10,13 +10,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object LabelTable extends MigrationTable[Label]{
 
-  lazy val _query: TableQuery[Label] = TableQuery[Label]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Label] = TableQuery[Label]
+  lazy val db: Database = Database.forConfig("mydb")
 
   /**
    * initialize the table, create its schema, update its schema
    */
-  def initialize(drop:Boolean = false) = init(_query, _db)(drop)
+  def initialize(drop:Boolean = false) = init(query, db)(drop)
 
   /**
    * populate the data into the table
@@ -33,7 +33,7 @@ object LabelTable extends MigrationTable[Label]{
 
     val setup = DBIO.seq(
 
-      _query.map {
+      query.map {
 
         m => (
           m.name,
@@ -48,7 +48,7 @@ object LabelTable extends MigrationTable[Label]{
 
     )
 
-    val result = _db.run(setup)
+    val result = db.run(setup)
 
     result
 

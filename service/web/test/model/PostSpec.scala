@@ -7,6 +7,7 @@ import org.scalatest.time.{Seconds, Span}
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
 import migration._
+import service.post.PostServ
 
 import scala.concurrent.duration.Duration
 import scala.concurrent._
@@ -30,6 +31,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
+      PostServ.all(0, 20)
 
     }
 

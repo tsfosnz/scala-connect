@@ -59,7 +59,11 @@ class Updater extends Command {
           case null => Future {
             InternalServerError(fail(ServErrorConst.SystemError))
           }
-          case _ => result.map(_ => Ok(success()))
+          case _ => result.map(_ => Ok(success())).recover {
+
+            case err =>
+              InternalServerError(fail(ServErrorConst.SystemError))
+          }
         }
 
     }
@@ -109,6 +113,10 @@ class Updater extends Command {
 
             }
 
+          }.recover {
+
+            case err =>
+              InternalServerError(fail(ServErrorConst.SystemError))
           }
         }
 
@@ -135,6 +143,10 @@ class Updater extends Command {
 
         }
 
+      }.recover {
+
+        case err =>
+          InternalServerError(fail(ServErrorConst.SystemError))
       }
     }
 

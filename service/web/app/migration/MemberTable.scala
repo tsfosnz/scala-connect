@@ -12,13 +12,13 @@ import scala.concurrent.Future
 
 object MemberTable extends MigrationTable[Member] {
 
-  lazy val _query: TableQuery[Member] = TableQuery[Member]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Member] = TableQuery[Member]
+  lazy val db: Database = Database.forConfig("mydb")
 
   /**
    * initialize the table, create its schema, update its schema
    */
-  def initialize(drop:Boolean = false) = init(_query, _db)(drop)
+  def initialize(drop:Boolean = false) = init(query, db)(drop)
 
   /**
    * populate the data into the table
@@ -35,7 +35,7 @@ object MemberTable extends MigrationTable[Member] {
 
     val setup = DBIO.seq(
 
-      _query.map {
+      query.map {
 
         m => (
 
@@ -61,7 +61,7 @@ object MemberTable extends MigrationTable[Member] {
 
     )
 
-    val result = _db.run(setup)
+    val result = db.run(setup)
 
 
     result

@@ -5,6 +5,7 @@ import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
 import migration.LabelPostTable
+import service.label.Abcd
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -27,6 +28,7 @@ class LabelPostSpec extends PlaySpec {
 
     "populate data in table<label>" in {
 
+      Await.result(Abcd.LabelPostServ.test, Duration("5 seconds"))
 
     }
 

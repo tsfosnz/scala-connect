@@ -8,10 +8,10 @@ import slick.driver.MySQLDriver.api._
 
 object PostTable extends MigrationTable[Post]{
 
-  lazy val _query: TableQuery[Post] = TableQuery[Post]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Post] = TableQuery[Post]
+  lazy val db: Database = Database.forConfig("mydb")
 
-  def initialize(drop:Boolean = false) = init(_query, _db)(drop)
+  def initialize(drop:Boolean = false) = init(query, db)(drop)
 
   /**
    * populate the data into the table
@@ -28,9 +28,9 @@ object PostTable extends MigrationTable[Post]{
 
     val setup = DBIO.seq(
 
-      // _query,
+      // query,
 
-      _query.map {
+      query.map {
 
         m => (
           m.authorId,
@@ -53,7 +53,7 @@ object PostTable extends MigrationTable[Post]{
 
     )
 
-    val result = _db.run(setup)
+    val result = db.run(setup)
 
     result
   }

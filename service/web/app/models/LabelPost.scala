@@ -24,4 +24,3 @@ case class LabelPostEntity
   labelId: Int,
   postId: Int
   )
-

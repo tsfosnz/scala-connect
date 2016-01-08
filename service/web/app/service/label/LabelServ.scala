@@ -10,8 +10,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object LabelServ {
 
-  lazy val _query: TableQuery[Label] = TableQuery[Label]
-  lazy val _db: Database = Database.forConfig("mydb")
+  lazy val query: TableQuery[Label] = TableQuery[Label]
+  lazy val db: Database = Database.forConfig("mydb")
 
   def test = {
 
@@ -27,18 +27,18 @@ object LabelServ {
 
       try {
 
-        val query = _query.drop(page).take(count)
-        val sql = query.result.statements.head
+        val q = query.drop(page).take(count)
+        val sql = q.result.statements.head
 
         println(sql)
 
-        val action = query.result
-        val result = _db.run(action)
+        val action = q.result
+        val result = db.run(action)
 
 
         //throw new Throwable("Wrong!!")
 
-        //_db.close
+        //db.close
 
         result
       }
@@ -55,13 +55,13 @@ object LabelServ {
 
       try {
 
-        val query = _query.filter(_.id === id)
-        val sql = query.result.statements.head
+        val q = query.filter(_.id === id)
+        val sql = q.result.statements.head
 
         println(sql)
 
-        val action = query.result
-        val result = _db.run(action)
+        val action = q.result
+        val result = db.run(action)
 
         result
       }
@@ -91,7 +91,7 @@ object LabelServ {
 
         val action = DBIO.seq {
 
-          _query.map {
+          query.map {
 
             model => (
               model.authorId,
@@ -111,12 +111,12 @@ object LabelServ {
         }
 
 
-        val sql = _query.insertStatement
+        val sql = query.insertStatement
 
-        // here we can see the pure sql from query
+        // here we can see the pure sql from q
         println(sql)
 
-        val result = _db.run(action)
+        val result = db.run(action)
 
         result
       }
@@ -141,16 +141,16 @@ object LabelServ {
         // should only add the value in data
         // and leave all esle alone
 
-        val query = for {
-          item <- _query if item.id === id
+        val q = for {
+          item <- query if item.id === id
         } yield (item.title, item.textBody, item.updatedAt)
 
-        val action = query.update(data("title").head, data("body").head, now)
-        val sql = query.updateStatement
+        val action = q.update(data("title").head, data("body").head, now)
+        val sql = q.updateStatement
 
         println(sql)
 
-        val result = _db.run(action)
+        val result = db.run(action)
 
         result
       }
@@ -167,10 +167,10 @@ object LabelServ {
       // first lets define a SQL
 
       try {
-        val query = _query.filter(_.id === id)
+        val q = query.filter(_.id === id)
 
-        val action = query.delete
-        val result = _db.run(action)
+        val action = q.delete
+        val result = db.run(action)
 
         val sql = action.statements.head
 

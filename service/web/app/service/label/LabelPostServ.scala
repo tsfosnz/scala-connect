@@ -3,188 +3,55 @@ package service.label
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import models.{LabelPost, Label}
+import core.Service
+import models.LabelPost
+import slick.ast.Node
 import slick.driver.MySQLDriver.api._
+import slick.lifted.{AbstractTable, BaseTag}
+import slick.model.Table
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object LabelPostServ {
+object Abcd {
 
-  lazy val _query: TableQuery[LabelPost] = TableQuery[LabelPost]
-  lazy val _db: Database = Database.forConfig("mydb")
+  object LabelPostServ extends Service[LabelPost]("mydb", abc) {
 
-  def test = {
+    //val _query = TableQuery[LabelPost]
 
-    //println(t)
+
+    def test = {
+
+      //println(t)
+
+
+      //db
+
+      val q = query.drop(1).take(20)
+      val r = db.run(q.result)
+
+      println(q.result.statements.head)
+      println(r)
+
+      r
+
+    }
 
 
   }
 
-  /*
-
-    def all(page: Int, count: Int) = {
-
-
-      try {
-
-        val query = _query.drop(page).take(count)
-        val sql = query.result.statements.head
-
-        println(sql)
-
-        val action = query.result
-        val result = _db.run(action)
-
-
-        //throw new Throwable("Wrong!!")
-
-        //_db.close
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
-    }
-
-    def one(id: Int) = {
-
-      // first lets define a SQL
-
-      try {
-
-        val query = _query.filter(_.id === id)
-        val sql = query.result.statements.head
-
-        println(sql)
-
-        val action = query.result
-        val result = _db.run(action)
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
-    }
-
-    /**
-     * Add the new item
-     *
-     * @param managerId the manager id
-     * @param data the data of the new item
-     * @return
-     */
-    def add(managerId: Int, data: Map[String, Seq[String]]) = {
-
-      try {
-
-        val dt: java.util.Date = new java.util.Date()
-        val sdf: SimpleDateFormat =
-          new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
-        val now: String = sdf.format(dt)
-
-        val action = DBIO.seq {
-
-          _query.map {
-
-            model => (
-              model.authorId,
-              model.title,
-              model.textBody,
-              model.createdAt,
-              model.updatedAt
-
-              )
-          } +=(
-            managerId,
-            data("title").head,
-            data("body").head,
-            now,
-            now
-            )
-        }
-
-
-        val sql = _query.insertStatement
-
-        // here we can see the pure sql from query
-        println(sql)
-
-        val result = _db.run(action)
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
-    }
-
-    def update(id: Int, data: Map[String, Seq[String]]) = {
-
-
-      try {
-
-        val dt: java.util.Date = new java.util.Date()
-        val sdf: SimpleDateFormat =
-          new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
-        val now: String = sdf.format(dt)
-
-        // should only add the value in data
-        // and leave all esle alone
-
-        val query = for {
-          item <- _query if item.id === id
-        } yield (item.title, item.textBody, item.updatedAt)
-
-        val action = query.update(data("title").head, data("body").head, now)
-        val sql = query.updateStatement
-
-        println(sql)
-
-        val result = _db.run(action)
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
-
-    }
-
-    def remove(id: Int) = {
-
-      // first lets define a SQL
-
-      try {
-        val query = _query.filter(_.id === id)
-
-        val action = query.delete
-        val result = _db.run(action)
-
-        val sql = action.statements.head
-
-        println(sql)
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
-    }
-  */
+  //private val ab: LabelPost = null
+  private def abc(tag: Tag) = new LabelPost(tag)
 
 }
+/*
+
+class Test extends Abcd {
+
+  def k = {
+
+    LabelPostServ.test
+
+  }
+
+}*/
