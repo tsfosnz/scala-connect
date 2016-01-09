@@ -2,36 +2,45 @@ package process.home.controllers.main
 
 import core._
 import models.PostEntity
+import play.api.libs.iteratee
+import play.api.libs.iteratee.Step.Done
+import play.api.libs.iteratee.{Input, Step, Iteratee, Enumerator}
 import play.api.libs.json.Json
 import play.api.mvc._
+import play.mvc.Http.Response
 import service.post.PostServ
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 
 
-class Fetcher extends Command {
+class Fetcher extends Controller {
 
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
 
   def index = Action.async { request =>
 
-    // get a list of post
 
-    // get a list of tag
+    //val result = PostServ.all(0, 20)
 
-    //
 
-    val result = PostServ.all(0, 20)
+    val k = new PostFetcher().index(request)
 
-    for {
+    val m = k.flatMap {
 
-      i <- result
+      tt => Html.readHtmlBy(tt.body)
 
-    } yield {
+    }
 
-      Ok(views.html.home.index("", i))
+    m.map {
+
+      ttt => {
+        println(ttt)
+        Ok(views.html.home.index(ttt))
+      }
     }
 
 
   }
+
 }

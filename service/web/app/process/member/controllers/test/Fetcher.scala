@@ -11,7 +11,7 @@ import scala.concurrent.Future
 import core._
 
 
-class Fetcher extends Command {
+object Fetcher extends Command {
 
 
   def team = Action.async { request =>
