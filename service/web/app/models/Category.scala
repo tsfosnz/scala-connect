@@ -2,9 +2,9 @@ package models
 
 import slick.driver.MySQLDriver.api._
 
-class Label(tag: Tag) extends Table[LabelEntity](tag, "label") {
+class Category(tag: Tag) extends Table[CategoryEntity](tag, "category") {
 
-  def id = column[Int]("label_id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("category_id", O.PrimaryKey, O.AutoInc)
 
   def name = column[String]("name", O.Length(128), O.Default(""))
 
@@ -18,10 +18,10 @@ class Label(tag: Tag) extends Table[LabelEntity](tag, "label") {
       name,
       createdAt,
       updatedAt) <>
-      ((LabelEntity.apply _).tupled, LabelEntity.unapply)
+      ((CategoryEntity.apply _).tupled, CategoryEntity.unapply)
 }
 
-case class LabelEntity
+case class CategoryEntity
 (
   id: Int,
   name: String,

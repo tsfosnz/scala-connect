@@ -4,8 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import migration.LabelPostTable
-import service.label.Abcd
+import service.category._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -22,13 +21,13 @@ import scala.concurrent.duration.Duration
  * This is more like a UnitTest, not a TDD
  */
 @RunWith(classOf[JUnitRunner])
-class LabelPostSpec extends PlaySpec {
+class CategoryItemSpec extends PlaySpec {
 
   "Label<Model>" must {
 
     "populate data in table<label>" in {
 
-      Await.result(Abcd.LabelPostServ.test, Duration("5 seconds"))
+      Await.result(CategoryItemServ.test, Duration("5 seconds"))
 
     }
 

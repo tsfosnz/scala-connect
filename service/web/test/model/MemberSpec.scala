@@ -3,9 +3,7 @@ package model
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import service.member.MemberServ
-import service.post.PostServ
-import service.team.TeamServ
+
 
 /**
  * The test is flexible, and we can use different test framework,

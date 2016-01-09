@@ -3,7 +3,7 @@ package service.post
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{LabelPost, Post}
+import models.{CategoryItem, Post}
 import slick.driver.MySQLDriver.api._
 
 object PostServ {

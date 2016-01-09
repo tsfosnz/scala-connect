@@ -3,14 +3,14 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Label
+import models.Category
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object LabelTable extends MigrationTable[Label]{
+object CategoryTable extends MigrationTable[Category]{
 
-  lazy val query: TableQuery[Label] = TableQuery[Label]
+  lazy val query: TableQuery[Category] = TableQuery[Category]
   lazy val db: Database = Database.forConfig("mydb")
 
   /**

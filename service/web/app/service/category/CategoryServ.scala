@@ -1,16 +1,16 @@
-package service.label
+package service.category
 
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import models.Label
+import models.Category
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object LabelServ {
+object CategoryServ {
 
-  lazy val query: TableQuery[Label] = TableQuery[Label]
+  lazy val query: TableQuery[Category] = TableQuery[Category]
   lazy val db: Database = Database.forConfig("mydb")
 
   def test = {

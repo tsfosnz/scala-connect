@@ -29,10 +29,3 @@ POST    /post/$id<[0-9]+>/update     process.member.controllers.post.Updater.upd
 
 DELETE  /post/:id/remove             process.member.controllers.post.Updater.remove(id: Int)
 
-# the routes for the team
-
-GET     /teams/$count<[0-9]+>           process.member.controllers.team.Fetcher.all(count: Int, page: Option[Int])
-#GET     /team/:id                       process.member.controllers.team.Fetcher.one(id: Int)
-#POST    /team/new                       process.member.controllers.team.Updater.add
-#POST    /team/:id/update                process.member.controllers.team.Updater.update(id: Int)
-#POST    /team/:id/remove                process.member.controllers.team.Updater.remove(id: Int)

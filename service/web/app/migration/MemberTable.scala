@@ -3,7 +3,7 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import migration.LabelTable._
+import migration.CategoryTable._
 import models.Member
 import slick.driver.MySQLDriver.api._
 

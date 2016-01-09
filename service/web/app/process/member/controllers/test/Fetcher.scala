@@ -1,12 +1,10 @@
 package process.member.controllers.test
 
-import models.{MemberEntity, TeamEntity, TeamFullEntity}
 import play.api.libs.iteratee.{Enumerator, Enumeratee}
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.twirl.api.Html
 import service.post.PostServ
-import service.team.TeamServ
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -15,21 +13,9 @@ import core._
 
 class Fetcher extends Command {
 
-  // the ugly json, this is the simple way to use json
-  // for different type in play 2.x.x
-  implicit val teamReads = Json.reads[TeamEntity]
-  implicit val teamWrites = Json.writes[TeamEntity]
-
-  implicit val memberReads = Json.reads[MemberEntity]
-  implicit val memberWrites = Json.writes[MemberEntity]
-
-  implicit val teamfullRead = Json.reads[TeamFullEntity]
-  implicit val teamfullWrite = Json.writes[TeamFullEntity]
-
 
   def team = Action.async { request =>
 
-    TeamServ.test
 
     /*
     val team = Team.all(0, 10)

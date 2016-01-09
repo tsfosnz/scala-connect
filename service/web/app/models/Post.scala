@@ -6,7 +6,11 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
 
   def id = column[Int]("post_id", O.PrimaryKey, O.AutoInc)
 
+  def urlKey = column[String]("url_key", O.Length(255), O.Default(""))
+
   def authorId = column[Int]("author_id", O.Default(0))
+
+  def postType = column[String]("type", O.Length(256), O.Default(""))
 
   def title = column[String]("title", O.Length(256), O.Default(""))
 
@@ -28,6 +32,7 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
     (
       id,
       authorId,
+      postType,
       title,
       excerpt,
       textBody,
@@ -43,6 +48,7 @@ case class PostEntity
 (
   id: Int,
   authorId: Int,
+  postType: String,
   title: String,
   excerpt: String,
   textBody: String,

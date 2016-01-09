@@ -91,11 +91,11 @@ object MemberServ {
     val action = DBIO.seq(
 
       query.map(
-        model => (
-          model.username,
-          model.description,
-          model.createdAt,
-          model.updatedAt
+        m => (
+          m.username,
+          m.description,
+          m.createdAt,
+          m.updatedAt
 
           )) +=(
         data("username"),

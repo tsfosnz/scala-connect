@@ -1,13 +1,13 @@
 package migration
 
 import core.MigrationTable
-import models.LabelPost
+import models.CategoryItem
 import slick.driver.MySQLDriver.api._
 
-object LabelPostTable extends MigrationTable[LabelPost]{
+object CategoryItemTable extends MigrationTable[CategoryItem]{
 
   //type T = LabelPost
-  lazy val query = TableQuery[LabelPost]
+  lazy val query = TableQuery[CategoryItem]
   lazy val db = Database.forConfig("mydb")
 
   def initialize(drop: Boolean = false) = init(query, db)(drop)
@@ -24,8 +24,8 @@ object LabelPostTable extends MigrationTable[LabelPost]{
       query.map {
 
         m => (
-          m.labelId,
-          m.postId
+          m.categoryId,
+          m.itemId
           )
       } +=(
         labelId,

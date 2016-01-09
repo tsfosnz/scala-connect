@@ -20,7 +20,7 @@ import scala.concurrent.duration.Duration
  * This is more like a UnitTest, not a TDD
  */
 @RunWith(classOf[JUnitRunner])
-class MigrationSpec extends PlaySpec {
+class DbSchemaSpec extends PlaySpec {
 
   "Db migration" must {
 
@@ -29,16 +29,16 @@ class MigrationSpec extends PlaySpec {
       // create all
 
       try {
-        Await.result(LabelTable.initialize(), Duration("5 seconds"))
-        Await.result(LabelPostTable.initialize(), Duration("5 seconds"))
+        Await.result(CategoryTable.initialize(), Duration("5 seconds"))
+        Await.result(CategoryItemTable.initialize(), Duration("5 seconds"))
         Await.result(MemberTable.initialize(), Duration("5 seconds"))
         Await.result(PostTable.initialize(), Duration("5 seconds"))
       }
 
       catch {
         case err: MySQLSyntaxErrorException => {
-          Await.result(LabelTable.initialize(true), Duration("5 seconds"))
-          Await.result(LabelPostTable.initialize(true), Duration("5 seconds"))
+          Await.result(CategoryTable.initialize(true), Duration("5 seconds"))
+          Await.result(CategoryItemTable.initialize(true), Duration("5 seconds"))
           Await.result(MemberTable.initialize(true), Duration("5 seconds"))
           Await.result(PostTable.initialize(true), Duration("5 seconds"))
         }
