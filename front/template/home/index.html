@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 2 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
@@ -43,7 +44,7 @@
 
 </head>
 
-<body ng-controller="MainController">
+<body>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -139,13 +140,13 @@
 
     .nav-pills li > a {
         color: #999999;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         padding: 5px
     }
 
     .nav-pills li > a:hover {
         color: #002C3C;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         padding: 5px
     }
 
@@ -154,7 +155,7 @@
     }
 
     body {
-        background-color: white;
+        background-color: #002c3c;
         overflow-x: hidden;
         margin-bottom: 0px;
         margin:0 auto;
@@ -172,102 +173,17 @@
 </style>
 <div class="container">
     <div class="row">
-
-        <div class="col-lg-12">
-            <div class="page-header" style="border-radius : 0 !important ;margin:0px;margin-bottom:20px;">
-
-                <ul class="nav nav-pills" role="tablist">
-                    <li role="presentation"><a href="#">语言</a></li>
-                    <li role="presentation"><a href="#">Messages </a></li>
-                    <li role="presentation"><a href="#">内容</a></li>
-                    <li role="presentation"><a href="#">兴趣</a></li>
-                    <li role="presentation"><a href="#">出游</a></li>
-                    <li role="presentation"><a href="#">无聊</a></li>
-                    <li role="presentation"><a href="#">Profile</a></li>
-                    <li role="presentation"><a href="#">Messages </a></li>
-                    <li role="presentation"><a href="#">时间</a></li>
-                </ul>
-
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-
         <div class="col-md-9">
-            <div class="list-group">
-                <div href="#" class="list-group-item list-group-item-info">
-                    Programming
-                </div>
-                <div href="#" class="list-group-item">
-                    <h3>
-                        <a>Functional programming</a>
-                    </h3>
-
-                    <div>
-                        Functional programming has its roots in lambda calculus, a formal system developed in the 1930s
-                        to investigate computability, the Entscheidungsproblem, function definition, function
-                        application, and recursion. Many functional programming languages can be viewed as elaborations
-                        on the lambda calculus. Another well-known declarative programming paradigm, logic programming,
-                        is based on relations.
-                    </div>
-                </div>
-                <div href="#" class="list-group-item">
-                    <h3>论语 - 来自维基百科</h3>
-
-                    <div>
-                        《《论语》自战国前期成书问世以后，因秦始皇的“焚书 坑儒”政策，几乎惨遭灭顶之灾。到汉初，朝廷明令“大收篇籍，广开献书之路”，有些冒着生命危险收藏下书籍的人，纷纷向朝廷“献书”，因口口相传再手抄笔 录辗转反复，字句往往有所差异。鲁人口头传授的《鲁论》20篇；齐人口头传授的《齐论》22篇，比《鲁论》多了“问王”、“知道”两篇；
-                    </div>
-                </div>
-            </div>
-            <div class="list-group">
-                <div href="#" class="list-group-item list-group-item-info">
-                    Programming
-                </div>
-                <div href="#" class="list-group-item">
-                    <h3>
-                        <a>Functional programming</a>
-                    </h3>
-
-                    <div>
-                        Functional programming has its roots in lambda calculus, a formal system developed in the 1930s
-                        to investigate computability, the Entscheidungsproblem, function definition, function
-                        application, and recursion. Many functional programming languages can be viewed as elaborations
-                        on the lambda calculus. Another well-known declarative programming paradigm, logic programming,
-                        is based on relations.
-                    </div>
-                </div>
-                <div href="#" class="list-group-item">
-                    <h3>论语 - 来自维基百科</h3>
-
-                    <div>
-                        《《论语》自战国前期成书问世以后，因秦始皇的“焚书 坑儒”政策，几乎惨遭灭顶之灾。到汉初，朝廷明令“大收篇籍，广开献书之路”，有些冒着生命危险收藏下书籍的人，纷纷向朝廷“献书”，因口口相传再手抄笔 录辗转反复，字句往往有所差异。鲁人口头传授的《鲁论》20篇；齐人口头传授的《齐论》22篇，比《鲁论》多了“问王”、“知道”两篇；
-                    </div>
-                </div>
-            </div>
+            <h3><a href="home.html">Home</a></h3>
+            <h3><a href="column.html">Column</a></h3>
+            <h3><a href="tag.html">Tag</a></h3>
+            <h3><a href="post.html">Post</a></h3>
+            <h3><a href="team.html">Team</a></h3>
+            <h3><a href="lab.html">Lab</a></h3>
+            <h3><a href="about.html">About</a></h3>
+            <h3><a href="login.html">Login</a></h3>
+            <h3><a href="user.html">User</a></h3>
         </div>
-        <div class="col-md-3">
-            <div class="list-group">
-
-                <div href="#" class="list-group-item list-group-item-info">
-                    Programming
-                </div>
-                <div href="#" class="list-group-item">
-                    <ul class="media-list">
-                        <li class="media">
-                            <div class="media-body">
-                                <h4 class="media-heading">Media heading</h4>
-                                《论语》自战国前期成书问世以后，因秦始皇的“焚书 坑儒”政策，几乎惨遭灭顶之灾。到汉初，朝廷明令“大收篇籍，广开献书之路”，有些冒着生命危险收藏下书籍的人，纷纷向朝廷“献书”，因口口相传再手抄笔 录辗转反复，字句往往有所差异。鲁人口头传授的《鲁论》20篇；齐人口头传授的《齐论》22篇，比《鲁论》多了“问王”、“知道”两篇；
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div href="#" class="list-group-item">Morbi leo risus</div>
-                <div href="#" class="list-group-item">Porta ac consectetur ac</div>
-                <div href="#" class="list-group-item">Vestibulum at eros</div>
-            </div>
-        </div>
-
     </div>
 </div>
 
