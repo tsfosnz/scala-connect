@@ -4,10 +4,12 @@ import core._
 import models.PostEntity
 import play.api.libs.json.Json
 import play.api.mvc._
+import service.post.PostServ
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 
-class Fetcher extends Controller {
+class Fetcher extends Command {
 
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
@@ -18,22 +20,67 @@ class Fetcher extends Controller {
     //val result = PostServ.all(0, 20)
 
 
-    val k = new PostFetcher().index(request)
+    val post = this.post(request).flatMap {t => Html.readHtmlBy(t.body)}
+    val head = this.head(request).flatMap {t => Html.readHtmlBy(t.body)}
+    val right = this.right(request).flatMap {t => Html.readHtmlBy(t.body)}
 
-    val m = k.flatMap {
 
-      tt => Html.readHtmlBy(tt.body)
+    for {
+
+      l <- post
+      h <- head
+      r <- right
+
+    } yield {
+
+      Ok(views.html.home.index("", h, l, r))
 
     }
 
-    m.map {
 
-      ttt => {
-        println(ttt)
-        Ok(views.html.home.index(ttt))
-      }
+  }
+
+  /**
+   * Get the post list with list view
+   *
+   * @return
+   */
+  protected def post = Action.async { request =>
+
+    val post = PostServ.all(0, 200)
+
+    post.map {
+
+      r => Ok(views.html.home.block.list(r))
+
     }
 
+
+  }
+
+  /**
+   * Get the header data with header view
+   *
+   * @return
+   */
+  protected def head = Action.async { request =>
+
+    Future {
+      Ok(views.html.home.block.head())
+    }
+
+  }
+
+  /**
+   * Get the data with right sidebar
+   *
+   * @return
+   */
+  protected def right = Action.async { request =>
+
+    Future {
+      Ok(views.html.home.block.right(""))
+    }
 
   }
 
