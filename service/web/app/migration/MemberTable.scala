@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import core.MigrationTable
 import migration.CategoryTable._
 import models.Member
+import service.member.MemberServ
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
@@ -12,8 +13,8 @@ import scala.concurrent.Future
 
 object MemberTable extends MigrationTable[Member] {
 
-  lazy val query: TableQuery[Member] = TableQuery[Member]
-  lazy val db: Database = Database.forConfig("mydb")
+  lazy val query = MemberServ.query
+  lazy val db = MemberServ.db
 
   /**
    * initialize the table, create its schema, update its schema

@@ -2,13 +2,14 @@ package migration
 
 import core.MigrationTable
 import models.CategoryItem
+import service.category.CategoryItemServ
 import slick.driver.MySQLDriver.api._
 
 object CategoryItemTable extends MigrationTable[CategoryItem]{
 
   //type T = LabelPost
-  lazy val query = TableQuery[CategoryItem]
-  lazy val db = Database.forConfig("mydb")
+  lazy val query = CategoryItemServ.query
+  lazy val db = CategoryItemServ.db
 
   def initialize(drop: Boolean = false) = init(query, db)(drop)
 

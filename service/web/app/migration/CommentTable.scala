@@ -3,20 +3,15 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Category
-import service.category.CategoryServ
+import models.Comment
+import service.comment.CommentServ
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+object CommentTable extends MigrationTable[Comment]{
 
-object CategoryTable extends MigrationTable[Category]{
+  val query = CommentServ.query
+  val db = CommentServ.db
 
-  lazy val query = CategoryServ.query
-  lazy val db = CategoryServ.db
-
-  /**
-   * initialize the table, create its schema, update its schema
-   */
   def initialize(drop:Boolean = false) = init(query, db)(drop)
 
   /**
@@ -34,15 +29,25 @@ object CategoryTable extends MigrationTable[Category]{
 
     val setup = DBIO.seq(
 
+      // query,
+
       query.map {
 
         m => (
-          m.name,
+          m.authorId,
+          m.title,
+          m.excerpt,
+          m.textBody,
+          m.htmlBody,
           m.createdAt,
           m.updatedAt
           )
       } +=(
-        faker.Lorem.words(2).mkString(""),
+        (Math.random() * 100).toInt,
+        faker.Lorem.sentence(16),
+        faker.Lorem.paragraph(3),
+        faker.Lorem.paragraphs(10).mkString("\n"),
+        faker.Lorem.paragraphs(10).mkString("\n"),
         now,
         now
         )
@@ -52,7 +57,6 @@ object CategoryTable extends MigrationTable[Category]{
     val result = db.run(setup)
 
     result
-
-
   }
+
 }

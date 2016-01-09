@@ -1,14 +1,14 @@
-package service.post
+package service.comment
 
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{CategoryItem, Post}
+import models.{Post, Comment}
 import slick.driver.MySQLDriver.api._
 
-object PostServ extends Service[Post](
+object CommentServ  extends Service[Comment](
   "mydb",
-  (tag: Tag) => new Post(tag)) {
+  (tag: Tag) => new Comment(tag)) {
 
 
   def test = {

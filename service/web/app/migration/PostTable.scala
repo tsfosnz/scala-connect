@@ -4,12 +4,13 @@ import java.text.SimpleDateFormat
 
 import core.MigrationTable
 import models.Post
+import service.post.PostServ
 import slick.driver.MySQLDriver.api._
 
 object PostTable extends MigrationTable[Post]{
 
-  lazy val query: TableQuery[Post] = TableQuery[Post]
-  lazy val db: Database = Database.forConfig("mydb")
+  lazy val query = PostServ.query
+  lazy val db = PostServ.db
 
   def initialize(drop:Boolean = false) = init(query, db)(drop)
 

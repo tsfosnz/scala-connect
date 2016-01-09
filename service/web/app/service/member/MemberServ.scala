@@ -2,16 +2,16 @@ package service.member
 
 import java.text.SimpleDateFormat
 
-import models.Member
+import core.Service
+import models.{Post, Member}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
 
 
-object MemberServ {
-
-  lazy val query: TableQuery[Member] = TableQuery[Member]
-  lazy val db: Database = Database.forConfig("mydb")
+object MemberServ  extends Service[Member](
+  "mydb",
+  (tag: Tag) => new Member(tag)) {
 
   def test() {
 
