@@ -1,7 +1,6 @@
 package process.home.controllers.main
 
 import play.api.mvc.Action
-import service.post.PostServ
 import core._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
