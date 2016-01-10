@@ -20,8 +20,6 @@ object CategoryServ  extends Service[Category](
 
   }
 
-  /*
-
     def all(page: Int, count: Int) = {
 
 
@@ -35,11 +33,6 @@ object CategoryServ  extends Service[Category](
         val action = q.result
         val result = db.run(action)
 
-
-        //throw new Throwable("Wrong!!")
-
-        //db.close
-
         result
       }
 
@@ -49,6 +42,8 @@ object CategoryServ  extends Service[Category](
 
     }
 
+
+  /*
     def one(id: Int) = {
 
       // first lets define a SQL

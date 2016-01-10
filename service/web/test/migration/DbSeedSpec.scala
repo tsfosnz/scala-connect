@@ -31,15 +31,19 @@ class DbSeedSpec extends PlaySpec {
         Await.result(CategoryTable.populate, Duration("5 seconds"))
       }
 
-      for (i <- 0 to 99) {
-        Await.result(PostTable.populate, Duration("5 seconds"))
+      for (i <- 0 to 200) {
+        Await.result(PostTable.populate(i % 10 + 1), Duration("5 seconds"))
       }
 
       for (i <- 0 to 9) {
         Await.result(MemberTable.populate, Duration("5 seconds"))
       }
 
-      // Await.result(LabelPostTable.populate, Duration("5 seconds"))
+      for (i <- 1 to 200) {
+
+        Await.result(CategoryItemTable.populate(i % 10 + 1, i, "post"), Duration("5 seconds"))
+
+      }
 
 
     }

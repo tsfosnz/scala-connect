@@ -8,6 +8,8 @@ class Comment(tag: Tag) extends Table[CommentEntity](tag, "comment") {
 
   def parentId = column[Int]("parent_id")
 
+  def itemId = column[Int]("item_id")
+
   def level = column[Int]("level")
 
   def urlKey = column[String]("url_key", O.Length(255), O.Default(""))
@@ -15,10 +17,6 @@ class Comment(tag: Tag) extends Table[CommentEntity](tag, "comment") {
   def authorId = column[Int]("author_id", O.Default(0))
 
   def commentType = column[String]("type", O.Length(256), O.Default(""))
-
-  def title = column[String]("title", O.Length(256), O.Default(""))
-
-  def excerpt = column[String]("excerpt", O.Length(512), O.Default(""))
 
   def textBody = column[String]("text_body", O.SqlType("TEXT"))
 
@@ -36,11 +34,10 @@ class Comment(tag: Tag) extends Table[CommentEntity](tag, "comment") {
     (
       id,
       parentId,
+      itemId,
       level,
       authorId,
       commentType,
-      title,
-      excerpt,
       textBody,
       htmlBody,
       status,
@@ -54,11 +51,10 @@ case class CommentEntity
 (
   id: Int,
   parentId: Int,
+  itemId: Int,
   level: Int,
   authorId: Int,
   commentType: String,
-  title: String,
-  excerpt: String,
   textBody: String,
   htmlBody: String,
   status: String,

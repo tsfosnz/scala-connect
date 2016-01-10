@@ -8,45 +8,58 @@ body {
     background-color: #197de9;
     border-color: #174075;
 }
+
 .navbar-default .navbar-brand {
     color: #ecf0f1;
 }
+
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
     color: #c9bc26;
 }
+
 .navbar-default .navbar-text {
     color: #ecf0f1;
 }
+
 .navbar-default .navbar-nav > li > a {
     color: #ecf0f1;
 }
+
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
     color: #c9bc26;
 }
+
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
     color: #c9bc26;
     background-color: #174075;
 }
+
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
     color: #c9bc26;
     background-color: #174075;
 }
+
 .navbar-default .navbar-toggle {
     border-color: #174075;
 }
+
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
     background-color: #174075;
 }
+
 .navbar-default .navbar-toggle .icon-bar {
     background-color: #ecf0f1;
 }
+
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
     border-color: #ecf0f1;
 }
+
 .navbar-default .navbar-link {
     color: #ecf0f1;
 }
+
 .navbar-default .navbar-link:hover {
     color: #c9bc26;
 }
@@ -55,11 +68,59 @@ body {
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #ecf0f1;
     }
+
     .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
         color: #c9bc26;
     }
+
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
         color: #c9bc26;
         background-color: #174075;
     }
+}
+
+/*
+ *
+ */
+
+html {
+    font-size: 60%
+}
+
+.nav-pills li > a {
+    color: #999999;
+    font-size: 1.3rem;
+    padding: 5px
+}
+
+.nav-pills li > a:hover {
+    color: #002C3C;
+    font-size: 1.3rem;
+    padding: 5px
+}
+
+h3 {
+    font-size: 1.6rem
+}
+
+body {
+    background-color: white;
+    overflow-x: hidden;
+    margin-bottom: 0px;
+    margin: 0 auto;
+}
+
+.footer {
+    /*position: fixed;*/
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+.page-header-small {
+    border-radius: 0 !important;
+    margin: 0px;
+    margin-bottom: 20px;
 }

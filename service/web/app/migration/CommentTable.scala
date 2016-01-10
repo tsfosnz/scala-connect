@@ -35,8 +35,6 @@ object CommentTable extends MigrationTable[Comment]{
 
         m => (
           m.authorId,
-          m.title,
-          m.excerpt,
           m.textBody,
           m.htmlBody,
           m.createdAt,
@@ -44,8 +42,6 @@ object CommentTable extends MigrationTable[Comment]{
           )
       } +=(
         (Math.random() * 100).toInt,
-        faker.Lorem.sentence(16),
-        faker.Lorem.paragraph(3),
         faker.Lorem.paragraphs(10).mkString("\n"),
         faker.Lorem.paragraphs(10).mkString("\n"),
         now,

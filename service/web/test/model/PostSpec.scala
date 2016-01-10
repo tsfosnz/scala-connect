@@ -1,5 +1,6 @@
 package model
 
+import models.PostEntity
 import org.junit.runner._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.{ScalaFutures, Futures}
@@ -31,7 +32,35 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
-      PostServ.all(0, 20)
+      val list = PostServ.all(0, 20)
+
+      val group = (list: Seq[(PostEntity, String)]) => {
+
+
+        // Map[String -> Seq[PostEntity]]
+
+        val category = Set[String]()
+
+        val map = for {
+
+          t <- list
+
+        } yield {
+
+            !category.contains(t._2) match {
+
+              case true => {
+                category + t._2
+                (t._2, for {n <- list.filter(_._2 === t._2)} yield (t._1))
+              }
+
+              case _ => null
+            }
+
+          }
+
+      }
+
 
     }
 

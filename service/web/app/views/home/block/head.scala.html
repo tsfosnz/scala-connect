@@ -1,21 +1,17 @@
-@()
+@(category: Seq[CategoryEntity])
 
 
 <div class="row">
 
     <div class="col-lg-12 col-sm-12">
-        <div class="page-header" style="border-radius : 0 !important ;margin:0px;margin-bottom:20px;">
+        <div class="page-header page-header-small">
 
             <ul class="nav nav-pills" role="tablist">
-                <li role="presentation"><a href="#">语言</a></li>
-                <li role="presentation"><a href="#">Messages </a></li>
-                <li role="presentation"><a href="#">内容</a></li>
-                <li role="presentation"><a href="#">兴趣</a></li>
-                <li role="presentation"><a href="#">出游</a></li>
-                <li role="presentation"><a href="#">无聊</a></li>
-                <li role="presentation"><a href="#">Profile</a></li>
-                <li role="presentation"><a href="#">Messages </a></li>
-                <li role="presentation"><a href="#">时间</a></li>
+                @for(c <- category) {
+                    <li role="presentation">
+                        <a href="#">@c.name</a>
+                    </li>
+                }
             </ul>
 
         </div>

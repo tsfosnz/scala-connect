@@ -6,6 +6,7 @@ import play.api.libs.concurrent.Promise
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
+import service.category.CategoryServ
 import service.post.PostServ
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -45,18 +46,18 @@ class Fetcher extends Command {
    */
   protected def post = Action.async { request =>
 
-    val post = PostServ.all(0, 200)
+    val list = PostServ.getAllBy(0, 50)
 
-    //Thread.sleep(10000)
+    for {
+      r <- list
 
-    post.map {
-
-      r => Ok(views.html.home.block.list(r))
-
+    } yield {
+      Ok(views.html.home.block.list(groupBy(r)))
     }
 
-
   }
+
+
 
   /**
    * Get the header data with header view
@@ -67,11 +68,12 @@ class Fetcher extends Command {
 
     //Thread.sleep(10000)
 
-    //val b = Promise.timeout(Some("Hello....".getBytes), 500)
+    val category = CategoryServ.all(0, 10)
 
-    Future {
-      //Thread.sleep(10000)
-      Ok(views.html.home.block.head())
+    category.map {
+
+      c => Ok(views.html.home.block.head(c))
+
     }
 
   }
@@ -84,7 +86,7 @@ class Fetcher extends Command {
   protected def right = Action.async { request =>
 
     Future {
-      Ok(views.html.home.block.right(""))
+      Ok(views.html.home.block.right())
     }
 
   }

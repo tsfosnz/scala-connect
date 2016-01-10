@@ -13,18 +13,6 @@ object CommentServ  extends Service[Comment](
 
   def test = {
 
-    query.filter(_.authorId === 1)
-    query.map(
-
-      model => {
-        println((
-          model.authorId,
-          model.title
-          ).getClass.getSimpleName)
-      }
-    )
-
-    //println(t)
 
 
   }
@@ -41,11 +29,6 @@ object CommentServ  extends Service[Comment](
 
       val action = query.result
       val result = db.run(action)
-
-
-      //throw new Throwable("Wrong!!")
-
-      //db.close
 
       result
     }
@@ -102,7 +85,6 @@ object CommentServ  extends Service[Comment](
 
           model => (
             model.authorId,
-            model.title,
             model.textBody,
             model.createdAt,
             model.updatedAt
@@ -110,7 +92,6 @@ object CommentServ  extends Service[Comment](
             )
         } +=(
           managerId,
-          data("title").head,
           data("body").head,
           now,
           now
@@ -150,9 +131,9 @@ object CommentServ  extends Service[Comment](
 
       val q = for {
         item <- query if item.id === id
-      } yield (item.title, item.textBody, item.updatedAt)
+      } yield (item.textBody, item.updatedAt)
 
-      val action = q.update(data("title").head, data("body").head, now)
+      val action = q.update(data("text").head, now)
       val sql = q.updateStatement
 
       println(sql)

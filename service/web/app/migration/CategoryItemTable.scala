@@ -17,7 +17,7 @@ object CategoryItemTable extends MigrationTable[CategoryItem]{
   /**
    * populate the data into the table
    */
-  def populate(labelId: Int, postId: Int) = {
+  def populate(categoryId: Int, postId: Int, itemType: String) = {
 
 
     val setup = DBIO.seq(
@@ -26,11 +26,13 @@ object CategoryItemTable extends MigrationTable[CategoryItem]{
 
         m => (
           m.categoryId,
-          m.itemId
+          m.itemId,
+          m.itemType
           )
       } +=(
-        labelId,
-        postId
+        categoryId,
+        postId,
+        itemType
         )
 
     )

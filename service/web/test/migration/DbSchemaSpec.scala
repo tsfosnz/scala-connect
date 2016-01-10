@@ -42,7 +42,7 @@ class DbSchemaSpec extends PlaySpec {
           Await.result(CategoryItemTable.initialize(true), Duration("5 seconds"))
           Await.result(MemberTable.initialize(true), Duration("5 seconds"))
           Await.result(PostTable.initialize(true), Duration("5 seconds"))
-          Await.result(CommentTable.initialize(), Duration("5 seconds"))
+          Await.result(CommentTable.initialize(true), Duration("5 seconds"))
         }
       }
 

@@ -17,7 +17,7 @@ object PostTable extends MigrationTable[Post]{
   /**
    * populate the data into the table
    */
-  def populate = {
+  def populate(authorId: Int) = {
 
     val dt: java.util.Date = new java.util.Date()
 
@@ -43,9 +43,9 @@ object PostTable extends MigrationTable[Post]{
           m.updatedAt
           )
       } +=(
-        (Math.random() * 100).toInt,
+        authorId,
         faker.Lorem.sentence(16),
-        faker.Lorem.paragraph(3),
+        faker.Lorem.paragraph(10),
         faker.Lorem.paragraphs(10).mkString("\n"),
         faker.Lorem.paragraphs(10).mkString("\n"),
         now,
