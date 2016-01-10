@@ -1,15 +1,14 @@
-package process.home.controllers.main
+package process.home.controllers.column
 
 import core._
 import models.PostEntity
-import play.api.libs.concurrent.Promise
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
 import service.post.PostServ
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration.Duration
 
 class Fetcher extends Command {
 
