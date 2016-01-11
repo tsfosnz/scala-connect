@@ -1,19 +1,19 @@
-@(list: Seq[(String, Seq[PostEntity])])
+@(list: Seq[(Seq[(PostEntity, Int)], String)])
 
 
 @for(item <- list) {
     <div class="list-group">
         <div href="#" class="list-group-item list-group-item-info">
-        @item._1
+        @item._2
         </div>
-        @for(post <- item._2) {
+        @for(post <- item._1) {
             <div href="#" class="list-group-item">
                 <h3>
-                    <a href="javascript:">@post.title</a>
+                    <a href="javascript:">@post._1.title</a>
                 </h3>
 
                 <div>
-                @post.excerpt
+                @post._1.excerpt
                 </div>
             </div>
         }

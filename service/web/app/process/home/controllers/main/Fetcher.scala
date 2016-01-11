@@ -46,14 +46,53 @@ class Fetcher extends Command {
    */
   protected def post = Action.async { request =>
 
-    val list = PostServ.getAllBy(0, 50)
+    val category = CategoryServ.all(0, 10)
+    //val list = PostServ.getAllBy(0, 50)
 
-    for {
-      r <- list
+    val list = for {
+
+      c <- category
 
     } yield {
-      Ok(views.html.home.block.list(groupBy(r)))
+
+
+      val post = for {
+
+        item <- c
+
+      } yield {
+
+          val n = PostServ.getAllBy(item.id, 0, 5)
+
+          n.flatMap {
+
+            k => Future {
+
+              (k, item.name)
+            }
+
+          }
+
+          //, item.name)
+
+        }
+
+      Future.sequence(post)
+
     }
+
+    list.flatMap {
+
+      f => f.map {
+
+        item => Ok(views.html.home.block.list(item))
+
+      }
+
+    }
+
+
+    //}
 
   }
 

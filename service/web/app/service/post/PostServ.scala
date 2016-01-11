@@ -92,6 +92,41 @@ object PostServ extends Service[Post](
 
   }
 
+  def getAllBy(categoryId: Int, page: Int, count: Int) = {
+
+    try {
+
+      val list = for {
+
+        l <- query
+        i <- CategoryItemServ.query
+        c <- CategoryServ.query
+        if (l.id === i.itemId && i.itemType === "post" && c.id === i.categoryId)
+
+      } yield (l, c.id)
+
+      val q = list.filter(_._2 === categoryId).drop(page).take(count)
+      val sql = q.result.statements.head
+
+      println(sql)
+
+      val action = q.result
+      val result = db.run(action)
+
+
+      //throw new Throwable("Wrong!!")
+
+      //db.close
+
+      result
+    }
+
+    catch {
+      case err: Throwable => null
+    }
+
+  }
+
   def one(id: Int) = {
 
     // first lets define a SQL
