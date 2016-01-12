@@ -20,20 +20,51 @@ class Fetcher extends Command {
   def index = Action.async { request =>
 
 
-    val post = this.post(request).flatMap {t => Html.readHtmlBy(t.body)}
-    val head = this.head(request).flatMap {t => Html.readHtmlBy(t.body)}
-    val right = this.right(request).flatMap {t => Html.readHtmlBy(t.body)}
+    val post = this.post(request).flatMap {
+
+      res => res.header.status == 200 match {
+
+        case true => Html.readHtmlBy(res.body)
+        case _ => Future {
+          ""
+        }
+      }
+
+    }
+
+    val head = this.head(request).flatMap {
+
+      res => res.header.status == 200 match {
+
+        case true => Html.readHtmlBy(res.body)
+        case _ => Future {
+          ""
+        }
+      }
+    }
+
+    val right = this.right(request).flatMap {
+
+      res => res.header.status == 200 match {
+
+        case true => Html.readHtmlBy(res.body)
+        case _ => Future {
+          ""
+        }
+      }
+
+    }
 
 
     for {
 
-      l <- post
       h <- head
+      p <- post
       r <- right
 
     } yield {
 
-      Ok.chunked(Enumerator(views.html.home.index("", h, l, r)))
+      Ok.chunked(Enumerator(views.html.home.index("", h, p, r)))
 
     }
 
@@ -46,56 +77,17 @@ class Fetcher extends Command {
    */
   protected def post = Action.async { request =>
 
-    val category = CategoryServ.all(0, 10)
-    //val list = PostServ.getAllBy(0, 50)
+    val list = PostServ.getGroupBy(3, 0, 200)
 
-    val list = for {
-
-      c <- category
-
-    } yield {
-
-
-      val post = for {
-
-        item <- c
-
-      } yield {
-
-          val n = PostServ.getAllBy(item.id, 0, 5)
-
-          n.flatMap {
-
-            k => Future {
-
-              (k, item.name)
-            }
-
-          }
-
-          //, item.name)
-
-        }
-
-      Future.sequence(post)
-
-    }
 
     list.flatMap {
 
-      f => f.map {
-
-        item => Ok(views.html.home.block.list(item))
-
-      }
+      item => item.map {r => Ok(views.html.home.block.list(groupBy[PostEntity, String, Int](r)))}
 
     }
 
 
-    //}
-
   }
-
 
 
   /**
@@ -105,15 +97,28 @@ class Fetcher extends Command {
    */
   protected def head = Action.async { request =>
 
-    //Thread.sleep(10000)
 
     val category = CategoryServ.all(0, 10)
 
-    category.map {
+    category match {
 
-      c => Ok(views.html.home.block.head(c))
+      case null => Future {
+        InternalServerError(fail(ServErrorConst.SystemError))
+      }
 
+      case _ =>
+
+        category.map {
+
+          c => Ok(views.html.home.block.head(c))
+
+        }.recover {
+
+          case err: Throwable => InternalServerError(fail(ServErrorConst.SystemError))
+
+        }
     }
+
 
   }
 

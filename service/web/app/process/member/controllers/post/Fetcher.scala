@@ -26,7 +26,14 @@ class Fetcher extends Command {
       else
         page.get - 1
 
-    val result: Future[Seq[PostEntity]] = PostServ.all(p, count)
+    val result = PostServ.getAllBy(p, count).map {
+
+      item => item.map {
+
+        r => r._1
+      }
+
+    }
     //val timeout = play.api.libs.concurrent.Promise.timeout("Oops", 1)
 
     val error = scala.concurrent.Future {

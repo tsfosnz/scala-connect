@@ -39,41 +39,43 @@ trait Command extends Controller {
    * to avoid second db query
    *
    * @param list
-   * @tparam T
-   * @tparam B
+   * @tparam T Entity
+   * @tparam B String
    * @return
    */
-  def groupBy[T, B](list: Seq[(T, B)]): Seq[(B, Seq[T])] = {
+  def groupBy[T, B](list: Seq[(T, B)]): Map[B, Seq[T]] = {
+
+    // lession #1,
+    // always look up method instead of creating it own
+
+    // changed by suggestion of github@staslev
+
+    // can't avoid to use mutable data, but only accept
+    // immutable and output immutable is recommanded
+    // https://github.com/scala/scala/blob/v2.11.7/src/library/scala/collection/TraversableLike.scala#L1
+
+    list
+      .groupBy({ case (post, category) => category })
+      .mapValues(_.map({ case (post, category) => post }))
 
 
-    // don't use var, but its internal usage
-    // might be fine here
-    // this method will be quick...
-    // it doesn't query db twice
+  }
 
-    var category = Set[B]()
-    val ret = for {
+  def groupBy[T, B, A](list: Seq[(T, B, A)]): Map[B, Seq[(T, A)]] = {
 
-      t <- list
+    // lession #1,
+    // always look up method instead of creating it own
 
-    } yield {
+    // changed by suggestion of github@staslev
 
-        !category.contains(t._2) match {
+    // can't avoid to use mutable data, but only accept
+    // immutable and output immutable is recommanded
+    // https://github.com/scala/scala/blob/v2.11.7/src/library/scala/collection/TraversableLike.scala#L1
 
-          case true => {
-            category += t._2
-            //println(category)
-            (t._2, for {n <- list.filter(_._2 == t._2)} yield (n._1))
-          }
+    list
+      .groupBy({ case (post, category, id) => category })
+      .mapValues(_.map({ case (post, category, id) => (post, id) }))
 
-          case _ => null
-        }
-
-
-      }
-
-
-    ret.filter(_ != null)
 
   }
 

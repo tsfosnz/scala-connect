@@ -32,35 +32,13 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
-      val list = PostServ.all(0, 20)
+      //val list = PostServ.getGroupBy(1)
 
-      val group = (list: Seq[(PostEntity, String)]) => {
+      //Await.result(PostServ.all(0, 20), Duration("5 seconds"))
 
+      val list = PostServ.getGroupBy(3, 0, 100)
 
-        // Map[String -> Seq[PostEntity]]
-
-        val category = Set[String]()
-
-        val map = for {
-
-          t <- list
-
-        } yield {
-
-            !category.contains(t._2) match {
-
-              case true => {
-                category + t._2
-                (t._2, for {n <- list.filter(_._2 === t._2)} yield (t._1))
-              }
-
-              case _ => null
-            }
-
-          }
-
-      }
-
+      Await.result(list, Duration(5000, "seconds"))
 
     }
 

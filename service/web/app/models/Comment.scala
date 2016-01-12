@@ -1,8 +1,9 @@
 package models
 
+import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
-class Comment(tag: Tag) extends Table[CommentEntity](tag, "comment") {
+class Comment(tag: Tag) extends BaseDateTime[CommentEntity](tag, "comment") {
 
   def id = column[Int]("comment_id", O.PrimaryKey, O.AutoInc)
 
@@ -26,9 +27,9 @@ class Comment(tag: Tag) extends Table[CommentEntity](tag, "comment") {
 
   def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
 
-  def createdAt = column[String]("created_at", O.SqlType("DateTime"))
+  //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
-  def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
+  //def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
 
   def * =
     (

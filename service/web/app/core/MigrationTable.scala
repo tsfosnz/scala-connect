@@ -25,4 +25,13 @@ trait MigrationTable[T <: Table[_]] {
 
   }
 
+  /**
+   * initialize the table, create its schema, update its schema
+   */
+  def init = {
+
+
+
+  }
+
 }

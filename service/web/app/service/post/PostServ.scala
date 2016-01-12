@@ -3,9 +3,12 @@ package service.post
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{CategoryItem, Post}
+import models.{PostEntity, CategoryItem, Post}
 import service.category.{CategoryServ, CategoryItemServ}
 import slick.driver.MySQLDriver.api._
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object PostServ extends Service[Post](
   "mydb",
@@ -14,49 +17,16 @@ object PostServ extends Service[Post](
 
   def test = {
 
-    query.filter(_.authorId === 1)
-    query.map(
-
-      model => {
-        println((
-          model.authorId,
-          model.title
-          ).getClass.getSimpleName)
-      }
-    )
-
-    //println(t)
-
 
   }
 
-  def all(page: Int, count: Int) = {
-
-
-    try {
-
-      val q = query.drop(page).take(count)
-      val sql = query.result.statements.head
-
-      println(sql)
-
-      val action = query.result
-      val result = db.run(action)
-
-
-      //throw new Throwable("Wrong!!")
-
-      //db.close
-
-      result
-    }
-
-    catch {
-      case err: Throwable => null
-    }
-
-  }
-
+  /**
+   * Get a list of data with post, category by (page, count)
+   *
+   * @param page
+   * @param count
+   * @return
+   */
   def getAllBy(page: Int, count: Int) = {
 
     try {
@@ -78,34 +48,41 @@ object PostServ extends Service[Post](
       val action = q.result
       val result = db.run(action)
 
-
-      //throw new Throwable("Wrong!!")
-
-      //db.close
-
       result
     }
 
     catch {
+      // catch all error, will this isn't recommanded
+      // just a simple try
       case err: Throwable => null
     }
 
   }
 
+  /**
+   * Get a list of data (post, category) by (category id, page, count)
+   *
+   * @param categoryId
+   * @param page
+   * @param count
+   * @return
+   */
   def getAllBy(categoryId: Int, page: Int, count: Int) = {
 
     try {
 
       val list = for {
 
-        l <- query
-        i <- CategoryItemServ.query
+        p <- query
+        ci <- CategoryItemServ.query
         c <- CategoryServ.query
-        if (l.id === i.itemId && i.itemType === "post" && c.id === i.categoryId)
+        if (p.id === ci.itemId
+          && ci.itemType === "post"
+          && c.id === ci.categoryId)
 
-      } yield (l, c.id)
+      } yield (p, c.name, c.id)
 
-      val q = list.filter(_._2 === categoryId).drop(page).take(count)
+      val q = list.filter(_._3 === categoryId).drop(page).take(count)
       val sql = q.result.statements.head
 
       println(sql)
@@ -113,11 +90,6 @@ object PostServ extends Service[Post](
       val action = q.result
       val result = db.run(action)
 
-
-      //throw new Throwable("Wrong!!")
-
-      //db.close
-
       result
     }
 
@@ -126,6 +98,91 @@ object PostServ extends Service[Post](
     }
 
   }
+
+  /**
+   * Get a group of data (category, seq[post]) in fix size
+   * by (page, count), will get them this way, first get
+   * a list of category, then get a list of post for each
+   * all in fixed size, the equal SQL is union all
+   *
+   * @param page
+   * @param count
+   * @return
+   */
+  def getGroupBy(categoryCount: Int, page: Int, count: Int) = {
+
+    // so what's the more elegant way?
+
+    try {
+
+      val category = CategoryServ.query
+      val categoryItem = CategoryItemServ.query
+
+      //
+      val categoryQuery = (for {
+
+        c <- category
+
+      } yield (c.id)).take(categoryCount)
+
+      println(categoryQuery.result.statements.head)
+
+      val postQuery = for {
+
+        p <- query
+        ci <- categoryItem if p.id === ci.itemId && ci.itemType === "post"
+        c <- category if ci.categoryId === c.id
+
+      } yield (p, c.name, c.id)
+
+
+      val st = new scala.collection.mutable.Stack[Query[(Post, Rep[String], Rep[Int]), (PostEntity, String, Int), scala.Seq]]
+
+      val result = for {
+
+        item <- db.run(categoryQuery.result)
+
+      } yield {
+
+          // put each list to a collection
+          // then use fold
+
+
+          item.map { id =>
+
+            item.size - item.indexOf(id) == 1 match {
+
+              case true => st.push(postQuery.filter(_._3 === id).take(5 * item.size))
+              case _ => st.push(postQuery.filter(_._3 === id).take(5))
+
+            }
+
+            println(item.indexOf(id))
+          }
+
+
+          val k = st.pop
+          val unionQuery = st.foldRight(k)((a, b) => a ++ b)
+
+          val q = unionQuery.drop(page).take(count).result
+
+          //println(unionQuery.drop(page).take(count).result)
+          println(q.statements.head)
+
+          db.run(q)
+
+        }
+
+      result
+
+    }
+
+    catch {
+      case err: Exception => null
+    }
+
+  }
+
 
   def one(id: Int) = {
 
@@ -145,7 +202,7 @@ object PostServ extends Service[Post](
     }
 
     catch {
-      case err: Throwable => null
+      case err: Exception => null
     }
 
   }

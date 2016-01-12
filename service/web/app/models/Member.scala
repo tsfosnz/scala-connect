@@ -1,8 +1,9 @@
 package models
 
+import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
-class Member(tag: Tag) extends Table[MemberEntity](tag, "member") {
+class Member(tag: Tag) extends BaseDateTime[MemberEntity](tag, "member") {
 
   def id = column[Int]("member_id", O.PrimaryKey, O.AutoInc)
 
@@ -20,9 +21,9 @@ class Member(tag: Tag) extends Table[MemberEntity](tag, "member") {
 
   def description = column[String]("description", O.Length(512), O.Default(""))
 
-  def createdAt = column[String]("created_at", O.SqlType("DateTime"))
+  //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
-  def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
+  //def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
 
   def * =
     (

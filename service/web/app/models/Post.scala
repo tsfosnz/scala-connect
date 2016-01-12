@@ -1,8 +1,9 @@
 package models
 
+import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
-class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
+class Post(tag: Tag) extends BaseDateTime[PostEntity](tag, "post") {
 
   def id = column[Int]("post_id", O.PrimaryKey, O.AutoInc)
 
@@ -24,9 +25,9 @@ class Post(tag: Tag) extends Table[PostEntity](tag, "post") {
 
   def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
 
-  def createdAt = column[String]("created_at", O.SqlType("DateTime"))
+  //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
-  def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
+  //def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
 
   def * =
     (

@@ -1,6 +1,8 @@
 package models
 
+import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
+
 
 class Category(tag: Tag) extends Table[CategoryEntity](tag, "category") {
 

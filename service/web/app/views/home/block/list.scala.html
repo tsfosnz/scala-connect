@@ -1,12 +1,12 @@
-@(list: Seq[(Seq[(PostEntity, Int)], String)])
+@(list: Map[String, Seq[(PostEntity, Int)]])
 
 
 @for(item <- list) {
     <div class="list-group">
         <div href="#" class="list-group-item list-group-item-info">
-        @item._2
+        @item._1
         </div>
-        @for(post <- item._1) {
+        @for(post <- item._2) {
             <div href="#" class="list-group-item">
                 <h3>
                     <a href="javascript:">@post._1.title</a>
