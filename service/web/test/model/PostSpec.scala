@@ -36,7 +36,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
       //Await.result(PostServ.all(0, 20), Duration("5 seconds"))
 
-      val list = PostServ.getGroupBy(3, 0, 100)
+      val list = PostServ.getAllBy(3, 0, 100)
 
       Await.result(list, Duration(5000, "seconds"))
 

@@ -3,129 +3,53 @@ package service.post
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{PostEntity, CategoryItem, Post}
+import models.{CategoryEntity, PostEntity, Post}
 import service.category.{CategoryServ, CategoryItemServ}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
+/**
+ * PostServ
+ * 
+ * @author Tom
+ */
+
 object PostServ extends Service[Post](
   "mydb",
   (tag: Tag) => new Post(tag)) {
 
 
-  def test = {
-
-
-  }
-
   /**
-   * Get a list of data with post, category by (page, count)
+   * Get a list of data (post, category) by (a list of category),
+   * usage, when we display a list of category and for each of 
+   * them, we will show a group of post in fix size
    *
+   * @param categoryResult
+   * @param postCount
    * @param page
    * @param count
    * @return
    */
-  def getAllBy(page: Int, count: Int) = {
+  def getAllBy(categoryResult: Future[scala.Seq[CategoryEntity]],
+               postCount: Int, 
+               page: Int, 
+               count: Int) = {
 
-    try {
-
-      val list = for {
-
-        l <- query
-        i <- CategoryItemServ.query
-        c <- CategoryServ.query
-        if (l.id === i.itemId && i.itemType === "post" && c.id === i.categoryId)
-
-      } yield (l, c.name)
-
-      val q = list.drop(page).take(count)
-      val sql = q.result.statements.head
-
-      println(sql)
-
-      val action = q.result
-      val result = db.run(action)
-
-      result
-    }
-
-    catch {
-      // catch all error, will this isn't recommanded
-      // just a simple try
-      case err: Throwable => null
-    }
-
-  }
-
-  /**
-   * Get a list of data (post, category) by (category id, page, count)
-   *
-   * @param categoryId
-   * @param page
-   * @param count
-   * @return
-   */
-  def getAllBy(categoryId: Int, page: Int, count: Int) = {
-
-    try {
-
-      val list = for {
-
-        p <- query
-        ci <- CategoryItemServ.query
-        c <- CategoryServ.query
-        if (p.id === ci.itemId
-          && ci.itemType === "post"
-          && c.id === ci.categoryId)
-
-      } yield (p, c.name, c.id)
-
-      val q = list.filter(_._3 === categoryId).drop(page).take(count)
-      val sql = q.result.statements.head
-
-      println(sql)
-
-      val action = q.result
-      val result = db.run(action)
-
-      result
-    }
-
-    catch {
-      case err: Throwable => null
-    }
-
-  }
-
-  /**
-   * Get a group of data (category, seq[post]) in fix size
-   * by (page, count), will get them this way, first get
-   * a list of category, then get a list of post for each
-   * all in fixed size, the equal SQL is union all
-   *
-   * @param page
-   * @param count
-   * @return
-   */
-  def getGroupBy(categoryCount: Int, page: Int, count: Int) = {
-
-    // so what's the more elegant way?
+    // To explain: 
+    //
+    // SELECT * FROM category LIMIT 10
+    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 1 LIMIT 5 
+    // UNION ALL
+    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 2 LIMIT 5
+    // ...
+    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 10 LIMIT 5
 
     try {
 
       val category = CategoryServ.query
       val categoryItem = CategoryItemServ.query
-
-      //
-      val categoryQuery = (for {
-
-        c <- category
-
-      } yield (c.id)).take(categoryCount)
-
-      println(categoryQuery.result.statements.head)
 
       val postQuery = for {
 
@@ -140,31 +64,27 @@ object PostServ extends Service[Post](
 
       val result = for {
 
-        item <- db.run(categoryQuery.result)
+        item <- categoryResult
 
       } yield {
 
-          // put each list to a collection
-          // then use fold
+          item.map { c =>
 
+            item.size - item.indexOf(c) == 1 match {
 
-          item.map { id =>
-
-            item.size - item.indexOf(id) == 1 match {
-
-              case true => st.push(postQuery.filter(_._3 === id).take(5 * item.size))
-              case _ => st.push(postQuery.filter(_._3 === id).take(5))
+              case true => st.push(postQuery.filter(_._3 === c.id).take(postCount * 2))
+              case _ => st.push(postQuery.filter(_._3 === c.id).take(postCount))
 
             }
 
-            println(item.indexOf(id))
+            println(item.indexOf(c))
           }
 
 
           val k = st.pop
           val unionQuery = st.foldRight(k)((a, b) => a ++ b)
 
-          val q = unionQuery.drop(page).take(count).result
+          val q = unionQuery.sortBy(_._3.asc).result
 
           //println(unionQuery.drop(page).take(count).result)
           println(q.statements.head)
@@ -183,22 +103,60 @@ object PostServ extends Service[Post](
 
   }
 
+  /**
+   * Get a list of data (post, category) by (category id) 
+   *
+   * @param categoryId
+   * @param page
+   * @param count
+   * @return
+   */
+  def getAllBy(categoryId: Int, page: Int, count: Int) = {
 
+    try {
+
+      val category = CategoryServ.query
+      val categoryItem = CategoryItemServ.query
+
+      val postQuery = for {
+
+        p <- query
+        ci <- categoryItem if p.id === ci.itemId && ci.itemType === "post"
+        c <- category if ci.categoryId === c.id
+
+      } yield (p, c.name, c.id)
+
+      val q = postQuery.filter(_._3 === categoryId).drop(page).take(count)
+
+      println(q.result.statements.head)
+
+      db.run(q.result)
+
+    }
+
+    catch {
+      case err: Exception => null
+    }
+
+  }
+
+
+  /**
+   * Get one post by its id
+   * 
+   * @param id
+   * @return
+   */
   def one(id: Int) = {
-
-    // first lets define a SQL
 
     try {
 
       val q = query.filter(_.id === id)
-      val sql = query.result.statements.head
 
-      println(sql)
+      println(query.result.statements.head)
 
-      val action = q.result
-      val result = db.run(action)
+      db.run(q.result)
 
-      result
     }
 
     catch {
@@ -208,15 +166,17 @@ object PostServ extends Service[Post](
   }
 
   /**
-   * Add the new item
+   * Add the new post
    *
-   * @param managerId the manager id
+   * @param authorId the manager id
    * @param data the data of the new item
    * @return
    */
-  def add(managerId: Int, data: Map[String, Seq[String]]) = {
+  def add(authorId: Int, data: Map[String, Seq[String]]) = {
 
     try {
+
+      // people said, use this only if it's java 8
 
       val dt: java.util.Date = new java.util.Date()
       val sdf: SimpleDateFormat =
@@ -237,7 +197,7 @@ object PostServ extends Service[Post](
 
             )
         } +=(
-          managerId,
+          authorId,
           data("title").head,
           data("body").head,
           now,
@@ -245,23 +205,24 @@ object PostServ extends Service[Post](
           )
       }
 
+      println(query.insertStatement)
 
-      val sql = query.insertStatement
-
-      // here we can see the pure sql from q
-      println(sql)
-
-      val result = db.run(action)
-
-      result
+      db.run(action)
     }
 
     catch {
-      case err: Throwable => null
+      case err: Exception => null
     }
 
   }
 
+  /**
+   * Update the post by id
+   *
+   * @param id
+   * @param data
+   * @return
+   */
   def update(id: Int, data: Map[String, Seq[String]]) = {
 
 
@@ -281,42 +242,40 @@ object PostServ extends Service[Post](
       } yield (item.title, item.textBody, item.updatedAt)
 
       val action = q.update(data("title").head, data("body").head, now)
-      val sql = q.updateStatement
 
-      println(sql)
+      println(q.updateStatement)
 
-      val result = db.run(action)
-
-      result
+      db.run(action)
     }
 
     catch {
-      case err: Throwable => null
+      case err: Exception => null
     }
 
 
   }
 
+  /**
+   * Remove the post by id
+   *
+   * @param id
+   * @return
+   */
   def remove(id: Int) = {
 
     // first lets define a SQL
 
     try {
+
       val q = query.filter(_.id === id)
+      println(q.delete.statements.head)
 
-      val action = q.delete
-      val result = db.run(action)
-
-      val sql = action.statements.head
-
-      println(sql)
-
-      result
+      db.run(q.delete)
     }
 
 
     catch {
-      case err: Throwable => null
+      case err: Exception => null
     }
 
   }

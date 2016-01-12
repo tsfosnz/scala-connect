@@ -30,19 +30,7 @@ trait Command extends Controller {
   }
 
 
-  /**
-   *
-   * Sometimes, you got have a join for M:M relationship,
-   * e.g. category : post, this time, you actually want
-   * get (category, seq[post..]), or you will have to
-   * try make twice db query, groupBy will do this job
-   * to avoid second db query
-   *
-   * @param list
-   * @tparam T Entity
-   * @tparam B String
-   * @return
-   */
+  /*
   def groupBy[T, B](list: Seq[(T, B)]): Map[B, Seq[T]] = {
 
     // lession #1,
@@ -60,11 +48,10 @@ trait Command extends Controller {
 
 
   }
+  */
 
-  def groupBy[T, B, A](list: Seq[(T, B, A)]): Map[B, Seq[(T, A)]] = {
+  def groupBy[T, B, Int](list: Seq[(T, B, Int)]): Seq[((B, Int), Seq[T])] = {
 
-    // lession #1,
-    // always look up method instead of creating it own
 
     // changed by suggestion of github@staslev
 
@@ -72,11 +59,13 @@ trait Command extends Controller {
     // immutable and output immutable is recommanded
     // https://github.com/scala/scala/blob/v2.11.7/src/library/scala/collection/TraversableLike.scala#L1
 
-    list
-      .groupBy({ case (post, category, id) => category })
-      .mapValues(_.map({ case (post, category, id) => (post, id) }))
+    val result = list
+      .groupBy({ case (post, category, id) => (category, id) })
+      .mapValues(_.map({ case (post, category, id) => post }))
+      .toSeq
+      .sortWith((a, b) => a._1._2.toString.toInt < b._1._2.toString.toInt)
 
-
+    result
   }
 
 

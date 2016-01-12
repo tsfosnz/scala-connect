@@ -9,7 +9,7 @@ import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object CategoryServ  extends Service[Category](
+object CategoryServ extends Service[Category](
   "mydb",
   (tag: Tag) => new Category(tag)) {
 
@@ -20,27 +20,33 @@ object CategoryServ  extends Service[Category](
 
   }
 
-    def all(page: Int, count: Int) = {
+  def getAllBy(page: Int, count: Int) = {
+
+    try {
+
+      //
+      val q = (for {
+
+        c <- query
+
+      } yield c).drop(page).take(count)
 
 
-      try {
+      val sql = q.result.statements.head
 
-        val q = query.drop(page).take(count)
-        val sql = q.result.statements.head
+      println(sql)
 
-        println(sql)
+      val action = q.result
+      val result = db.run(action)
 
-        val action = q.result
-        val result = db.run(action)
-
-        result
-      }
-
-      catch {
-        case err: Throwable => null
-      }
-
+      result
     }
+
+    catch {
+      case err: Throwable => null
+    }
+
+  }
 
 
   /*

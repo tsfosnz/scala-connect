@@ -12,6 +12,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration.Duration
 
+/**
+ *
+ * @author Tom
+ */
 class Fetcher extends Command {
 
   implicit val postReads = Json.reads[PostEntity]
@@ -71,19 +75,39 @@ class Fetcher extends Command {
   }
 
   /**
-   * Get the post list with list view
+   * Get the post template
    *
    * @return
    */
   protected def post = Action.async { request =>
 
-    val list = PostServ.getGroupBy(3, 0, 200)
+    val list = PostServ.getAllBy(CategoryServ.getAllBy(0, 10), 5, 0, 200)
 
+    // here is bug, the data is
 
-    list.flatMap {
+    list match {
 
-      item => item.map {r => Ok(views.html.home.block.list(groupBy[PostEntity, String, Int](r)))}
+      case null => Future {
+        InternalServerError(fail(ServErrorConst.SystemError))
+      }
 
+      case _ =>
+
+        list.flatMap {
+
+          item => item.map { r =>
+
+            val a = groupBy(r)
+
+            a.map {r => println(r._1)}
+
+            Ok(views.html.home.block.list(groupBy(r))) }
+
+        }.recover {
+
+          case err: Throwable => InternalServerError(fail(ServErrorConst.SystemError))
+
+        }
     }
 
 
@@ -91,14 +115,14 @@ class Fetcher extends Command {
 
 
   /**
-   * Get the header data with header view
+   * Get the head template
    *
    * @return
    */
   protected def head = Action.async { request =>
 
 
-    val category = CategoryServ.all(0, 10)
+    val category = CategoryServ.getAllBy(0, 10)
 
     category match {
 
@@ -123,7 +147,7 @@ class Fetcher extends Command {
   }
 
   /**
-   * Get the data with right sidebar
+   * Get the right template
    *
    * @return
    */

@@ -10,22 +10,20 @@ GET     /assets/*file                   controllers.Assets.versioned(path="/publ
 
 # Home page
 
-GET     /                               process.member.controllers.Application.index
-GET     /hello                          process.member.controllers.HelloScala.index
-GET     /more/:name                     process.member.controllers.HelloScala.more(name: String)
+GET     /doc                            process.home.controllers.Application.index
 
 
 # the route for home
 
-GET     /home                     process.home.controllers.main.Fetcher.index
+GET     /                               process.home.controllers.main.Fetcher.index
 
 # the routes for the post
 
-GET     /posts/$count<[0-9]+>        process.member.controllers.post.Fetcher.all(count: Int, page: Option[Int])
-GET     /post/$id<[0-9]+>            process.member.controllers.post.Fetcher.one(id: Int)
+#GET     /posts/$count<[0-9]+>        process.member.controllers.post.Fetcher.all(count: Int, page: Option[Int])
+#GET     /post/$id<[0-9]+>            process.member.controllers.post.Fetcher.one(id: Int)
 
-POST    /post/new                    process.member.controllers.post.Updater.add
-POST    /post/$id<[0-9]+>/update     process.member.controllers.post.Updater.update(id: Int)
+#POST    /post/new                    process.member.controllers.post.Updater.add
+#POST    /post/$id<[0-9]+>/update     process.member.controllers.post.Updater.update(id: Int)
 
-DELETE  /post/:id/remove             process.member.controllers.post.Updater.remove(id: Int)
+#DELETE  /post/:id/remove             process.member.controllers.post.Updater.remove(id: Int)
 
