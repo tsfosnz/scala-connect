@@ -1,10 +1,9 @@
 
-@import scala.concurrent._
 
-@(title: String = "Welcome", head: String = "", list: String = "", right: String = "")
+@(title: String = "Welcome", head: String = "", list: String = "", right: String = "")(implicit messages: Messages)
+
 
 @_layout.default(title) {
-
 
     @Html(head)
 

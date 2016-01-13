@@ -1,4 +1,4 @@
-@(category: Seq[CategoryEntity])
+@(topic: Seq[TopicEntity])
 
 
 <div class="row">
@@ -7,7 +7,7 @@
         <div class="page-header page-header-small">
 
             <ul class="nav nav-pills" role="tablist">
-                @for(c <- category) {
+                @for(c <- topic) {
                     <li role="presentation">
                         <a href="#">@c.name</a>
                     </li>

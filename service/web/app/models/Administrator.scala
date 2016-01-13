@@ -3,9 +3,9 @@ package models
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
-class Member(tag: Tag) extends BaseDateTime[MemberEntity](tag, "member") {
+class Administrator(tag: Tag) extends BaseDateTime[AdministratorEntity](tag, "administrator") {
 
-  def id = column[Int]("member_id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("administrator_id", O.PrimaryKey, O.AutoInc)
 
   def username = column[String]("username", O.Length(128), O.Default(""))
 
@@ -41,10 +41,10 @@ class Member(tag: Tag) extends BaseDateTime[MemberEntity](tag, "member") {
       introduction,
       createdAt,
       updatedAt) <>
-      ((MemberEntity.apply _).tupled, MemberEntity.unapply)
+      ((AdministratorEntity.apply _).tupled, AdministratorEntity.unapply)
 }
 
-case class MemberEntity
+case class AdministratorEntity
 (
   id: Int,
   username: String,

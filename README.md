@@ -17,28 +17,38 @@ A simple social connect app by scala
 
 Please read it first before you would like to contribute anything.
 
-Currently I have no idea the best practice of Play, Slick or Scala,
-and this project, for me, is to learn them by practicing.
+It's learning project, to learn best practice of Play, Slick, or
+Scala by coding it. To keep changing it by adopting more and
+more best practice is always the priority.
 
-So we don't really try to complete it as an app, instead we build it
-to adopt more and more best practice, we learned, so we might keep
-changing it to make that meet.
+I recommand we write wiki page to share what we learned constantly:
 
-I recommanded we write wiki page to record what we got about :
+- The best practice of Play, Slick, or Scala
+- The Play, Slick, Scala, how to
+- The resource to learn Play, Slick and Scala
 
-- The best practice of Play framework
-- The best practice of Slick
+Then we can really learn Play, Slick and Scala together.
 
-Constantly, so we can really learn Play, Slick and Scala (some).
+##### Copyright
+
+- Please make sure your contribution don't have copyright issue
+- The copyright of the code you contributed, belongs to you
+
+>On to the copyright and intellectual property question. A person or a company contributing source back upstream to the open source project owns the IP of the new code
+>http://twiki.org/cgi-bin/view/Blog/BlogEntry201207x1
+
+##### License
+
+- MIT
 
 ##### Style
 
 - It's learning project
 - No task assignment
 - Free style, coz I don't know you are wrong
-- Share your knowledge at wiki, is recommended!
 - By using English is required
 - Translation will be conducted after that
+- Share your knowledge at wiki, is recommended!
 
 ##### Coding
 

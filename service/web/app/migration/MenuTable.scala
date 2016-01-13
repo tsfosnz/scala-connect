@@ -3,18 +3,15 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import migration.TopicTable._
-import models.Member
-import service.member.MemberServ
+import models.{Menu, Topic}
+import service.topic.TopicServ
+import service.menu.MenuServ
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.Future
+object MenuTable extends MigrationTable[Menu]{
 
-
-object MemberTable extends MigrationTable[Member] {
-
-  lazy val query = MemberServ.query
-  lazy val db = MemberServ.db
+  lazy val query = MenuServ.query
+  lazy val db = MenuServ.db
 
   /**
    * initialize the table, create its schema, update its schema
@@ -39,32 +36,18 @@ object MemberTable extends MigrationTable[Member] {
       query.map {
 
         m => (
-
-          m.username,
-          m.email,
-          m.firstName,
-          m.lastName,
-          m.displayName,
-          m.introduction,
-          m.createdAt,
-          m.updatedAt
+          m.name
           )
       } +=(
-        faker.Name.name,
-        faker.Internet.email,
-        faker.Name.first_name,
-        faker.Name.last_name,
-        faker.Name.name,
-        faker.Lorem.paragraph(3),
-        now,
-        now
+        faker.Lorem.words(2).mkString("")
         )
 
     )
 
     val result = db.run(setup)
 
-
     result
+
+
   }
 }

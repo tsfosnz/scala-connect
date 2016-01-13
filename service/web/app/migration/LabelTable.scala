@@ -3,16 +3,14 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Category
-import service.category.CategoryServ
+import models.Label
+import service.label.LabelServ
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+object LabelTable extends MigrationTable[Label]{
 
-object CategoryTable extends MigrationTable[Category]{
-
-  lazy val query = CategoryServ.query
-  lazy val db = CategoryServ.db
+  lazy val query = LabelServ.query
+  lazy val db = LabelServ.db
 
   /**
    * initialize the table, create its schema, update its schema

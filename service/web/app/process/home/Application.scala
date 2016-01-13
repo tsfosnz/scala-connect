@@ -8,9 +8,7 @@ class Application extends Controller {
 
    def index = Action {
 
-
-     Ok("Welcome")
-
+     Ok(views.html.index("Welcome to Play framework"))
 
    }
 

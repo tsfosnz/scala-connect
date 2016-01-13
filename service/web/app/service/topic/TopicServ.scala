@@ -1,17 +1,17 @@
-package service.category
+package service.topic
 
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 import core.Service
-import models.{Post, Category}
+import models.{Post, Topic}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object CategoryServ extends Service[Category](
+object TopicServ extends Service[Topic](
   "mydb",
-  (tag: Tag) => new Category(tag)) {
+  (tag: Tag) => new Topic(tag)) {
 
   def test = {
 

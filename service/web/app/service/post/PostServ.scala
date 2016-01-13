@@ -3,8 +3,8 @@ package service.post
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{CategoryEntity, PostEntity, Post}
-import service.category.{CategoryServ, CategoryItemServ}
+import models.{TopicEntity, PostEntity, Post}
+import service.topic.{TopicServ, TopicItemServ}
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
@@ -26,13 +26,13 @@ object PostServ extends Service[Post](
    * usage, when we display a list of category and for each of 
    * them, we will show a group of post in fix size
    *
-   * @param categoryResult
+   * @param topicResult
    * @param postCount
    * @param page
    * @param count
    * @return
    */
-  def getAllBy(categoryResult: Future[scala.Seq[CategoryEntity]],
+  def getAllBy(topicResult: Future[scala.Seq[TopicEntity]],
                postCount: Int, 
                page: Int, 
                count: Int) = {
@@ -48,14 +48,14 @@ object PostServ extends Service[Post](
 
     try {
 
-      val category = CategoryServ.query
-      val categoryItem = CategoryItemServ.query
+      val topicQuery = TopicServ.query
+      val topicItemQuery = TopicItemServ.query
 
       val postQuery = for {
 
         p <- query
-        ci <- categoryItem if p.id === ci.itemId && ci.itemType === "post"
-        c <- category if ci.categoryId === c.id
+        ci <- topicItemQuery if p.id === ci.itemId && ci.itemType === "post"
+        c <- topicQuery if ci.topicId === c.id
 
       } yield (p, c.name, c.id)
 
@@ -64,7 +64,7 @@ object PostServ extends Service[Post](
 
       val result = for {
 
-        item <- categoryResult
+        item <- topicResult
 
       } yield {
 
@@ -77,7 +77,7 @@ object PostServ extends Service[Post](
 
             }
 
-            println(item.indexOf(c))
+            //println(item.indexOf(c))
           }
 
 
@@ -87,7 +87,7 @@ object PostServ extends Service[Post](
           val q = unionQuery.sortBy(_._3.asc).result
 
           //println(unionQuery.drop(page).take(count).result)
-          println(q.statements.head)
+          //println(q.statements.head)
 
           db.run(q)
 
@@ -106,27 +106,27 @@ object PostServ extends Service[Post](
   /**
    * Get a list of data (post, category) by (category id) 
    *
-   * @param categoryId
+   * @param topicId
    * @param page
    * @param count
    * @return
    */
-  def getAllBy(categoryId: Int, page: Int, count: Int) = {
+  def getAllBy(topicId: Int, page: Int, count: Int) = {
 
     try {
 
-      val category = CategoryServ.query
-      val categoryItem = CategoryItemServ.query
+      val topicQuery = TopicServ.query
+      val topicItemQuery = TopicItemServ.query
 
       val postQuery = for {
 
         p <- query
-        ci <- categoryItem if p.id === ci.itemId && ci.itemType === "post"
-        c <- category if ci.categoryId === c.id
+        ci <- topicItemQuery if p.id === ci.itemId && ci.itemType === "post"
+        c <- topicQuery if ci.topicId === c.id
 
       } yield (p, c.name, c.id)
 
-      val q = postQuery.filter(_._3 === categoryId).drop(page).take(count)
+      val q = postQuery.filter(_._3 === topicId).drop(page).take(count)
 
       println(q.result.statements.head)
 

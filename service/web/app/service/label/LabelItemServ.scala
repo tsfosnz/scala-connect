@@ -1,13 +1,13 @@
-package service.category
+package service.label
 
-import core.{Service}
-import models.CategoryItem
+import core.Service
+import models.{LabelItem, TopicItem}
 import slick.driver.MySQLDriver.api._
 
 
-object CategoryItemServ extends Service[CategoryItem](
+object LabelItemServ extends Service[LabelItem](
   "mydb",
-  (tag: Tag) => new CategoryItem(tag)) {
+  (tag: Tag) => new LabelItem(tag)) {
 
   def test = {
 

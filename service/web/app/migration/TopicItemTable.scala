@@ -1,15 +1,15 @@
 package migration
 
 import core.MigrationTable
-import models.CategoryItem
-import service.category.CategoryItemServ
+import models.TopicItem
+import service.topic.TopicItemServ
 import slick.driver.MySQLDriver.api._
 
-object CategoryItemTable extends MigrationTable[CategoryItem]{
+object TopicItemTable extends MigrationTable[TopicItem]{
 
   //type T = LabelPost
-  lazy val query = CategoryItemServ.query
-  lazy val db = CategoryItemServ.db
+  lazy val query = TopicItemServ.query
+  lazy val db = TopicItemServ.db
 
   def initialize(drop: Boolean = false) = init(query, db)(drop)
 
@@ -25,7 +25,7 @@ object CategoryItemTable extends MigrationTable[CategoryItem]{
       query.map {
 
         m => (
-          m.categoryId,
+          m.topicId,
           m.itemId,
           m.itemType
           )

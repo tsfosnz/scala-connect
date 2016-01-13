@@ -28,7 +28,7 @@ class DbSeedSpec extends PlaySpec {
       // create all
 
       for (i <- 0 to 9) {
-        Await.result(CategoryTable.populate, Duration("5 seconds"))
+        Await.result(TopicTable.populate, Duration("5 seconds"))
       }
 
       for (i <- 0 to 200) {
@@ -41,7 +41,7 @@ class DbSeedSpec extends PlaySpec {
 
       for (i <- 1 to 200) {
 
-        Await.result(CategoryItemTable.populate(i % 10 + 1, i, "post"), Duration("5 seconds"))
+        Await.result(TopicItemTable.populate(i % 10 + 1, i, "post"), Duration("5 seconds"))
 
       }
 

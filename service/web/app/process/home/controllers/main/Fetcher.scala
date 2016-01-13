@@ -1,22 +1,25 @@
 package process.home.controllers.main
 
+import javax.inject.Inject
+
 import core._
 import models.PostEntity
-import play.api.libs.concurrent.Promise
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.category.CategoryServ
+import service.topic.TopicServ
 import service.post.PostServ
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.concurrent.duration.Duration
+
+import play.api.i18n.{MessagesApi, I18nSupport}
 
 /**
  *
  * @author Tom
  */
-class Fetcher extends Command {
+// https://www.playframework.com/documentation/2.5.x/ScalaDependencyInjection
+class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSupport {
 
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
@@ -68,7 +71,9 @@ class Fetcher extends Command {
 
     } yield {
 
-      Ok.chunked(Enumerator(views.html.home.index("", h, p, r)))
+      //println(h)
+
+      Ok.chunked(Enumerator(views.html.home.main.index("", h, p, r)))
 
     }
 
@@ -81,7 +86,7 @@ class Fetcher extends Command {
    */
   protected def post = Action.async { request =>
 
-    val list = PostServ.getAllBy(CategoryServ.getAllBy(0, 10), 5, 0, 200)
+    val list = PostServ.getAllBy(TopicServ.getAllBy(0, 10), 5, 0, 200)
 
     // here is bug, the data is
 
@@ -99,13 +104,20 @@ class Fetcher extends Command {
 
             val a = groupBy(r)
 
-            a.map {r => println(r._1)}
+            //a.map {r => println(r._1)}
+            //println(a)
 
-            Ok(views.html.home.block.list(groupBy(r))) }
+            val b = views.html.home.main.list(a)
+            //println(b)
+
+            Ok(b) }
 
         }.recover {
 
-          case err: Throwable => InternalServerError(fail(ServErrorConst.SystemError))
+          case err: Throwable => {
+            //println(err.getMessage)
+            InternalServerError(fail(ServErrorConst.SystemError))
+          }
 
         }
     }
@@ -122,7 +134,7 @@ class Fetcher extends Command {
   protected def head = Action.async { request =>
 
 
-    val category = CategoryServ.getAllBy(0, 10)
+    val category = TopicServ.getAllBy(0, 10)
 
     category match {
 
@@ -134,7 +146,7 @@ class Fetcher extends Command {
 
         category.map {
 
-          c => Ok(views.html.home.block.head(c))
+          c => Ok(views.html.home.main.head(c))
 
         }.recover {
 
@@ -154,7 +166,7 @@ class Fetcher extends Command {
   protected def right = Action.async { request =>
 
     Future {
-      Ok(views.html.home.block.right())
+      Ok(views.html.home.main.right())
     }
 
   }

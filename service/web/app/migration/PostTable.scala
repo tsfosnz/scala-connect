@@ -45,7 +45,7 @@ object PostTable extends MigrationTable[Post]{
       } +=(
         authorId,
         faker.Lorem.sentence(16),
-        faker.Lorem.paragraph(10),
+        faker.Lorem.paragraph(5),
         faker.Lorem.paragraphs(10).mkString("\n"),
         faker.Lorem.paragraphs(10).mkString("\n"),
         now,

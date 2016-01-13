@@ -3,18 +3,15 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import migration.TopicTable._
-import models.Member
-import service.member.MemberServ
+import models.Administrator
+import service.admin.AdministratorServ
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.Future
 
+object AdministratorTable extends MigrationTable[Administrator] {
 
-object MemberTable extends MigrationTable[Member] {
-
-  lazy val query = MemberServ.query
-  lazy val db = MemberServ.db
+  lazy val query = AdministratorServ.query
+  lazy val db = AdministratorServ.db
 
   /**
    * initialize the table, create its schema, update its schema

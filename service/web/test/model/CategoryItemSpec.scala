@@ -4,7 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
 import org.junit.runner._
 import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
-import service.category._
+import service.topic._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -27,7 +27,7 @@ class CategoryItemSpec extends PlaySpec {
 
     "populate data in table<label>" in {
 
-      Await.result(CategoryItemServ.test, Duration("5 seconds"))
+      Await.result(TopicItemServ.test, Duration("5 seconds"))
 
     }
 

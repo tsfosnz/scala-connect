@@ -29,20 +29,28 @@ class DbSchemaSpec extends PlaySpec {
       // create all
 
       try {
-        Await.result(CategoryTable.initialize(), Duration("5 seconds"))
-        Await.result(CategoryItemTable.initialize(), Duration("5 seconds"))
+        Await.result(TopicTable.initialize(), Duration("5 seconds"))
+        Await.result(TopicItemTable.initialize(), Duration("5 seconds"))
         Await.result(MemberTable.initialize(), Duration("5 seconds"))
         Await.result(PostTable.initialize(), Duration("5 seconds"))
         Await.result(CommentTable.initialize(), Duration("5 seconds"))
+        Await.result(MenuTable.initialize(), Duration("5 seconds"))
+        Await.result(LabelTable.initialize(), Duration("5 seconds"))
+        Await.result(LabelItemTable.initialize(), Duration("5 seconds"))
+        Await.result(AdministratorTable.initialize(), Duration("5 seconds"))
       }
 
       catch {
         case err: MySQLSyntaxErrorException => {
-          Await.result(CategoryTable.initialize(true), Duration("5 seconds"))
-          Await.result(CategoryItemTable.initialize(true), Duration("5 seconds"))
+          Await.result(TopicTable.initialize(true), Duration("5 seconds"))
+          Await.result(TopicItemTable.initialize(true), Duration("5 seconds"))
           Await.result(MemberTable.initialize(true), Duration("5 seconds"))
           Await.result(PostTable.initialize(true), Duration("5 seconds"))
           Await.result(CommentTable.initialize(true), Duration("5 seconds"))
+          Await.result(MenuTable.initialize(true), Duration("5 seconds"))
+          Await.result(LabelTable.initialize(true), Duration("5 seconds"))
+          Await.result(LabelItemTable.initialize(true), Duration("5 seconds"))
+          Await.result(AdministratorTable.initialize(true), Duration("5 seconds"))
         }
       }
 

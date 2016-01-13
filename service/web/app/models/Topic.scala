@@ -4,11 +4,13 @@ import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
 
-class Category(tag: Tag) extends BaseDateTime[CategoryEntity](tag, "category") {
+class Topic(tag: Tag) extends BaseDateTime[TopicEntity](tag, "topic") {
 
-  def id = column[Int]("category_id", O.PrimaryKey, O.AutoInc)
+  def id = column[Int]("topic_id", O.PrimaryKey, O.AutoInc)
 
   def name = column[String]("name", O.Length(128), O.Default(""))
+
+  //def idx = index("idx_a", (name), unique = true)
 
   //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
@@ -20,10 +22,10 @@ class Category(tag: Tag) extends BaseDateTime[CategoryEntity](tag, "category") {
       name,
       createdAt,
       updatedAt) <>
-      ((CategoryEntity.apply _).tupled, CategoryEntity.unapply)
+      ((TopicEntity.apply _).tupled, TopicEntity.unapply)
 }
 
-case class CategoryEntity
+case class TopicEntity
 (
   id: Int,
   name: String,

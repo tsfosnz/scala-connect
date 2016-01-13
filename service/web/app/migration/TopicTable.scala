@@ -3,18 +3,16 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import migration.TopicTable._
-import models.Member
-import service.member.MemberServ
+import models.Topic
+import service.topic.TopicServ
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
+object TopicTable extends MigrationTable[Topic]{
 
-object MemberTable extends MigrationTable[Member] {
-
-  lazy val query = MemberServ.query
-  lazy val db = MemberServ.db
+  lazy val query = TopicServ.query
+  lazy val db = TopicServ.db
 
   /**
    * initialize the table, create its schema, update its schema
@@ -39,23 +37,12 @@ object MemberTable extends MigrationTable[Member] {
       query.map {
 
         m => (
-
-          m.username,
-          m.email,
-          m.firstName,
-          m.lastName,
-          m.displayName,
-          m.introduction,
+          m.name,
           m.createdAt,
           m.updatedAt
           )
       } +=(
-        faker.Name.name,
-        faker.Internet.email,
-        faker.Name.first_name,
-        faker.Name.last_name,
-        faker.Name.name,
-        faker.Lorem.paragraph(3),
+        faker.Lorem.words(2).mkString(""),
         now,
         now
         )
@@ -64,7 +51,8 @@ object MemberTable extends MigrationTable[Member] {
 
     val result = db.run(setup)
 
-
     result
+
+
   }
 }

@@ -1,0 +1,38 @@
+@(list: Seq[((String, Int), Seq[PostEntity])])
+
+@for(item <- list) {
+    <div class="list-group">
+        <div href="#" class="list-group-item list-group-item-info" style="">
+            <a href="/cat/@item._1._2/20">
+                @item._1._1 (@item._2.length)
+            </a>
+        </div>
+        @for(post <- item._2) {
+            <div href="#" class="list-group-item">
+                <h3>
+                    <a href="javascript:">
+                    @(post.title.length < 80 match {
+                        case true => post.title
+                        case false => post.title.substring(0, 80) + "..."
+                    })
+                    </a>
+                </h3>
+
+                <div>
+                    @(post.excerpt.length < 256 match {
+                        case _ => post.excerpt
+                        //case false => post.excerpt.substring(0, 256) + "..."
+                    })
+                </div>
+            </div>
+        }
+
+        <div href="#" class="list-group-item list-group-item-text">
+            <div>
+                <small>
+                    <a href="/cat/@item._1._2/20">更多</a>
+                </small>
+            </div>
+        </div>
+    </div>
+}

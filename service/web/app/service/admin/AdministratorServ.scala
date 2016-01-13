@@ -1,17 +1,17 @@
-package service.member
+package service.admin
 
 import java.text.SimpleDateFormat
 
 import core.Service
-import models.{Post, Member}
+import models.Administrator
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
 
 
-object MemberServ  extends Service[Member](
+object AdministratorServ  extends Service[Administrator](
   "mydb",
-  (tag: Tag) => new Member(tag)) {
+  (tag: Tag) => new Administrator(tag)) {
 
   def test() {
 

@@ -1,17 +1,17 @@
 package models
 
-import models.base.BaseDateTime
+import models.base.{BaseDateTime}
 import slick.driver.MySQLDriver.api._
 
-class Post(tag: Tag) extends BaseDateTime[PostEntity](tag, "post") {
+class Post(tag: Tag) extends BaseDateTime[PostEntity](tag, "post")  {
 
   def id = column[Int]("post_id", O.PrimaryKey, O.AutoInc)
-
-  def urlKey = column[String]("url_key", O.Length(255), O.Default(""))
 
   def authorId = column[Int]("author_id", O.Default(0))
 
   def postType = column[String]("type", O.Length(256), O.Default(""))
+
+  def urlKey = column[String]("url_key", O.Length(255), O.Default(""))
 
   def title = column[String]("title", O.Length(256), O.Default(""))
 
@@ -25,6 +25,16 @@ class Post(tag: Tag) extends BaseDateTime[PostEntity](tag, "post") {
 
   def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
 
+  def commentCount = column[Int]("count_comment", O.Default(0))
+
+  def readCount = column[Int]("count_read", O.Default(0))
+
+  def likeCount = column[Int]("count_like", O.Default(0))
+
+  def dislikeCount =  column[Int]("count_dislike", O.Default(0))
+
+  //def idx = index("idx_a", (urlKey), unique = false)
+
   //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
   //def updatedAt = column[String]("updated_at", O.SqlType("DateTime"))
@@ -34,12 +44,17 @@ class Post(tag: Tag) extends BaseDateTime[PostEntity](tag, "post") {
       id,
       authorId,
       postType,
+      urlKey,
       title,
       excerpt,
       textBody,
       htmlBody,
       status,
       isArchived,
+      commentCount,
+      readCount,
+      likeCount,
+      dislikeCount,
       createdAt,
       updatedAt) <>
       ((PostEntity.apply _).tupled, PostEntity.unapply)
@@ -50,12 +65,17 @@ case class PostEntity
   id: Int,
   authorId: Int,
   postType: String,
+  urlKey: String,
   title: String,
   excerpt: String,
   textBody: String,
   htmlBody: String,
   status: String,
   isArchived: String,
+  commentCount: Int,
+  readCount: Int,
+  likeCount: Int,
+  dislikeCount: Int,
   createdAt: String,
   updatedAt: String
   )

@@ -13,8 +13,6 @@ class Comment(tag: Tag) extends BaseDateTime[CommentEntity](tag, "comment") {
 
   def level = column[Int]("level")
 
-  def urlKey = column[String]("url_key", O.Length(255), O.Default(""))
-
   def authorId = column[Int]("author_id", O.Default(0))
 
   def commentType = column[String]("type", O.Length(256), O.Default(""))
@@ -26,6 +24,14 @@ class Comment(tag: Tag) extends BaseDateTime[CommentEntity](tag, "comment") {
   def status = column[String]("status", O.SqlType("CHAR"), O.Length(32), O.Default(""))
 
   def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
+
+  def replyCount = column[Int]("count_reply", O.Default(0))
+
+  def readCount = column[Int]("count_read", O.Default(0))
+
+  def likeCount = column[Int]("count_like", O.Default(0))
+
+  def dislikeCount = column[Int]("count_dislike", O.Default(0))
 
   //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
 
@@ -43,6 +49,10 @@ class Comment(tag: Tag) extends BaseDateTime[CommentEntity](tag, "comment") {
       htmlBody,
       status,
       isArchived,
+      replyCount,
+      readCount,
+      likeCount,
+      dislikeCount,
       createdAt,
       updatedAt) <>
       ((CommentEntity.apply _).tupled, CommentEntity.unapply)
@@ -60,6 +70,10 @@ case class CommentEntity
   htmlBody: String,
   status: String,
   isArchived: String,
+  replyCount: Int,
+  readCount: Int,
+  likeCount: Int,
+  dislikeCount: Int,
   createdAt: String,
   updatedAt: String
   )

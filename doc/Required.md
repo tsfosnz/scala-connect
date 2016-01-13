@@ -1,28 +1,36 @@
 # Product Backlog
 
 
-It's a small social network, to communicate by post/comment/vote, chat etc
+## Home
 
-## Member
+- A list of post in different category
 
-- CRUD profile
-- CRUD post
-- CRUD comment
-- CRUD vote
+## Topic
+
+-
 
 ## Post
 
-- Post should have content/title
-- Post should have author
-- Post should have created date
-- Post should have updated date
-- Post should be displayed at home page
-- Post should be in different tag
+- A content of Post and its Comment/pagination by post id
 
-## Tag
+## Page
 
-- Tag should be horizontal
-- One tag should have many posts
+- A single page 
 
-##
+## Menu
 
+- Item, could be, page/category/post/
+- Not nested
+- Top menu
+- Post / Topic
+
+## Widget
+
+- Appeared in side bar
+- Could be advitisment
+- Or anything else..
+
+## User 
+
+- Add post in allowed topic..
+- 
