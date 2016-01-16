@@ -3,16 +3,15 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Topic
-import service.topic.TopicServ
+import models._
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object TopicTable extends MigrationTable[Topic]{
 
-  lazy val query = TopicServ.query
-  lazy val db = TopicServ.db
+  lazy val query = TopicQuery.query
+  lazy val db = TopicQuery.db
 
   /**
    * initialize the table, create its schema, update its schema

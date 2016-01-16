@@ -3,14 +3,13 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Comment
-import service.comment.CommentServ
+import models.{CommentQuery, Comment}
 import slick.driver.MySQLDriver.api._
 
 object CommentTable extends MigrationTable[Comment]{
 
-  val query = CommentServ.query
-  val db = CommentServ.db
+  val query = CommentQuery.query
+  val db = CommentQuery.db
 
   def initialize(drop:Boolean = false) = init(query, db)(drop)
 

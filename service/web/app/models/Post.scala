@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import models.base.{BaseDateTime}
 import slick.driver.MySQLDriver.api._
 
@@ -79,4 +80,11 @@ case class PostEntity
   createdAt: String,
   updatedAt: String
   )
+
+object PostQuery extends DbQuery[Post](
+  "mydb",
+  (tag: Tag) => new Post(tag))  {
+
+
+}
 

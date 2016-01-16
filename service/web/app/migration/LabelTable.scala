@@ -3,14 +3,13 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Label
-import service.label.LabelServ
+import models._
 import slick.driver.MySQLDriver.api._
 
 object LabelTable extends MigrationTable[Label]{
 
-  lazy val query = LabelServ.query
-  lazy val db = LabelServ.db
+  lazy val query = LabelQuery.query
+  lazy val db = LabelQuery.db
 
   /**
    * initialize the table, create its schema, update its schema

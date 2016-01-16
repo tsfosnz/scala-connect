@@ -3,15 +3,14 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.{Menu, Topic}
-import service.topic.TopicServ
-import service.menu.MenuServ
+import models._
 import slick.driver.MySQLDriver.api._
 
 object MenuTable extends MigrationTable[Menu]{
 
-  lazy val query = MenuServ.query
-  lazy val db = MenuServ.db
+  lazy val query = MenuQuery.query
+  lazy val db = MenuQuery.db
+
 
   /**
    * initialize the table, create its schema, update its schema
@@ -31,18 +30,16 @@ object MenuTable extends MigrationTable[Menu]{
     val now: String = sdf.format(dt)
 
 
-    val setup = DBIO.seq(
+    val setup = DBIO.seq {
 
       query.map {
 
-        m => (
+        m => {
           m.name
-          )
-      } +=(
-        faker.Lorem.words(2).mkString("")
-        )
+        }
+      } += (faker.Lorem.words(2).mkString(""))
 
-    )
+    }
 
     val result = db.run(setup)
 

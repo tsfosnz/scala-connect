@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import slick.driver.MySQLDriver.api._
 
 
@@ -35,4 +36,11 @@ case class MenuEntity
   isEnabled: String,
   isArchived: String
   )
+
+object MenuQuery extends DbQuery[Menu](
+  "mydb",
+  (tag: Tag) => new Menu(tag))  {
+
+
+}
 

@@ -1,5 +1,6 @@
 package models
 
+import core.{DbQuery}
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
@@ -57,4 +58,11 @@ case class AdministratorEntity
   createdAt: String,
   updatedAt: String
   )
+
+object AdministratorQuery extends DbQuery[Administrator](
+"mydb",
+(tag: Tag) => new Administrator(tag))  {
+
+
+}
 

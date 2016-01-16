@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
@@ -57,4 +58,12 @@ case class MemberEntity
   createdAt: String,
   updatedAt: String
   )
+
+object MemberQuery extends DbQuery[Member](
+  "mydb",
+  (tag: Tag) => new Member(tag))  {
+
+
+}
+
 

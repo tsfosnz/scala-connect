@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import slick.driver.MySQLDriver.api._
 
 class TopicItem(tag: Tag) extends Table[TopicItemEntity](tag, "topic_item") {
@@ -28,3 +29,10 @@ case class TopicItemEntity
   itemId: Int,
   itemType: String
   )
+
+object TopicItemQuery extends DbQuery[TopicItem](
+  "mydb",
+  (tag: Tag) => new TopicItem(tag))  {
+
+
+}

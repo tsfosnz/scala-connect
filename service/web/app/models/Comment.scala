@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
@@ -77,4 +78,12 @@ case class CommentEntity
   createdAt: String,
   updatedAt: String
   )
+
+object CommentQuery extends DbQuery[Comment](
+  "mydb",
+  (tag: Tag) => new Comment(tag))  {
+
+
+}
+
 

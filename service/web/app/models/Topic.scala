@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
@@ -32,4 +33,11 @@ case class TopicEntity
   createdAt: String,
   updatedAt: String
   )
+
+object TopicQuery extends DbQuery[Topic](
+  "mydb",
+  (tag: Tag) => new Topic(tag))  {
+
+
+}
 

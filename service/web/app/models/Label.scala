@@ -1,5 +1,6 @@
 package models
 
+import core.DbQuery
 import models.base.BaseDateTime
 import slick.driver.MySQLDriver.api._
 
@@ -31,4 +32,12 @@ case class LabelEntity
   createdAt: String,
   updatedAt: String
   )
+
+object LabelQuery extends DbQuery[Label](
+  "mydb",
+  (tag: Tag) => new Label(tag))  {
+
+
+}
+
 
