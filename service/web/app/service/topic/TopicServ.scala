@@ -3,15 +3,16 @@ package service.topic
 import java.text.SimpleDateFormat
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import core.Service
-import models.{Post, Topic}
+import core._
+import models._
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object TopicServ extends Service[Topic](
-  "mydb",
-  (tag: Tag) => new Topic(tag)) {
+object TopicServ {
+
+
+  val topic = TopicQuery
 
   def test = {
 
@@ -27,7 +28,7 @@ object TopicServ extends Service[Topic](
       //
       val q = (for {
 
-        c <- query
+        c <- topic.query
 
       } yield c).drop(page).take(count)
 
@@ -37,7 +38,7 @@ object TopicServ extends Service[Topic](
       println(sql)
 
       val action = q.result
-      val result = db.run(action)
+      val result = topic.db.run(action)
 
       result
     }

@@ -1,13 +1,13 @@
 package service.topic
 
-import core.{Service}
-import models.TopicItem
+import models._
 import slick.driver.MySQLDriver.api._
 
 
-object TopicItemServ extends Service[TopicItem](
-  "mydb",
-  (tag: Tag) => new TopicItem(tag)) {
+object TopicItemServ {
+
+
+  val topicItem = TopicItemQuery
 
   def test = {
 
@@ -16,8 +16,8 @@ object TopicItemServ extends Service[TopicItem](
 
     //db
 
-    val q = query.drop(1).take(20)
-    val r = db.run(q.result)
+    val q = topicItem.query.drop(1).take(20)
+    val r = topicItem.db.run(q.result)
 
     println(q.result.statements.head)
     println(r)
@@ -25,7 +25,6 @@ object TopicItemServ extends Service[TopicItem](
     r
 
   }
-
 
 
 }

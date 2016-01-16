@@ -3,15 +3,14 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Administrator
-import service.admin.AdministratorServ
+import models.{AdministratorQuery, Administrator}
 import slick.driver.MySQLDriver.api._
 
 
 object AdministratorTable extends MigrationTable[Administrator] {
 
-  lazy val query = AdministratorServ.query
-  lazy val db = AdministratorServ.db
+  lazy val query = AdministratorQuery.query
+  lazy val db = AdministratorQuery.db
 
   /**
    * initialize the table, create its schema, update its schema

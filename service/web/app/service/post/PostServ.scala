@@ -2,9 +2,7 @@ package service.post
 
 import java.text.SimpleDateFormat
 
-import core.Service
-import models.{TopicEntity, PostEntity, Post}
-import service.topic.{TopicServ, TopicItemServ}
+import models._
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
@@ -12,14 +10,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * PostServ
- * 
+ *
  * @author Tom
  */
 
-object PostServ extends Service[Post](
-  "mydb",
-  (tag: Tag) => new Post(tag)) {
+object PostServ {
 
+  val post = PostQuery
+  val topic = TopicQuery
+  val topicItem = TopicItemQuery
 
   /**
    * Get a list of data (post, category) by (a list of category),
@@ -33,8 +32,8 @@ object PostServ extends Service[Post](
    * @return
    */
   def getAllBy(topicResult: Future[scala.Seq[TopicEntity]],
-               postCount: Int, 
-               page: Int, 
+               postCount: Int,
+               page: Int,
                count: Int) = {
 
     // To explain: 
@@ -48,52 +47,50 @@ object PostServ extends Service[Post](
 
     try {
 
-      val topicQuery = TopicServ.query
-      val topicItemQuery = TopicItemServ.query
+      val topicQuery = topic.query
+      val topicItemQuery = topicItem.query
 
+      // #question
+      //
+      // how post.query to support for expression?
+      // SELECT * FROM post, topic_item, topic WHERE ....
+      //
       val postQuery = for {
 
-        p <- query
-        ci <- topicItemQuery if p.id === ci.itemId && ci.itemType === "post"
-        c <- topicQuery if ci.topicId === c.id
+        p <- post.query
+        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
+        c <- topicQuery if i.topicId === c.id
 
       } yield (p, c.name, c.id)
 
 
       val st = new scala.collection.mutable.Stack[Query[(Post, Rep[String], Rep[Int]), (PostEntity, String, Int), scala.Seq]]
 
-      val result = for {
+      for {
 
         item <- topicResult
 
       } yield {
 
-          item.map { c =>
+        item.map {
 
-            item.size - item.indexOf(c) == 1 match {
+          c => item.size - item.indexOf(c) == 1 match {
 
-              case true => st.push(postQuery.filter(_._3 === c.id).take(postCount * 2))
-              case _ => st.push(postQuery.filter(_._3 === c.id).take(postCount))
+            case true => st.push(postQuery.filter(_._3 === c.id).take(postCount * 2))
+            case _ => st.push(postQuery.filter(_._3 === c.id).take(postCount))
 
-            }
-
-            //println(item.indexOf(c))
           }
-
-
-          val k = st.pop
-          val unionQuery = st.foldRight(k)((a, b) => a ++ b)
-
-          val q = unionQuery.sortBy(_._3.asc).result
-
-          //println(unionQuery.drop(page).take(count).result)
-          //println(q.statements.head)
-
-          db.run(q)
-
         }
 
-      result
+        val k = st.pop
+        val unionQuery = st.foldRight(k)((a, b) => a ++ b)
+
+        val q = unionQuery.sortBy(_._3.asc).result
+
+        //println(unionQuery.drop(page).take(count).result)
+        //println(q.statements.head)
+        post.db.run(q)
+      }
 
     }
 
@@ -115,14 +112,14 @@ object PostServ extends Service[Post](
 
     try {
 
-      val topicQuery = TopicServ.query
-      val topicItemQuery = TopicItemServ.query
+      val topicQuery = topic.query
+      val topicItemQuery = topicItem.query
 
       val postQuery = for {
 
-        p <- query
-        ci <- topicItemQuery if p.id === ci.itemId && ci.itemType === "post"
-        c <- topicQuery if ci.topicId === c.id
+        p <- post.query
+        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
+        c <- topicQuery if i.topicId === c.id
 
       } yield (p, c.name, c.id)
 
@@ -130,7 +127,7 @@ object PostServ extends Service[Post](
 
       println(q.result.statements.head)
 
-      db.run(q.result)
+      post.db.run(q.result)
 
     }
 
@@ -143,7 +140,7 @@ object PostServ extends Service[Post](
 
   /**
    * Get one post by its id
-   * 
+   *
    * @param id
    * @return
    */
@@ -151,11 +148,11 @@ object PostServ extends Service[Post](
 
     try {
 
-      val q = query.filter(_.id === id)
+      val q = post.query.filter(_.id === id)
 
-      println(query.result.statements.head)
+      println(q.result.statements.head)
 
-      db.run(q.result)
+      post.db.run(q.result)
 
     }
 
@@ -186,7 +183,7 @@ object PostServ extends Service[Post](
 
       val action = DBIO.seq {
 
-        query.map {
+        post.query.map {
 
           model => (
             model.authorId,
@@ -205,9 +202,9 @@ object PostServ extends Service[Post](
           )
       }
 
-      println(query.insertStatement)
+      println(post.query.insertStatement)
 
-      db.run(action)
+      post.db.run(action)
     }
 
     catch {
@@ -238,14 +235,14 @@ object PostServ extends Service[Post](
       // and leave all esle alone
 
       val q = for {
-        item <- query if item.id === id
+        item <- post.query if item.id === id
       } yield (item.title, item.textBody, item.updatedAt)
 
       val action = q.update(data("title").head, data("body").head, now)
 
       println(q.updateStatement)
 
-      db.run(action)
+      post.db.run(action)
     }
 
     catch {
@@ -267,10 +264,10 @@ object PostServ extends Service[Post](
 
     try {
 
-      val q = query.filter(_.id === id)
+      val q = post.query.filter(_.id === id)
       println(q.delete.statements.head)
 
-      db.run(q.delete)
+      post.db.run(q.delete)
     }
 
 

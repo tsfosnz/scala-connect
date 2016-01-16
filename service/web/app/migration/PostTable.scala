@@ -3,14 +3,13 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import models.Post
-import service.post.PostServ
+import models._
 import slick.driver.MySQLDriver.api._
 
 object PostTable extends MigrationTable[Post]{
 
-  lazy val query = PostServ.query
-  lazy val db = PostServ.db
+  lazy val query = PostQuery.query
+  lazy val db = PostQuery.db
 
   def initialize(drop:Boolean = false) = init(query, db)(drop)
 
