@@ -4,31 +4,32 @@ import javax.inject.Inject
 
 import core._
 import models.PostEntity
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
-import service.topic.TopicServ
 import service.post.PostServ
+import service.topic.TopicServ
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-import play.api.i18n._
-import play.api.i18n.I18nSupport
 /**
  *
  * @author Tom
  */
 // https://www.playframework.com/documentation/2.5.x/ScalaDependencyInjection
-class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSupport
- {
+class Test@Inject()(val messagesApi: MessagesApi) extends Command with I18nSupport {
 
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
 
   def index = Action.async { request =>
 
-    //implicit val lang = request.acceptLanguages(3)
-    implicit val req: RequestHeader = request
+
+    // here this.post(request) still a Future?
+    // then what happened?
+    // Action is a Future always..
 
     val post = this.post(request).flatMap {
 
@@ -75,7 +76,6 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
     } yield {
 
       //println(h)
-      //println(p)
 
       Ok.chunked(Enumerator(views.html.home.main.index("", h, p, r)))
 
@@ -88,44 +88,11 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
    *
    * @return
    */
-  protected def post = Action.async { request =>
+  protected def post = Action { request =>
 
-    val list = PostServ.getAllBy(TopicServ.getAllBy(0, 10), 5, 0, 200)
+    val list = PostServ.getAllBy(0, 200)
 
-    // here is bug, the data is
-
-    list match {
-
-      case null => Future {
-        InternalServerError(fail(ServErrorConst.SystemError))
-      }
-
-      case _ =>
-
-        list.flatMap {
-
-          item => item.map { r =>
-
-            val a = groupBy(r)
-
-            //a.map {r => println(r._1)}
-            //println(a)
-
-            val b = views.html.home.main.list(a)
-            //println(b)
-
-            Ok(b) }
-
-        }.recover {
-
-          case err: Throwable => {
-            //println(err.getMessage)
-            InternalServerError(fail(ServErrorConst.SystemError))
-          }
-
-        }
-    }
-
+    Ok("")
 
   }
 
