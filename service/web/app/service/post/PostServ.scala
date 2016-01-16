@@ -19,6 +19,7 @@ object PostServ {
   val post = PostQuery
   val topic = TopicQuery
   val topicItem = TopicItemQuery
+  val db = post.db
 
   /**
    * Get a list of data (post, category) by (a list of category),
@@ -89,7 +90,7 @@ object PostServ {
 
         //println(unionQuery.drop(page).take(count).result)
         //println(q.statements.head)
-        post.db.run(q)
+        db.run(q)
       }
 
     }
@@ -127,7 +128,43 @@ object PostServ {
 
       println(q.result.statements.head)
 
-      post.db.run(q.result)
+      db.run(q.result)
+
+    }
+
+    catch {
+      case err: Exception => null
+    }
+
+  }
+
+  /**
+   * Get a list of post by update date / time
+   *
+   * @param page
+   * @param count
+   * @return
+   */
+  def getAllBy(page: Int, count: Int) = {
+
+    try {
+
+      val topicQuery = topic.query
+      val topicItemQuery = topicItem.query
+
+      val postQuery = for {
+
+        p <- post.query
+        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
+        c <- topicQuery if i.topicId === c.id
+
+      } yield (p, c.name, c.id)
+
+      val q = postQuery.drop(page).take(count).sortBy(_._1.updatedAt.desc)
+
+      println(q.result.statements.head)
+
+      db.run(q.result)
 
     }
 
@@ -152,7 +189,7 @@ object PostServ {
 
       println(q.result.statements.head)
 
-      post.db.run(q.result)
+      db.run(q.result)
 
     }
 
@@ -184,27 +221,27 @@ object PostServ {
       val action = DBIO.seq {
 
         post.query.map {
-
-          model => (
-            model.authorId,
-            model.title,
-            model.textBody,
-            model.createdAt,
-            model.updatedAt
-
+          m =>
+            (
+              m.authorId,
+              m.title,
+              m.textBody,
+              m.createdAt,
+              m.updatedAt
+              )
+        } +=
+          (
+            authorId,
+            data("title").head,
+            data("body").head,
+            now,
+            now
             )
-        } +=(
-          authorId,
-          data("title").head,
-          data("body").head,
-          now,
-          now
-          )
       }
 
       println(post.query.insertStatement)
 
-      post.db.run(action)
+      db.run(action)
     }
 
     catch {
@@ -242,7 +279,7 @@ object PostServ {
 
       println(q.updateStatement)
 
-      post.db.run(action)
+      db.run(action)
     }
 
     catch {
@@ -267,9 +304,45 @@ object PostServ {
       val q = post.query.filter(_.id === id)
       println(q.delete.statements.head)
 
-      post.db.run(q.delete)
+      db.run(q.delete)
     }
 
+
+    catch {
+      case err: Exception => null
+    }
+
+  }
+
+  /**
+   * Get a list of post by update date / time
+   *
+   * @param page
+   * @param count
+   * @return
+   */
+  def test(page: Int, count: Int) = {
+
+    try {
+
+      val topicQuery = topic.query
+      val topicItemQuery = topicItem.query
+
+      val postQuery = for {
+
+        p <- post.query
+        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
+        c <- topicQuery if i.topicId === c.id
+
+      } yield (p, c.name, c.id)
+
+      val q = postQuery.drop(page).take(count).sortBy(_._1.updatedAt.desc)
+
+      println(q.result.statements.head)
+
+      // the result always Future...
+      db.run(q.result)
+    }
 
     catch {
       case err: Exception => null
