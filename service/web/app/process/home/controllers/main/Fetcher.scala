@@ -85,11 +85,9 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
     // here is bug, the data is
 
     list match {
-
       case null => Future {
         InternalServerError(fail(ServErrorConst.SystemError))
       }
-
       case _ =>
         list.flatMap {
           item => item.map { r => Ok(views.html.home.main.list(groupBy(r))) }
@@ -110,11 +108,9 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
   protected def head(topics: Future[Seq[TopicEntity]]) = Action.async { request =>
 
     topics match {
-
       case null => Future {
         InternalServerError(fail(ServErrorConst.SystemError))
       }
-
       case _ =>
         topics.map { c => Ok(views.html.home.main.head(c)) }
           .recover {
