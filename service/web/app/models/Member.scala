@@ -23,7 +23,9 @@ class Member(tag: Tag) extends BaseDateTime[MemberEntity](tag, "member") {
   def isActive = column[String]("is_active", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
 
   def introduction = column[String]("introduction", O.Length(512), O.Default(""))
-  
+
+  def icon = column[String]("icon", O.Length(256), O.Default(""))
+
   //def idx = index("idx_a", (username, email), unique = true)
 
   //def createdAt = column[String]("created_at", O.SqlType("DateTime"))
@@ -40,6 +42,7 @@ class Member(tag: Tag) extends BaseDateTime[MemberEntity](tag, "member") {
       lastName,
       displayName,
       introduction,
+      icon,
       createdAt,
       updatedAt) <>
       ((MemberEntity.apply _).tupled, MemberEntity.unapply)
@@ -55,13 +58,14 @@ case class MemberEntity
   lastName: String,
   displayName: String,
   introduction: String,
+  icon: String,
   createdAt: String,
   updatedAt: String
   )
 
 object MemberQuery extends DbQuery[Member](
   "mydb",
-  (tag: Tag) => new Member(tag))  {
+  (tag: Tag) => new Member(tag)) {
 
 
 }

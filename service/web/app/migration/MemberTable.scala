@@ -3,12 +3,8 @@ package migration
 import java.text.SimpleDateFormat
 
 import core.MigrationTable
-import migration.TopicTable._
 import models.{MemberQuery, Member}
 import slick.driver.MySQLDriver.api._
-
-import scala.concurrent.Future
-
 
 object MemberTable extends MigrationTable[Member] {
 

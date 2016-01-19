@@ -1,38 +1,41 @@
-@(list: Seq[((String, Int), Seq[PostEntity])])
+@(list: Seq[(PostEntity, String, Int)])
 
-@for(item <- list) {
-    <div class="list-group">
-        <div href="#" class="list-group-item list-group-item-info" style="">
-            <a href="/cat/@item._1._2/20">
-                @item._1._1 (@item._2.length)
-            </a>
-        </div>
-        @for(post <- item._2) {
-            <div href="#" class="list-group-item">
-                <h3>
-                    <a href="javascript:">
-                    @(post.title.length < 80 match {
-                        case true => post.title
-                        case false => post.title.substring(0, 80) + "..."
-                    })
-                    </a>
-                </h3>
+<div class="list-group">
+    <div href="#" class="list-group-item list-group-item-info">
+    </div>
+    @for(post <- list) {
+        <div href="#" class="list-group-item">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>
 
-                <div>
-                    @(post.excerpt.length < 256 match {
-                        case _ => post.excerpt
-                        //case false => post.excerpt.substring(0, 256) + "..."
-                    })
+                        <span class="label label-primary">@post._2</span>
+                    </p>
+                    <p>
+                        <a href="javascript:">
+                        @(post._1.title.length < 80 match {
+                            case true => post._1.title
+                            case false => post._1.title.substring(0, 80) + "..."
+                        })
+                        </a>
+                    </p>
+
+                    <div>
+                        <p>
+                        @(post._1.excerpt.length < 256 match {
+                            case _ => post._1.excerpt
+                            //case false => post.excerpt.substring(0, 256) + "..."
+                        })
+                        </p>
+                        <p>
+                            <b><span
+                                class="pull-right label label-info"
+                                style="background-color: #31708f !important;color:#d9edf7">@@Tom
+                                </span></b>
+                        </p>
+                    </div>
                 </div>
             </div>
-        }
-
-        <div href="#" class="list-group-item list-group-item-text">
-            <div>
-                <small>
-                    <a href="/cat/@item._1._2/20">更多</a>
-                </small>
-            </div>
         </div>
-    </div>
-}
+    }
+</div>

@@ -77,10 +77,10 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
   protected def post(topics: Future[Seq[TopicEntity]]) = Action.async { request =>
 
 
+    /*
     val list = for {item <- topics} yield PostServ.getPostsByTopics(Map(
       "item" -> item,
       "postCount" -> 5))
-
 
     // here is bug, the data is
 
@@ -96,6 +96,23 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
             InternalServerError(fail(ServErrorConst.SystemError))
         }
     }
+    */
+
+    val list = PostServ.getPosts(0, 20)
+
+    list match {
+      case null => Future {
+        InternalServerError(fail(ServErrorConst.SystemError))
+      }
+      case _ =>
+        list.map {
+          item => Ok(views.html.home.main.list(item))
+        }.recover {
+          case err: Throwable =>
+            InternalServerError(fail(ServErrorConst.SystemError))
+        }
+    }
+
 
   }
 

@@ -32,14 +32,31 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "populate data in table<project>" in {
 
-      //val list = PostServ.getGroupBy(1)
+      // how many thread it will use?
+      // how about mysql thread?
 
-      //Await.result(PostServ.all(0, 20), Duration("5 seconds"))
+      // thread pool = 12
+      // connection pool = 12
+      // it will use 17 mysql thread, and 2 active
 
-      val list = PostServ.getPostsBy(3, 0, 100)
+      // thread = 2
+      // connection pool = 2
+      // it will use 7 mysql thread
 
-      Await.result(list, Duration(5000, "seconds"))
+      for (i <- 1 to 1000) {
 
+        val list = PostServ.getPosts(1, 200)
+
+        list.onSuccess {
+          case result => println(i + ":" + result(0)._2)
+        }
+
+        list.onFailure {
+          case e => println(e)
+        }
+
+        Await.result(list, Duration(5000, "seconds"))
+      }
     }
 
     "continue..." in {

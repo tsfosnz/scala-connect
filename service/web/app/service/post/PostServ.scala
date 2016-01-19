@@ -23,10 +23,8 @@ object PostServ {
 
   /**
    * To re-use SQL probably ok
-   *
-   * @return
    */
-  def queryPosts = for {
+  val queryPosts = for {
 
     p <- post.query
     i <- topicItem.query if p.id === i.itemId && i.itemType === "post"
@@ -108,9 +106,9 @@ object PostServ {
 
     try {
 
-      val q = queryPosts.take(page).drop(count).sortBy(_._1.updatedAt.desc)
+      val q = queryPosts.sortBy(_._1.updatedAt.desc).drop(page).take(count)
 
-      println(q.result.statements.head)
+      println(q.drop(page).take(count).result.statements.head)
 
       db.run(q.result)
 
