@@ -3,10 +3,7 @@ package service.post
 import java.text.SimpleDateFormat
 
 import models._
-import service.topic.TopicServ
 import slick.driver.MySQLDriver.api._
-
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -63,10 +60,7 @@ object PostServ {
         }
       }
 
-      val k = st.pop
-      val unionQuery = st.foldRight(k)((a, b) => a ++ b)
-
-      val q = unionQuery.sortBy(_._3.asc).result
+      val q = st.foldRight(st.pop())((a, b) => a ++ b).sortBy(_._3.asc).result
 
       println(q.statements.head)
       db.run(q)
@@ -109,10 +103,6 @@ object PostServ {
 
   /**
    * Get a list of post by update date / time
-   *
-   * @param page
-   * @param count
-   * @return
    */
   def getPosts(page: Int, count: Int) = {
 
@@ -135,9 +125,6 @@ object PostServ {
 
   /**
    * Get one post by its id
-   *
-   * @param id
-   * @return
    */
   def one(id: Int) = {
 
@@ -210,10 +197,6 @@ object PostServ {
 
   /**
    * Update the post by id
-   *
-   * @param id
-   * @param data
-   * @return
    */
   def update(id: Int, data: Map[String, Seq[String]]) = {
 
@@ -249,9 +232,6 @@ object PostServ {
 
   /**
    * Remove the post by id
-   *
-   * @param id
-   * @return
    */
   def remove(id: Int) = {
 
@@ -274,10 +254,6 @@ object PostServ {
 
   /**
    * Get a list of post by update date / time
-   *
-   * @param page
-   * @param count
-   * @return
    */
   def test(page: Int, count: Int) = {
 

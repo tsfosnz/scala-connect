@@ -91,32 +91,13 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       }
 
       case _ =>
-
         list.flatMap {
-
-          item => item.map { r =>
-
-            val a = groupBy(r)
-
-            //a.map {r => println(r._1)}
-            //println(a)
-
-            val b = views.html.home.main.list(a)
-            //println(b)
-
-            Ok(b)
-          }
-
+          item => item.map { r => Ok(views.html.home.main.list(groupBy(r))) }
         }.recover {
-
-          case err: Throwable => {
-            //println(err.getMessage)
+          case err: Throwable =>
             InternalServerError(fail(ServErrorConst.SystemError))
-          }
-
         }
     }
-
 
   }
 
@@ -135,19 +116,12 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       }
 
       case _ =>
-
-        topics.map {
-
-          c => Ok(views.html.home.main.head(c))
-
-        }.recover {
-
-          case err: Throwable => InternalServerError(fail(ServErrorConst.SystemError))
-
-        }
+        topics.map { c => Ok(views.html.home.main.head(c)) }
+          .recover {
+            case err: Throwable =>
+              InternalServerError(fail(ServErrorConst.SystemError))
+          }
     }
-
-
   }
 
   /**

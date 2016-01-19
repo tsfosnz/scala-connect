@@ -1,13 +1,9 @@
 package service.topic
 
-import java.text.SimpleDateFormat
-
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException
-import core._
 import models._
 import slick.driver.MySQLDriver.api._
 
-import scala.concurrent.ExecutionContext.Implicits.global
+//import scala.concurrent.ExecutionContext.Implicits.global
 
 object TopicServ {
 
