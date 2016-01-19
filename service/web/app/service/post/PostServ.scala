@@ -3,6 +3,7 @@ package service.post
 import java.text.SimpleDateFormat
 
 import models._
+import service.topic.TopicServ
 import slick.driver.MySQLDriver.api._
 
 import scala.concurrent.Future
@@ -19,79 +20,57 @@ object PostServ {
   val post = PostQuery
   val topic = TopicQuery
   val topicItem = TopicItemQuery
+  val member = MemberQuery
+
   val db = post.db
+
+  /**
+   * To re-use SQL probably ok
+   *
+   * @return
+   */
+  def queryPosts = for {
+
+    p <- post.query
+    i <- topicItem.query if p.id === i.itemId && i.itemType === "post"
+    c <- topic.query if i.topicId === c.id
+    //m <- member.query if m.id === p.authorId
+
+  } yield (p, c.name, c.id)
+
 
   /**
    * Get a list of data (post, category) by (a list of category),
    * usage, when we display a list of category and for each of 
    * them, we will show a group of post in fix size
    *
-   * @param topicResult
-   * @param postCount
-   * @param page
-   * @param count
-   * @return
    */
-  def getAllBy(topicResult: Future[scala.Seq[TopicEntity]],
-               postCount: Int,
-               page: Int,
-               count: Int) = {
 
-    // To explain: 
-    //
-    // SELECT * FROM category LIMIT 10
-    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 1 LIMIT 5 
-    // UNION ALL
-    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 2 LIMIT 5
-    // ...
-    // SELECT * FROM post INNER JOIN category_item ON .. WHERE category_id = 10 LIMIT 5
+  def getPostsByTopics(input: Map[String, Any]) = {
 
     try {
 
-      val topicQuery = topic.query
-      val topicItemQuery = topicItem.query
-
-      // #question
-      //
-      // how post.query to support for expression?
-      // SELECT * FROM post, topic_item, topic WHERE ....
-      //
-      val postQuery = for {
-
-        p <- post.query
-        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
-        c <- topicQuery if i.topicId === c.id
-
-      } yield (p, c.name, c.id)
-
+      val item = input("item").asInstanceOf[Seq[TopicEntity]]
+      val postCount = input("postCount").asInstanceOf[Int]
 
       val st = new scala.collection.mutable.Stack[Query[(Post, Rep[String], Rep[Int]), (PostEntity, String, Int), scala.Seq]]
 
-      for {
+      item.map {
 
-        item <- topicResult
-
-      } yield {
-
-        item.map {
-
-          c => item.size - item.indexOf(c) == 1 match {
-
-            case true => st.push(postQuery.filter(_._3 === c.id).take(postCount * 2))
-            case _ => st.push(postQuery.filter(_._3 === c.id).take(postCount))
-
-          }
+        c => item.size - item.indexOf(c) == 1 match {
+          case true => st.push(queryPosts.filter(_._3 === c.id).take(postCount * 2))
+          case _ => st.push(queryPosts.filter(_._3 === c.id).take(postCount))
         }
-
-        val k = st.pop
-        val unionQuery = st.foldRight(k)((a, b) => a ++ b)
-
-        val q = unionQuery.sortBy(_._3.asc).result
-
-        //println(unionQuery.drop(page).take(count).result)
-        //println(q.statements.head)
-        db.run(q)
       }
+
+      val k = st.pop
+      val unionQuery = st.foldRight(k)((a, b) => a ++ b)
+
+      val q = unionQuery.sortBy(_._3.asc).result
+
+      //println(unionQuery.drop(page).take(count).result)
+      //println(q.statements.head)
+      db.run(q)
 
     }
 
@@ -102,34 +81,25 @@ object PostServ {
   }
 
   /**
-   * Get a list of data (post, category) by (category id) 
-   *
-   * @param topicId
-   * @param page
-   * @param count
-   * @return
+   * Get a list of data (post, category) by (category id)
    */
-  def getAllBy(topicId: Int, page: Int, count: Int) = {
+  def getPostsByTopic(input: Map[String, Any]) = {
 
     try {
 
-      val topicQuery = topic.query
-      val topicItemQuery = topicItem.query
+      val topicId = input("topicId").asInstanceOf[Int]
+      val page = input("page").asInstanceOf[Int]
+      val count = input("count").asInstanceOf[Int]
 
-      val postQuery = for {
+      db.run(queryPosts.length.result).flatMap {
 
-        p <- post.query
-        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
-        c <- topicQuery if i.topicId === c.id
-
-      } yield (p, c.name, c.id)
-
-      val q = postQuery.filter(_._3 === topicId).drop(page).take(count)
-
-      println(q.result.statements.head)
-
-      db.run(q.result)
-
+        total =>
+          val q = queryPosts.take(page).drop(count).filter(_._3 === topicId)
+          // println(q.result.statements.head)
+          db.run(q.result).map {
+            item => Map("total" -> total, "item" -> item)
+          }
+      }
     }
 
     catch {
@@ -145,22 +115,11 @@ object PostServ {
    * @param count
    * @return
    */
-  def getAllBy(page: Int, count: Int) = {
+  def getPosts(page: Int, count: Int) = {
 
     try {
 
-      val topicQuery = topic.query
-      val topicItemQuery = topicItem.query
-
-      val postQuery = for {
-
-        p <- post.query
-        i <- topicItemQuery if p.id === i.itemId && i.itemType === "post"
-        c <- topicQuery if i.topicId === c.id
-
-      } yield (p, c.name, c.id)
-
-      val q = postQuery.drop(page).take(count).sortBy(_._1.updatedAt.desc)
+      val q = queryPosts.take(page).drop(count).sortBy(_._1.updatedAt.desc)
 
       println(q.result.statements.head)
 

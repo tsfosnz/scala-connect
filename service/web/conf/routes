@@ -18,6 +18,10 @@ GET     /doc                            process.home.controllers.Application.ind
 GET     /                               process.home.controllers.main.Fetcher.index
 #GET     /cat/$id<[0-9]+>/$count<[0-9]+> process.home.controllers.category.Fetcher.index(id: Int, count: Int)
 
+# topic
+GET     /topic/$id<[0-9]+>/$page<[0-9]+>/$count<[0-9]+>              process.home.controllers.topic.Fetcher.index(id: Int, page: Int, count: Int)
+
+
 # the routes for the post
 
 #GET     /posts/$count<[0-9]+>        process.member.controllers.post.Fetcher.all(count: Int, page: Option[Int])

@@ -3,7 +3,7 @@ package process.home.controllers.main
 import javax.inject.Inject
 
 import core._
-import models.PostEntity
+import models.{TopicEntity, PostEntity}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -30,7 +30,9 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
     //implicit val lang = request.acceptLanguages(3)
     implicit val req: RequestHeader = request
 
-    val post = this.post(request).flatMap {
+    val topics = TopicServ.topics(0, 10)
+
+    val post = this.post(topics)(request).flatMap {
 
       res => res.header.status == 200 match {
 
@@ -88,9 +90,13 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
    *
    * @return
    */
-  protected def post = Action.async { request =>
+  protected def post(topics: Future[Seq[TopicEntity]]) = Action.async { request =>
 
-    val list = PostServ.getAllBy(TopicServ.getAllBy(0, 10), 5, 0, 200)
+
+    val list = for {item <- topics} yield PostServ.getPostsByTopics(Map(
+      "item" ->item,
+      "postCount" -> 5))
+
 
     // here is bug, the data is
 
@@ -138,7 +144,7 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
   protected def head = Action.async { request =>
 
 
-    val category = TopicServ.getAllBy(0, 10)
+    val category = TopicServ.topics(0, 10)
 
     category match {
 
