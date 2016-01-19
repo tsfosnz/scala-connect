@@ -22,7 +22,7 @@ object TopicServ {
       val q = queryTopics.drop(page).take(count)
       val sql = q.result.statements.head
 
-      //println(sql)
+      println(sql)
       
       topic.db.run(q.result)
 

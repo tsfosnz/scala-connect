@@ -68,8 +68,7 @@ object PostServ {
 
       val q = unionQuery.sortBy(_._3.asc).result
 
-      //println(unionQuery.drop(page).take(count).result)
-      //println(q.statements.head)
+      println(q.statements.head)
       db.run(q)
 
     }

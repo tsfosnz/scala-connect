@@ -14,13 +14,13 @@ import scala.concurrent.Future
 
 import play.api.i18n._
 import play.api.i18n.I18nSupport
+
 /**
  *
  * @author Tom
  */
 // https://www.playframework.com/documentation/2.5.x/ScalaDependencyInjection
-class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSupport
- {
+class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nSupport {
 
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
@@ -33,21 +33,16 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
     val topics = TopicServ.topics(0, 10)
 
     val post = this.post(topics)(request).flatMap {
-
       res => res.header.status == 200 match {
-
         case true => Html.readHtmlBy(res.body)
         case _ => Future {
           ""
         }
       }
-
     }
 
-    val head = this.head(request).flatMap {
-
+    val head = this.head(topics)(request).flatMap {
       res => res.header.status == 200 match {
-
         case true => Html.readHtmlBy(res.body)
         case _ => Future {
           ""
@@ -56,31 +51,20 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
     }
 
     val right = this.right(request).flatMap {
-
       res => res.header.status == 200 match {
-
         case true => Html.readHtmlBy(res.body)
         case _ => Future {
           ""
         }
       }
-
     }
 
-
     for {
-
       h <- head
       p <- post
       r <- right
-
     } yield {
-
-      //println(h)
-      //println(p)
-
       Ok.chunked(Enumerator(views.html.home.main.index("", h, p, r)))
-
     }
 
   }
@@ -94,7 +78,7 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
 
 
     val list = for {item <- topics} yield PostServ.getPostsByTopics(Map(
-      "item" ->item,
+      "item" -> item,
       "postCount" -> 5))
 
 
@@ -120,7 +104,8 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
             val b = views.html.home.main.list(a)
             //println(b)
 
-            Ok(b) }
+            Ok(b)
+          }
 
         }.recover {
 
@@ -141,12 +126,9 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
    *
    * @return
    */
-  protected def head = Action.async { request =>
+  protected def head(topics: Future[Seq[TopicEntity]]) = Action.async { request =>
 
-
-    val category = TopicServ.topics(0, 10)
-
-    category match {
+    topics match {
 
       case null => Future {
         InternalServerError(fail(ServErrorConst.SystemError))
@@ -154,7 +136,7 @@ class Fetcher@Inject()(val messagesApi: MessagesApi) extends Command with I18nSu
 
       case _ =>
 
-        category.map {
+        topics.map {
 
           c => Ok(views.html.home.main.head(c))
 

@@ -11,7 +11,7 @@ class Topic(tag: Tag) extends BaseDateTime[TopicEntity](tag, "topic") {
 
   def name = column[String]("name", O.Length(128), O.Default(""))
 
-  def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
+  //def isArchived = column[String]("is_archived", O.SqlType("ENUM('true', 'false')"), O.Default("false"))
 
   //def idx = index("idx_a", (name), unique = true)
 
@@ -23,7 +23,7 @@ class Topic(tag: Tag) extends BaseDateTime[TopicEntity](tag, "topic") {
     (
       id,
       name,
-      isArchived,
+      //isArchived,
       createdAt,
       updatedAt) <>
       ((TopicEntity.apply _).tupled, TopicEntity.unapply)
@@ -33,7 +33,7 @@ case class TopicEntity
 (
   id: Int,
   name: String,
-  isArchived: String,
+  //isArchived: String,
   createdAt: String,
   updatedAt: String
   )
