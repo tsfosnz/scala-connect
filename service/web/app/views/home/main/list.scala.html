@@ -1,9 +1,9 @@
-@(list: Seq[(PostEntity, String, Int)])
+@(list: Map[String, Any])
 
 <div class="list-group">
     <div href="#" class="list-group-item list-group-item-info">
     </div>
-    @for(post <- list) {
+    @for(post <- list("data").asInstanceOf[Seq[(PostEntity, String, Int)]]) {
         <div href="#" class="list-group-item">
             <div class="row">
                 <div class="col-sm-12">
@@ -29,13 +29,27 @@
                         </p>
                         <p>
                             <b><span
-                                class="pull-right label label-info"
-                                style="background-color: #31708f !important;color:#d9edf7">@@Tom
-                                </span></b>
+                            class="pull-right label label-info"
+                            style="background-color : #31708f !important ; color : #d9edf7">@@Tom
+                            </span>
+                            </b>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     }
+
+        <div class="list-group-item-text">
+
+        @_layout.pagination(
+            list("page").asInstanceOf[Int],
+            list("count").asInstanceOf[Int],
+            list("prev").asInstanceOf[Int],
+            list("next").asInstanceOf[Int],
+            list("last").asInstanceOf[Int],
+            list("pagination").asInstanceOf[Range]
+        )
+
+</div>
 </div>

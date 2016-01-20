@@ -28,6 +28,10 @@ object TopicServ {
       case err: Exception => null
     }
 
+    finally {
+      //topic.db.source.close();
+    }
+
   }
 
 }

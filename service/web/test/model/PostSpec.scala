@@ -9,6 +9,7 @@ import org.scalatestplus.play.PlaySpec
 import org.specs2.runner._
 import migration._
 import service.post.PostServ
+import service.topic.TopicServ
 
 import scala.concurrent.duration.Duration
 import scala.concurrent._
@@ -48,7 +49,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
         val list = PostServ.getPosts(1, 200)
 
         list.onSuccess {
-          case result => println(i + ":" + result(0)._2)
+          case result => println(i + ":")
         }
 
         list.onFailure {
@@ -56,6 +57,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
         }
 
         Await.result(list, Duration(5000, "seconds"))
+        Await.result(TopicServ.topics(0, 10), Duration(5000, "seconds"))
       }
     }
 

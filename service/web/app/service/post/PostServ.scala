@@ -7,8 +7,6 @@ import slick.driver.MySQLDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * PostServ
- *
  * @author Tom
  */
 
@@ -21,6 +19,8 @@ object PostServ {
 
   val db = post.db
 
+  def test = {}
+
   /**
    * To re-use SQL probably ok
    */
@@ -29,7 +29,7 @@ object PostServ {
     p <- post.query
     i <- topicItem.query if p.id === i.itemId && i.itemType === "post"
     c <- topic.query if i.topicId === c.id
-    //m <- member.query if m.id === p.authorId
+  //m <- member.query if m.id === p.authorId
 
   } yield (p, c.name, c.id)
 
@@ -83,7 +83,6 @@ object PostServ {
       val count = input("count").asInstanceOf[Int]
 
       db.run(queryPosts.length.result).flatMap {
-
         total =>
           val q = queryPosts.take(page).drop(count).filter(_._3 === topicId)
           // println(q.result.statements.head)
@@ -106,16 +105,32 @@ object PostServ {
 
     try {
 
-      val q = queryPosts.sortBy(_._1.updatedAt.desc).drop(page).take(count)
+      val result = db.run(queryPosts.length.result).flatMap {
+        total =>
+          val q = queryPosts.sortBy(_._1.updatedAt.desc).drop(page).take(count)
 
-      println(q.drop(page).take(count).result.statements.head)
+          println(q.result.statements.head)
 
-      db.run(q.result)
+          db.run(q.result).map {
+            item => Map(
+              "total" -> total,
+              "data" -> item,
+              "page" -> page,
+              "count" -> count)
+          }
+      }
+
+      println(db.source.getClass.getSimpleName)
+      //db.source.close()
+
+      result
 
     }
 
     catch {
-      case err: Exception => null
+      case err: Exception =>
+        println(err.getMessage)
+        null
     }
 
   }

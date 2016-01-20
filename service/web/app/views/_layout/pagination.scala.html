@@ -1,0 +1,26 @@
+@(page: Int, count: Int, prev: Int, next: Int, last: Int, pagination: Range)
+
+@pageUrl(page: Int, count: Int) = {/?page=@page&count=@count }
+
+<nav>
+    <ul class="pagination">
+        <li>
+            <a href="@pageUrl(prev, count)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        @for(i <- pagination) {
+            <li @if(i == page) {
+                class="active"}><a href="@pageUrl(i, count)">@i</a></li>
+        }
+        @if(last > pagination(1)) {
+            <li><a href="">...</a></li>
+            <li><a href="@pageUrl(last, count)">@last</a></li>
+        }
+        <li>
+            <a href="@pageUrl(next, count)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

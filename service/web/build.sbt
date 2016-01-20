@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   // https://github.com/playframework/play-slick
   "com.typesafe.play" %% "play-slick" % "1.1.1",
   "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
-  "mysql" % "mysql-connector-java" % "5.1.24",
+  "mysql" % "mysql-connector-java" % "5.1.38",
   "org.reactivemongo" %% "reactivemongo" % "0.11.7",
   "com.h2database" % "h2" % "1.4.187"
 )

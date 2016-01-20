@@ -1,4 +1,4 @@
-@(page: Int, total: Int, paging: Range,  list: Seq[(PostEntity, String, Int)])
+@(page: Int, total: Int, paging: Range, list: Seq[(PostEntity, String, Int)])
     @*
     If there is no good data structure, the code become ugly here
     *@
@@ -21,9 +21,9 @@
         @defining("") { name =>
 
             <div class="list-group-item">
-                <blockquote style="padding:0; padding-left:5px;">
+                <blockquote style="padding : 0 ; padding-left : 5 px ;">
                     <p align="left">
-                        <a class="pull-left" style="margin:10px">
+                        <a class="pull-left" style="margin : 10 px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
                                 <clipPath id="clipCircle">
                                     <circle r="25" cx="25" cy="25"/>
@@ -54,24 +54,25 @@
         }
 
 
-            <div class="list-group-item-text">
-                <nav>
-                    <ul class="pagination">
-                        <li>
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        @for(i <- paging) {
-                            <li @if(i == page) {class="active"}><a href="#">@i</a></li>
-                        }
-                        <li>
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+    <div class="list-group-item-text">
+        <nav>
+            <ul class="pagination">
+                <li>
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for(i <- paging) {
+                    <li @if(i == page) {
+                        class="active"}><a href="#">@i</a></li>
+                }
+                <li>
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
     </div>

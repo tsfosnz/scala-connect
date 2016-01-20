@@ -29,8 +29,12 @@ class DbQuery[T <: Table[_]](path: String, foo: Tag => T) {
 
   // then only ...
 
-  lazy val db = Database.forConfig(path)
+  lazy val db = DAO.db
   lazy val query = TableQuery[T](foo)
 
+}
+
+object DAO {
+  val db = Database.forConfig("mydb")
 }
 
