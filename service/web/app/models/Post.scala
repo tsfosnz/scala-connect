@@ -82,7 +82,6 @@ case class PostEntity
   )
 
 object PostQuery extends DbQuery[Post](
-  "mydb",
   (tag: Tag) => new Post(tag))  {
 
 

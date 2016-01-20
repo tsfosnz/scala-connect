@@ -31,7 +31,6 @@ case class TopicItemEntity
   )
 
 object TopicItemQuery extends DbQuery[TopicItem](
-  "mydb",
   (tag: Tag) => new TopicItem(tag))  {
 
 

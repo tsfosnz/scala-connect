@@ -34,7 +34,6 @@ case class LabelEntity
   )
 
 object LabelQuery extends DbQuery[Label](
-  "mydb",
   (tag: Tag) => new Label(tag))  {
 
 

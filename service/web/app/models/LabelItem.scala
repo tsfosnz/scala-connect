@@ -31,7 +31,6 @@ case class LabelItemEntity
   )
 
 object LabelItemQuery extends DbQuery[LabelItem](
-  "mydb",
   (tag: Tag) => new LabelItem(tag))  {
 
 

@@ -2,7 +2,7 @@ package core
 
 import slick.driver.MySQLDriver.api._
 
-class DbQuery[T <: Table[_]](path: String, foo: Tag => T) {
+class DbQuery[T <: Table[_]](foo: Tag => T) {
 
 
   /*

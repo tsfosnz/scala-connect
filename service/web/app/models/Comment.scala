@@ -80,7 +80,6 @@ case class CommentEntity
   )
 
 object CommentQuery extends DbQuery[Comment](
-  "mydb",
   (tag: Tag) => new Comment(tag))  {
 
 

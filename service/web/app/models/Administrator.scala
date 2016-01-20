@@ -60,7 +60,6 @@ case class AdministratorEntity
   )
 
 object AdministratorQuery extends DbQuery[Administrator](
-"mydb",
 (tag: Tag) => new Administrator(tag))  {
 
 

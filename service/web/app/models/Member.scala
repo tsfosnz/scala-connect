@@ -64,7 +64,6 @@ case class MemberEntity
   )
 
 object MemberQuery extends DbQuery[Member](
-  "mydb",
   (tag: Tag) => new Member(tag)) {
 
 

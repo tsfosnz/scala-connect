@@ -38,7 +38,6 @@ case class MenuEntity
   )
 
 object MenuQuery extends DbQuery[Menu](
-  "mydb",
   (tag: Tag) => new Menu(tag))  {
 
 
