@@ -14,6 +14,7 @@ import service.topic.TopicServ
 import scala.concurrent.duration.Duration
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
+import slick.driver.MySQLDriver.api._
 
 /**
  * The test is flexible, and we can use different test framework,
@@ -44,7 +45,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
       // connection pool = 2
       // it will use 7 mysql thread
 
-      for (i <- 1 to 1000) {
+      for (i <- 1 to 1) {
 
         val list = PostServ.getPosts(1, 200)
 
@@ -56,7 +57,7 @@ class PostSpec extends PlaySpec with ScalaFutures {
           case e => println(e)
         }
 
-        Await.result(Future {list;TopicServ.topics(0, 10)}, Duration(5000, "seconds"))
+        //Await.result(Future {list;TopicServ.topics(0, 10)}, Duration(5000, "seconds"))
         //Await.result(TopicServ.topics(0, 10), Duration(5000, "seconds"))
       }
 
@@ -65,9 +66,25 @@ class PostSpec extends PlaySpec with ScalaFutures {
 
     "continue..." in {
 
-      println("To be continuted...")
+      // t : Query[Post]
+      val t = PostServ.post.query
 
-      //Project.remove
+      val queryPosts = for {
+
+        p <- PostServ.post.query
+        i <- PostServ.topicItem.query if p.id === i.itemId && i.itemType === "post"
+        t <- PostServ.topic.query if i.topicId === t.id
+      //m <- member.query if m.id === p.authorId
+
+      } yield p.id
+
+/*      val t = PostServ.post.query.flatMap {
+        p => PostServ.topicItem.query.filter(p.id === _.itemId).flatMap {
+          i => PostServ.topic.query.filter(_.id === i.topicId).map {
+            t => p.id
+          }
+        }
+      }*/
 
     }
   }

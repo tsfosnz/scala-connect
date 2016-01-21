@@ -1,20 +1,15 @@
 @(topic: Seq[TopicEntity])
 
-
 <div class="row">
-
     <div class="col-lg-12 col-sm-12">
         <div class="page-header page-header-small">
-
             <ul class="nav nav-pills" role="tablist">
                 @for(c <- topic) {
                     <li role="presentation">
-                        <a href="#">@c.name</a>
+                        <a href="/topic/@c.id" class="btn btn-sm">@c.name</a>
                     </li>
                 }
             </ul>
-
         </div>
     </div>
-
 </div>

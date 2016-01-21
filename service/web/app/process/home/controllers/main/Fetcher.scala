@@ -3,7 +3,7 @@ package process.home.controllers.main
 import javax.inject.Inject
 
 import core._
-import models.{PostQuery, TopicEntity, PostEntity}
+import models.{TopicEntity, PostEntity}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -69,21 +69,6 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
 
   }
 
-  def test = Action.async {request =>
-
-    val h = ""
-    val p = ""
-    val r = ""
-
-    PostServ.getPosts(0, 20)
-    //PostServ.test
-    PostServ.getPosts(0, 10)
-    TopicServ.topics(0, 10)
-    TopicServ.topics(0, 9)
-
-    Future {Ok(((views.html.home.main.index("", h, p, r))))}
-  }
-
   /**
    * Get the post template
    *
@@ -113,19 +98,8 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
     }
     */
 
-    var page = 1
-    var count = 20
-
-    try {
-      page = request.getQueryString("page").getOrElse("1").toInt
-      count = request.getQueryString("count").getOrElse("20").toInt
-    }
-
-    catch {
-      case err: Throwable =>
-        page = 1
-        count = 20
-    }
+    val page = request.getQueryString("page").getOrElse("1").toInt
+    val count = request.getQueryString("count").getOrElse("20").toInt
 
     val list = PostServ.getPosts((page - 1) * count, count)
 
@@ -136,42 +110,30 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       case _ =>
         list.map {
           post =>
-
             val total: Int = post("total").asInstanceOf[Int]
-            val data = post("data").asInstanceOf[Seq[(PostEntity, String, Int)]]
-            val last = Math.ceil(total / count).toInt
-            val prev = Math.max(page - 1, 1)
-            val next = Math.min(page + 1, last)
 
-            val pagination = page % 5 == 0 match {
-              case true =>
-                val start = Math.max(page, 1) >= last match {
-                  case true => Math.max(1, last - 5)
-                  case _ => Math.max(page, 1)
-                }
-                Range(start, Math.min(page + 5, last))
+            total == 0 match {
+              case true => Ok("")
               case _ =>
-                val start = Math.max((page / 5) * 5, 1) >= last match {
-                  case true => Math.max(1, last - 5)
-                  case _ => Math.max((page / 5) * 5, 1)
-                }
-                Range(start, Math.min(start + 5, last))
+                // not eval, when total == 0
+                lazy val data = post("data").asInstanceOf[Seq[(PostEntity, TopicEntity)]]
+                lazy val last = Math.ceil(total / count).toInt
+                lazy val prev = Math.max(page - 1, 1)
+                lazy val next = Math.min(page + 1, last)
+
+                lazy val pagination = ViewHelper.paging(page, count, total)
+
+                Ok(views.html.home.main.list_summary(Map(
+                  "data" -> data,
+                  "total" -> total,
+                  "page" -> page,
+                  "count" -> count,
+                  "prev" -> prev,
+                  "next" -> next,
+                  "last" -> last,
+                  "pagination" -> pagination
+                )))
             }
-
-            println(pagination)
-            println(last)
-
-            Ok(views.html.home.main.list(Map(
-              "data" -> data,
-              "total" -> total,
-              "page" -> page,
-              "count" -> count,
-              "prev" -> prev,
-              "next" -> next,
-              "last" -> last,
-              "pagination" -> pagination
-            )))
-
         }.recover {
           case err: Exception =>
             println(err)
@@ -196,7 +158,7 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
         InternalServerError(fail(ServErrorConst.SystemError))
       }
       case _ =>
-        topics.map { c => Ok(views.html.home.main.head(c)) }
+        topics.map { c => Ok(views.html._layout.head(c)) }
           .recover {
             case err: Exception =>
               InternalServerError(fail(ServErrorConst.SystemError))

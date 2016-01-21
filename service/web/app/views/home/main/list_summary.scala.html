@@ -3,31 +3,31 @@
 <div class="list-group">
     <div href="#" class="list-group-item list-group-item-info">
     </div>
-    @for(post <- list("data").asInstanceOf[Seq[(PostEntity, String, Int)]]) {
+    @for(item <- list("data").asInstanceOf[Seq[(PostEntity, TopicEntity)]]) {
         <div href="#" class="list-group-item">
             <div class="row">
                 <div class="col-sm-12">
                     <p>
-                        <span class="label label-primary">@post._2</span>
-                        <b><span
-                        class="label label-info"
-                        style="background-color : #31708f !important ; color : #d9edf7">@@Tom
-                        </span>
-                        </b>
-                    </p>
-                    <p>
-                        <a href="javascript:">
-                        @(post._1.title.length < 80 match {
-                            case true => post._1.title
-                            case false => post._1.title.substring(0, 80) + "..."
-                        })
+                        <a href="/topic/@item._2.id"  class="btn btn-sm btn-info">
+                            @item._2.name
+                        </a>
+                        <a href="/topic/@item._2.id"  class="btn btn-sm btn-info">
+                        @@Tom
                         </a>
                     </p>
+                    <h3>
+                        <a href="javascript:">
+                        @(item._1.title.length < 80 match {
+                            case true => item._1.title
+                            case false => item._1.title.substring(0, 80) + "..."
+                        })
+                        </a>
+                    </h3>
 
                     <div>
                         <p>
-                        @(post._1.excerpt.length < 256 match {
-                            case _ => post._1.excerpt
+                        @(item._1.excerpt.length < 256 match {
+                            case _ => item._1.excerpt
                             //case false => post.excerpt.substring(0, 256) + "..."
                         })
                         </p>
@@ -39,8 +39,8 @@
         </div>
     }
 
-        <div class="list-group-item-text">
-
+    <div class="list-group-item-text">
+    @if(list("pagination").asInstanceOf[Range].size > 0) {
         @_layout.pagination(
             list("page").asInstanceOf[Int],
             list("count").asInstanceOf[Int],
@@ -49,6 +49,7 @@
             list("last").asInstanceOf[Int],
             list("pagination").asInstanceOf[Range]
         )
+    }
 
 </div>
 </div>

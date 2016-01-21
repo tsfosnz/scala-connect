@@ -8,6 +8,7 @@ import slick.driver.MySQLDriver.api._
 object TopicServ {
 
   val topic = TopicQuery
+  val db = topic.db
 
   def queryTopics = for {c <- topic.query} yield c
 
@@ -18,9 +19,9 @@ object TopicServ {
       val q = queryTopics.drop(page).take(count)
       val sql = q.result.statements.head
 
-      println(sql)
-      
-      topic.db.run(q.result)
+      //println(sql)
+
+      db.run(q.result)
 
     }
 

@@ -3,7 +3,7 @@ package process.home.controllers.topic
 import javax.inject.Inject
 
 import core._
-import models.PostEntity
+import models.{TopicEntity, PostEntity}
 import play.api.i18n.{I18nSupport, _}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
@@ -24,13 +24,13 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
   implicit val postReads = Json.reads[PostEntity]
   implicit val postWrites = Json.writes[PostEntity]
 
-  def index(id: Int, page: Int, count: Int) = Action.async { request =>
+  def index(id: Int) = Action.async { request =>
 
     //implicit val lang = request.acceptLanguages(3)
     implicit val req: RequestHeader = request
 
 
-    val post = this.post(id, page, count)(request).flatMap {
+    val post = this.post(id)(request).flatMap {
 
       res => res.header.status == 200 match {
 
@@ -88,11 +88,15 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
    *
    * @return
    */
-  protected def post(id: Int, page: Int, count: Int) = Action.async { request =>
+  protected def post(id: Int) = Action.async { request =>
+
+
+    val page = request.getQueryString("page").getOrElse("1").toInt
+    val count = request.getQueryString("count").getOrElse("20").toInt
 
     val list = PostServ.getPostsByTopic(Map(
       "topicId" -> id,
-      "page" -> page,
+      "page" -> (page - 1) * count,
       "count" -> count
     ))
 
@@ -107,20 +111,38 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       case _ => list.map {
 
         post =>
-
           val total: Int = post("total").asInstanceOf[Int]
-          val item = post("item").asInstanceOf[Seq[(PostEntity, String, Int)]]
 
-          val paging = page % 5 == 0 match {
-            case true => Range(page, page + 5)
-            case _ => Range((page / 5) * 5 + 1, (page / 5) * 5 + 6)
+          total == 0 match {
+            case true => Ok("")
+            case _ =>
+              // not eval, when total == 0
+              lazy val data = post("data").asInstanceOf[Seq[(PostEntity, TopicEntity)]]
+              lazy val last = Math.ceil(total / count).toInt
+              lazy val prev = Math.max(page - 1, 1)
+              lazy val next = Math.min(page + 1, last)
+
+              lazy val pagination = ViewHelper.paging(page, count, total)
+
+              println(pagination)
+
+              Ok(views.html.home.topic.list(Map(
+                "data" -> data.map {item => item._1},
+                "name" -> data.head._2.name,
+                "total" -> total,
+                "page" -> page,
+                "count" -> count,
+                "prev" -> prev,
+                "next" -> next,
+                "last" -> last,
+                "pagination" -> pagination
+              )))
           }
-
-          println(page)
-          println(paging)
-
-          Ok(views.html.home.topic.list(page, total, paging, item))
-
+      }.recover {
+        case err: Exception =>
+          println(err)
+          println(err.getMessage)
+          InternalServerError(fail(ServErrorConst.SystemError))
       }
 
     }
@@ -143,7 +165,7 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       }
 
       case _ => category.map {
-        c => Ok(views.html.home.topic.head(c))
+        c => Ok(views.html._layout.head(c))
       }.recover {
         case err: Throwable => InternalServerError(fail(ServErrorConst.SystemError))
       }

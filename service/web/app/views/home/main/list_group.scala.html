@@ -1,7 +1,5 @@
 @(list: Seq[((String, Int), Seq[PostEntity])])
 
-@*
-// display each topic & its post, lets try another one
 @for(item <- list) {
     <div class="list-group">
         <div href="#" class="list-group-item list-group-item-info" style="">
@@ -38,5 +36,3 @@
         </div>
     </div>
 }
-
-*@

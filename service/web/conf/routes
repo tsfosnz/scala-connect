@@ -16,11 +16,10 @@ GET     /doc                            process.home.controllers.Application.ind
 # the route for home
 
 GET     /                               process.home.controllers.main.Fetcher.index
-GET     /test                           process.home.controllers.main.Fetcher.test
 #GET     /cat/$id<[0-9]+>/$count<[0-9]+> process.home.controllers.category.Fetcher.index(id: Int, count: Int)
 
 # topic
-GET     /topic/$id<[0-9]+>/$page<[0-9]+>/$count<[0-9]+>              process.home.controllers.topic.Fetcher.index(id: Int, page: Int, count: Int)
+GET     /topic/$id<[0-9]+>             process.home.controllers.topic.Fetcher.index(id: Int)
 
 
 # the routes for the post

@@ -28,12 +28,11 @@ object PostServ {
 
     p <- post.query
     i <- topicItem.query if p.id === i.itemId && i.itemType === "post"
-    c <- topic.query if i.topicId === c.id
+    t <- topic.query if i.topicId === t.id
   //m <- member.query if m.id === p.authorId
 
-  } yield (p, c.name, c.id)
-
-
+  } yield (p, t)
+   
   /**
    * Get a list of data (post, category) by (a list of category),
    * usage, when we display a list of category and for each of 
@@ -48,17 +47,17 @@ object PostServ {
       val item = input("item").asInstanceOf[Seq[TopicEntity]]
       val postCount = input("postCount").asInstanceOf[Int]
 
-      val st = new scala.collection.mutable.Stack[Query[(Post, Rep[String], Rep[Int]), (PostEntity, String, Int), scala.Seq]]
+      val st = new scala.collection.mutable.Stack[Query[(Post, Topic), (PostEntity, TopicEntity), scala.Seq]]
 
       item.map {
 
         c => item.size - item.indexOf(c) == 1 match {
-          case true => st.push(queryPosts.filter(_._3 === c.id).take(postCount * 2))
-          case _ => st.push(queryPosts.filter(_._3 === c.id).take(postCount))
+          case true => st.push(queryPosts.filter(_._1.id === c.id).take(postCount * 2))
+          case _ => st.push(queryPosts.filter(_._1.id === c.id).take(postCount))
         }
       }
 
-      val q = st.foldRight(st.pop())((a, b) => a ++ b).sortBy(_._3.asc).result
+      val q = st.foldRight(st.pop())((a, b) => a ++ b).sortBy(_._1.updatedAt.asc).result
 
       println(q.statements.head)
       db.run(q)
@@ -82,12 +81,15 @@ object PostServ {
       val page = input("page").asInstanceOf[Int]
       val count = input("count").asInstanceOf[Int]
 
-      db.run(queryPosts.length.result).flatMap {
+      val q1 = queryPosts.withFilter(_._2.id === topicId).length.result
+      println(q1.statements.head)
+
+      db.run(q1).flatMap {
         total =>
-          val q = queryPosts.take(page).drop(count).filter(_._3 === topicId)
-          // println(q.result.statements.head)
+          val q = queryPosts.filter(_._2.id === topicId).take(count).drop(page)
+          println(q.result.statements.head)
           db.run(q.result).map {
-            item => Map("total" -> total, "item" -> item)
+            item => Map("total" -> total, "data" -> item)
           }
       }
     }
