@@ -3,19 +3,15 @@
 
 ## Home
 
-- A list of post in different category
+- A list of post in different category by pagination
 
 ## Topic
 
--
+- A list of post in the topic by pagination
 
 ## Post
 
 - A content of Post and its Comment/pagination by post id
-
-## Page
-
-- A single page 
 
 ## Menu
 
@@ -24,13 +20,6 @@
 - Top menu
 - Post / Topic
 
-## Widget
+## Page
 
-- Appeared in side bar
-- Could be advitisment
-- Or anything else..
-
-## User 
-
-- Add post in allowed topic..
-- 
+- A single page
