@@ -10,7 +10,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Test the connection management of different way in Java, and HikariCP is
- * very stable connection pool, and the connection always closed
+ * very stable connection pool
  */
 
 final class HikariCPMySQL {

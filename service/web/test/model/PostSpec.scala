@@ -56,9 +56,11 @@ class PostSpec extends PlaySpec with ScalaFutures {
           case e => println(e)
         }
 
-        Await.result(list, Duration(5000, "seconds"))
-        Await.result(TopicServ.topics(0, 10), Duration(5000, "seconds"))
+        Await.result(Future {list;TopicServ.topics(0, 10)}, Duration(5000, "seconds"))
+        //Await.result(TopicServ.topics(0, 10), Duration(5000, "seconds"))
       }
+
+      //while(true){}
     }
 
     "continue..." in {

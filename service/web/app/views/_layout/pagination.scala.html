@@ -13,9 +13,11 @@
             <li @if(i == page) {
                 class="active"}><a href="@pageUrl(i, count)">@i</a></li>
         }
-        @if(last > pagination(1)) {
+        @if(last > pagination.last + 1) {
             <li><a href="">...</a></li>
             <li><a href="@pageUrl(last, count)">@last</a></li>
+        } else {
+            <li @if(last == page) {class="active"}><a href="@pageUrl(last, count)">@last</a></li>
         }
         <li>
             <a href="@pageUrl(next, count)" aria-label="Next">

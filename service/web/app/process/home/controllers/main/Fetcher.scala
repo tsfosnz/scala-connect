@@ -145,13 +145,21 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
 
             val pagination = page % 5 == 0 match {
               case true =>
-                Range(Math.max(page, 1), Math.min(page + 5, last))
+                val start = Math.max(page, 1) >= last match {
+                  case true => Math.max(1, last - 5)
+                  case _ => Math.max(page, 1)
+                }
+                Range(start, Math.min(page + 5, last))
               case _ =>
-                val start = (page / 5) * 5 + 1
+                val start = Math.max((page / 5) * 5, 1) >= last match {
+                  case true => Math.max(1, last - 5)
+                  case _ => Math.max((page / 5) * 5, 1)
+                }
                 Range(start, Math.min(start + 5, last))
             }
 
-            //println(data)
+            println(pagination)
+            println(last)
 
             Ok(views.html.home.main.list(Map(
               "data" -> data,
