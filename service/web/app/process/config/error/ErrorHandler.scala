@@ -1,4 +1,4 @@
-package process.error
+package process.config.error
 
 import javax.inject._
 
