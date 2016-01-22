@@ -32,7 +32,7 @@ object PostServ {
   //m <- member.query if m.id === p.authorId
 
   } yield (p, t)
-   
+
   /**
    * Get a list of data (post, category) by (a list of category),
    * usage, when we display a list of category and for each of 
@@ -141,15 +141,17 @@ object PostServ {
   /**
    * Get one post by its id
    */
-  def one(id: Int) = {
+  def getPost(id: Int) = {
 
     try {
 
-      val q = post.query.filter(_.id === id)
+      // you just can't use that way, why?
+      val q = for {
+        (p, m) <- queryPosts join member.query  on (_._1.authorId === _.id)
+      } yield (p, m.username, m.icon)
 
-      println(q.result.statements.head)
-
-      db.run(q.result)
+      println(q.filter(_._1._1.id === id).result.statements.head)
+      db.run(q.filter(_._1._1.id === id).result)
 
     }
 

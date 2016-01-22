@@ -34,13 +34,13 @@ object MemberTable extends MigrationTable[Member] {
       query.map {
 
         m => (
-
           m.username,
           m.email,
           m.firstName,
           m.lastName,
           m.displayName,
           m.introduction,
+          m.icon,
           m.createdAt,
           m.updatedAt
           )
@@ -51,6 +51,7 @@ object MemberTable extends MigrationTable[Member] {
         faker.Name.last_name,
         faker.Name.name,
         faker.Lorem.paragraph(3),
+        "assets/bootstrap/img/avatar.png",
         now,
         now
         )

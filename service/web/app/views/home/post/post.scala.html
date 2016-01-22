@@ -1,0 +1,47 @@
+@(post: Map[String, Any])
+
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">
+       <a href="/topic/@post("topic").asInstanceOf[TopicEntity].id">
+           @post("topic").asInstanceOf[TopicEntity].name
+       </a>
+    </li>
+</ol>
+<div class="list-group">
+    <div href="#" class="list-group-item list-group-item-info">
+        @post("topic").asInstanceOf[TopicEntity].name
+    </div>
+    <div class="list-group-item">
+        <blockquote>
+            <p align="left">
+                <a class="pull-left" style="margin:10px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+                        <clipPath id="clipCircle">
+                            <circle r="25" cx="25" cy="25"/>
+                        </clipPath>
+                        <image xlink:href="@routes.Assets.versioned(post("member").asInstanceOf[(String, String)]._2)" width="50" height="50"
+                        clip-path="url(#clipCircle)"/>
+                    </svg>
+                </a></p>
+            <small>
+                @post("post").asInstanceOf[PostEntity].excerpt
+            </small>
+        </blockquote>
+        <div class="clearfix"></div>
+    </div>
+
+        <div href="#" class="list-group-item">
+            <h3 class="text-center">
+                <p class="text-left">@post("post").asInstanceOf[PostEntity].title<p>
+            </h3>
+            <p class="text-center">
+                @post("member").asInstanceOf[(String, String)]._1
+            </p>
+            <div>
+                @post("post").asInstanceOf[PostEntity].htmlBody
+            </div>
+        </div>
+</div>
+
+@home.post.comment()

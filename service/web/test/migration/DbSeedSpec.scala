@@ -35,7 +35,7 @@ class DbSeedSpec extends PlaySpec {
         Await.result(PostTable.populate(i % 10 + 1), Duration("5 seconds"))
       }
 
-      for (i <- 0 to 9) {
+      for (i <- 0 to 10) {
         Await.result(MemberTable.populate, Duration("5 seconds"))
       }
 

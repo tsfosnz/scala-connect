@@ -21,6 +21,9 @@ GET     /                               process.home.controllers.main.Fetcher.in
 # topic
 GET     /topic/$id<[0-9]+>             process.home.controllers.topic.Fetcher.index(id: Int)
 
+# post
+GET     /post/$id<[0-9]+>             process.home.controllers.post.Fetcher.index(id: Int)
+
 
 # the routes for the post
 
