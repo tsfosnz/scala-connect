@@ -12,12 +12,28 @@ A simple social connect app by scala, just like any other simple social forum, i
 ## By
 
 - Bootstrap css framework 3.3.6+
-- AngularJS 1.x.x
-- ReactJs/Flux
+- AngularJS 1.x.x (maybe)
+- ReactJs/Flux (maybe)
 - Play framework 2.x
 - Play Slick 1.x
 - Slick 3.x
 - MySQL
+
+## Installation
+
+- IDE, prefer to Ultimate IDEA with Scala plugin and Nodejs plugin
+- By git clone, or download it 
+- The app is at /service/web folder
+- The front design is at /front folder
+- The document is at /doc folder
+- Some test among different language is at /test folder
+- Run it, in /service/web folder, ``activator ~run``
+- Run test, in /service/web folder, ``activator`` then ``test`` or ``test-only``
+- Db schema and seed script is at /service/web/test/migration folder, use ``test-only`` run it
+- All modules and related to HTTP in /service/web/app/process folder
+- All modules and related to Data in /service/web/app/service folder
+- Some higher heriatage class and helper is at /service/web/app/core
+- Basicall that's all, ask question in issue if you have any
 
 
 ## Conduct of Contribution
