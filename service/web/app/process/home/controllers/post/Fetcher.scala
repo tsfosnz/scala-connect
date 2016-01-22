@@ -3,7 +3,7 @@ package process.home.controllers.post
 import javax.inject.Inject
 
 import core._
-import models.{PostEntity, TopicEntity}
+import models.{CommentEntity, PostEntity, TopicEntity}
 import play.api.i18n.{I18nSupport, _}
 import play.api.libs.iteratee.Enumerator
 import play.api.libs.json.Json
@@ -38,6 +38,15 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
       }
     }
 
+    val comment = this.comment(id)(request).flatMap {
+      res => res.header.status == 200 match {
+        case true => Html.readHtmlBy(res.body)
+        case _ => Future {
+          ""
+        }
+      }
+    }
+
     val head = this.head(request).flatMap {
       res => res.header.status == 200 match {
         case true => Html.readHtmlBy(res.body)
@@ -59,9 +68,10 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
     for {
       h <- head
       p <- post
+      c <- comment
       r <- right
     } yield {
-      Ok.chunked(Enumerator(views.html.home.topic.index("", h, p, r)))
+      Ok.chunked(Enumerator(views.html.home.post.index("", h, p, c, r)))
     }
 
   }
@@ -136,11 +146,48 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
 
   }
 
-  def comment = Action.async { request =>
+  def comment(id: Int) = Action.async { request =>
 
-    Future {
-      Ok("")
+    val page = request.getQueryString("page").getOrElse("1").toInt
+    val count = request.getQueryString("count").getOrElse("10").toInt
+
+    val list = PostServ.getCommentsByPost(id, (page - 1) * count, count)
+
+    list match {
+      case null => Future {
+        InternalServerError(fail(ServErrorConst.SystemError))
+      }
+      case _ =>
+        list.map {
+          c =>
+            val total: Int = c("total").asInstanceOf[Int]
+
+            total == 0 match {
+              case true => Ok("")
+              case _ =>
+                lazy val data = c("data").asInstanceOf[Seq[CommentEntity]]
+                lazy val last = Math.ceil(total / count).toInt
+                lazy val prev = Math.max(page - 1, 1)
+                lazy val next = Math.min(page + 1, last)
+
+                lazy val pagination = ViewHelper.paging(page, count, total)
+
+                println(pagination)
+
+                Ok(views.html.home.post.comment(Map(
+                  "data" -> data,
+                  "total" -> total,
+                  "page" -> page,
+                  "count" -> count,
+                  "prev" -> prev,
+                  "next" -> next,
+                  "last" -> last,
+                  "pagination" -> pagination
+                )))
+            }
+        }
     }
+
   }
 
 }

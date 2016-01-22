@@ -16,7 +16,7 @@ object CommentTable extends MigrationTable[Comment]{
   /**
    * populate the data into the table
    */
-  def populate = {
+  def populate(postId: Int) = {
 
     val dt: java.util.Date = new java.util.Date()
 
@@ -33,6 +33,7 @@ object CommentTable extends MigrationTable[Comment]{
       query.map {
 
         m => (
+          m.itemId,
           m.authorId,
           m.textBody,
           m.htmlBody,
@@ -40,6 +41,7 @@ object CommentTable extends MigrationTable[Comment]{
           m.updatedAt
           )
       } +=(
+        postId,
         (Math.random() * 100).toInt,
         faker.Lorem.paragraphs(10).mkString("\n"),
         faker.Lorem.paragraphs(10).mkString("\n"),

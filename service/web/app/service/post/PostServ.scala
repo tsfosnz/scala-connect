@@ -16,6 +16,7 @@ object PostServ {
   val topic = TopicQuery
   val topicItem = TopicItemQuery
   val member = MemberQuery
+  val comment = CommentQuery
 
   val db = post.db
 
@@ -141,7 +142,7 @@ object PostServ {
 
       // you just can't use that way, why?
       val q = for {
-        (p, m) <- queryPosts join member.query  on (_._1.authorId === _.id)
+        (p, m) <- queryPosts join member.query on (_._1.authorId === _.id)
       } yield (p, m.username, m.icon)
 
       println(q.filter(_._1._1.id === id).result.statements.head)
@@ -155,11 +156,22 @@ object PostServ {
 
   }
 
-  def getCommentsByPost(postId: Int, page: Int, count: Int): Unit = {
+  def getCommentsByPost(postId: Int, page: Int, count: Int) = {
 
+    val q = for {
+      c <- comment.query
+    } yield c
 
+    db.run(q.filter(_.itemId === postId).length.result).flatMap {
+      total =>
+        db.run(q.filter(_.itemId === postId).sortBy(_.createdAt.asc).drop(page).take(count).result).map {
+          c => Map(
+            "total" -> total,
+            "data" -> c
+          )
+        }
+    }
   }
-
 
 
   /**

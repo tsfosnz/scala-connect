@@ -40,9 +40,11 @@ class DbSeedSpec extends PlaySpec {
       }
 
       for (i <- 1 to 200) {
-
         Await.result(TopicItemTable.populate(i % 10 + 1, i, "post"), Duration("5 seconds"))
+      }
 
+      for (i <- 1 to 2000) {
+        Await.result(CommentTable.populate(i % 10 + 1), Duration("5 seconds"))
       }
 
 

@@ -8,11 +8,11 @@ class Comment(tag: Tag) extends BaseDateTime[CommentEntity](tag, "comment") {
 
   def id = column[Int]("comment_id", O.PrimaryKey, O.AutoInc)
 
-  def parentId = column[Int]("parent_id")
+  def parentId = column[Int]("parent_id", O.Default(0))
 
-  def itemId = column[Int]("item_id")
+  def itemId = column[Int]("item_id", O.Default(0))
 
-  def level = column[Int]("level")
+  def level = column[Int]("level", O.Default(0))
 
   def authorId = column[Int]("author_id", O.Default(0))
 
