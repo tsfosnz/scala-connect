@@ -1,6 +1,13 @@
 # Scala Connect
 
-A simple social connect app by scala
+A simple social connect app by scala, just like any other simple social forum, it will support
+
+- Membership
+- Different topic
+- Publish your post at different topic
+- Comment on the post
+- ...
+
 
 ## By
 
