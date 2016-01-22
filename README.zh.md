@@ -31,7 +31,7 @@
 - 运行测试, 在 /service/web 中, ``activator`` then ``test`` or ``test-only``
 - 数据库的建立和数据初始化代码，位于/service/web/test/migration, 可使用 ``test-only migration.NNNNNN`` 运行
 - 所有和 HTTP 有关的代码位于  /service/web/app/process 
-- 所有和数据提供有关的代码位于  /service/web/app/service folder
+- 所有和数据提供有关的代码位于  /service/web/app/service
 - 一些类位于 /service/web/app/core
 - 有问题，发issue
 
