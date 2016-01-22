@@ -1,4 +1,4 @@
-## Bug Test
+## Cross language test
 
 Too many connection at MySQL
 
