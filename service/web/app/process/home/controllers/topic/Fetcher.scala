@@ -94,11 +94,7 @@ class Fetcher @Inject()(val messagesApi: MessagesApi) extends Command with I18nS
     val page = request.getQueryString("page").getOrElse("1").toInt
     val count = request.getQueryString("count").getOrElse("20").toInt
 
-    val list = PostServ.getPostsByTopic(Map(
-      "topicId" -> id,
-      "page" -> (page - 1) * count,
-      "count" -> count
-    ))
+    val list = PostServ.getPostsByTopic(id, page, count)
 
     // here is bug, the data is
 

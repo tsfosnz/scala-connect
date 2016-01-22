@@ -40,18 +40,16 @@ object PostServ {
    *
    */
 
-  def getPostsByTopics(input: Map[String, Any]) = {
+  def getPostsByTopics(topic: Seq[TopicEntity], postCount: Int) = {
 
     try {
 
-      val item = input("item").asInstanceOf[Seq[TopicEntity]]
-      val postCount = input("postCount").asInstanceOf[Int]
+      type T = Query[(Post, Topic), (PostEntity, TopicEntity), scala.Seq]
+      val st = new scala.collection.mutable.Stack[T]
 
-      val st = new scala.collection.mutable.Stack[Query[(Post, Topic), (PostEntity, TopicEntity), scala.Seq]]
+      topic.map {
 
-      item.map {
-
-        c => item.size - item.indexOf(c) == 1 match {
+        c => topic.size - topic.indexOf(c) == 1 match {
           case true => st.push(queryPosts.filter(_._1.id === c.id).take(postCount * 2))
           case _ => st.push(queryPosts.filter(_._1.id === c.id).take(postCount))
         }
@@ -73,13 +71,9 @@ object PostServ {
   /**
    * Get a list of data (post, category) by (category id)
    */
-  def getPostsByTopic(input: Map[String, Any]) = {
+  def getPostsByTopic(topicId: Int, page: Int, count: Int) = {
 
     try {
-
-      val topicId = input("topicId").asInstanceOf[Int]
-      val page = input("page").asInstanceOf[Int]
-      val count = input("count").asInstanceOf[Int]
 
       val q1 = queryPosts.withFilter(_._2.id === topicId).length.result
       println(q1.statements.head)
@@ -160,6 +154,13 @@ object PostServ {
     }
 
   }
+
+  def getCommentsByPost(postId: Int, page: Int, count: Int): Unit = {
+
+
+  }
+
+
 
   /**
    * Add the new post

@@ -1,4 +1,4 @@
-@(title: String = "Welcome", head: String = "", list: String = "", right: String = "")(implicit messages: Messages)
+@(title: String = "Welcome", head: String = "", list: String = "", comment: String = "", right: String = "")(implicit messages: Messages)
 
 
 @_layout.default(title) {
@@ -9,6 +9,7 @@
 
         <div class="col-md-9 col-sm-9 col-xs-12">
             @Html(list)
+            @Html(comment)
         </div>
         <div class="col-md-3 col-sm-3 col-xs-12">
             @Html(right)

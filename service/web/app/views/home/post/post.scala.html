@@ -1,16 +1,16 @@
-@(post: Map[String, Any])
+@(data: Map[String, Any])
 
 <ol class="breadcrumb">
     <li><a href="/">Home</a></li>
     <li class="active">
-       <a href="/topic/@post("topic").asInstanceOf[TopicEntity].id">
-           @post("topic").asInstanceOf[TopicEntity].name
+       <a href="/topic/@data("topic").asInstanceOf[TopicEntity].id">
+           @data("topic").asInstanceOf[TopicEntity].name
        </a>
     </li>
 </ol>
 <div class="list-group">
     <div href="#" class="list-group-item list-group-item-info">
-        @post("topic").asInstanceOf[TopicEntity].name
+        @data("topic").asInstanceOf[TopicEntity].name
     </div>
     <div class="list-group-item">
         <blockquote>
@@ -20,12 +20,12 @@
                         <clipPath id="clipCircle">
                             <circle r="25" cx="25" cy="25"/>
                         </clipPath>
-                        <image xlink:href="@routes.Assets.versioned(post("member").asInstanceOf[(String, String)]._2)" width="50" height="50"
+                        <image xlink:href="@routes.Assets.versioned(data("member").asInstanceOf[(String, String)]._2)" width="50" height="50"
                         clip-path="url(#clipCircle)"/>
                     </svg>
                 </a></p>
             <small>
-                @post("post").asInstanceOf[PostEntity].excerpt
+                @data("post").asInstanceOf[PostEntity].excerpt
             </small>
         </blockquote>
         <div class="clearfix"></div>
@@ -33,15 +33,13 @@
 
         <div href="#" class="list-group-item">
             <h3 class="text-center">
-                <p class="text-left">@post("post").asInstanceOf[PostEntity].title<p>
+                <p class="text-left">@data("post").asInstanceOf[PostEntity].title<p>
             </h3>
             <p class="text-center">
-                @post("member").asInstanceOf[(String, String)]._1
+                @data("member").asInstanceOf[(String, String)]._1
             </p>
             <div>
-                @post("post").asInstanceOf[PostEntity].htmlBody
+                @data("post").asInstanceOf[PostEntity].htmlBody
             </div>
         </div>
 </div>
-
-@home.post.comment()

@@ -1,17 +1,17 @@
-@(list: Map[String, Any])
+@(data: Map[String, Any])
 
 <ol class="breadcrumb">
     <li><a href="/">Home</a></li>
-    <li class="active">@list("name").asInstanceOf[String]</li>
+    <li class="active">@data("name").asInstanceOf[String]</li>
 </ol>
 
 <div class="list-group">
 
     <div href="#" class="list-group-item list-group-item-info">
-    @list("name").asInstanceOf[String]
+    @data("name").asInstanceOf[String]
     </div>
 
-    @for(post <- list("data").asInstanceOf[Seq[PostEntity]]) {
+    @for(post <- data("data").asInstanceOf[Seq[PostEntity]]) {
         <div href="#" class="list-group-item">
             <h3 class="text-left">
                 <a href="/post/@post.id">@post.title</a>
@@ -23,14 +23,14 @@
 
     <div class="list-group-item-text">
 
-        @if(list("pagination").asInstanceOf[Range].size > 0) {
+        @if(data("pagination").asInstanceOf[Range].size > 0) {
             @_layout.pagination(
-                list("page").asInstanceOf[Int],
-                list("count").asInstanceOf[Int],
-                list("prev").asInstanceOf[Int],
-                list("next").asInstanceOf[Int],
-                list("last").asInstanceOf[Int],
-                list("pagination").asInstanceOf[Range]
+                data("page").asInstanceOf[Int],
+                data("count").asInstanceOf[Int],
+                data("prev").asInstanceOf[Int],
+                data("next").asInstanceOf[Int],
+                data("last").asInstanceOf[Int],
+                data("pagination").asInstanceOf[Range]
             )
         }
 
