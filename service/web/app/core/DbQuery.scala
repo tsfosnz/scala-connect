@@ -35,6 +35,6 @@ class DbQuery[T <: Table[_]](foo: Tag => T) {
 }
 
 object DAO {
-  val db = Database.forConfig("mydb")
+  lazy val db = Database.forConfig("mydb")
 }
 
